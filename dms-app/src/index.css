@@ -5,7 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image: linear-gradient(to right, rgba(255,0,0,0), rgb(214, 87, 87))
+  background-image: linear-gradient(to right, rgba(255,0,0,0), #A3CAE9)
 }
 
 code {
@@ -15,6 +15,9 @@ code {
 
 :root {
   --form-color: rgba(128, 128, 128, 0.1);
-  --button-primary-color: #0000FF;
+  --primary-color: #0000FF;
+  --bg-grey-color: #EAECED;
+  --bg-blue-color: #6E9FC0;
+  --btn-blue-color: #39597E;
 }
 
