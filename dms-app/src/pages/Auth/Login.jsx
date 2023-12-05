@@ -1,19 +1,24 @@
 import Form from 'react-bootstrap/Form';
 import styled from 'styled-components';
 import Button from '../../components/Button/Button';
+import { postLogin } from '../../api/auth/auth';
 import { useState } from 'react';
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [auth, setAuth] = useState();
 
-  const handleSubmit = (event) => {
+  async function handleSubmit(event) {
     event.preventDefault();
-    // => handle api
+    setAuth(postLogin({username, password}));
     setUsername("");
     setPassword("");
   }
-  
+  const buttonContent = {
+    name: "",
+    title: "SIGN IN",
+  }
   return (
     <LoginContainer>
       <Title >DENTAL MANAGEMENT SYSTEM</Title>
@@ -28,7 +33,7 @@ const Login = () => {
             <Form.Control type="password" placeholder=" Enter password" onChange={(event) => setPassword(event.target.value)} value={password}/>
           </Form.Group>
           <Form.Group>
-            <Button text={"SIGN IN"}/>
+            <Button content={buttonContent} bgColor={"var(--primary-color)"} style={{margin: "0 27%"}}/>
           </Form.Group>
         </Form>
       </FormWrapper>
@@ -51,7 +56,6 @@ const Title = styled.h1`
   text-align: center;
   margin-top: 10vh;
 `
-
 
 export default Login;
 

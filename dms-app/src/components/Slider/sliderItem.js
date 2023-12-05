@@ -5,6 +5,7 @@ import icon4 from "../../assets/lichlamviec.png";
 import icon5 from "../../assets/donthuoc.png";
 import icon6 from "../../assets/hoadon.png";
 import icon7 from "../../assets/thongke.png";
+import icon8 from "../../assets/logout.png";
 
 const SliderItems = [
   {
@@ -44,7 +45,7 @@ const SliderItems = [
   },
   {
     idSlider: 7,
-    iconSlider: "",
+    iconSlider: icon8,
     nameSlider: "Đăng xuất"
   }];
 

@@ -1,17 +1,20 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { SliderItems } from "./sliderItem";
+import { useNavigate, useHistory } from 'react-router-dom';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 
 const SliderCategory = () => {
+  const navigate = useNavigate();
+
   var settings = {
     dots: true,
     infinite: false,
     speed: 500,
     slidesToShow: 6,
-    slidesToScroll: 8
+    slidesToScroll: 8,
   };
 
   const getScreenSize = () => {
@@ -31,12 +34,42 @@ const SliderCategory = () => {
     }
   }, [screenSize])
 
+  function handleSelectPage(key) {
+    switch(key) {
+      case 0:
+        navigate("/patient-records");
+        break;
+      case 1:
+        //navigate cho nay
+        break;
+      case 2:
+        // naviagte cho nay
+        break;
+      case 3:
+        // naviagte cho nay
+        break;
+      case 4:
+        // naviagte cho nay
+        break;
+      case 5:
+        // naviagte cho nay
+        break;
+      case 6:
+        // naviagte cho nay
+        break;
+      case 7:
+          // naviagte cho nay
+          break;
+      default:
+    }
+  }
+
   return (
     <SliderContainer>
         <Slider {...settings} className="slider-wrapper">
-          {SliderItems.map((item) => {
+          {SliderItems.map((item, index) => {
             return (
-              <div className="slider-item">
+              <div className="slider-item" onClick={() => handleSelectPage(index)} key={index}>
                 <img src={item.iconSlider} alt="" />
                 <div>{item.nameSlider}</div>
               </div>
@@ -50,7 +83,7 @@ const SliderCategory = () => {
 export default SliderCategory;
 
 const SliderContainer = styled.div`
-  height: 210px;
+  height: 150px;
   width: 100%;
   overflow-x: hidden;
   overflow-y: hidden;
