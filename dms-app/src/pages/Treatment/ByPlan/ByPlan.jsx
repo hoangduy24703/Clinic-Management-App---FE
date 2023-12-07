@@ -1,23 +1,24 @@
+import { Table, TableRow, TableHead, Dropdown, DropdownItem, DropdownWrapper } from "../../Patient/PatientRecords/PatientRecords";
 import SliderCategory from "../../../components/Slider/SliderCategory";
+import Scrollbar from "../../../components/Scrollbar/Scrollbar";
 import styled from "styled-components";
 import { AiOutlineMore } from "react-icons/ai";
-import { dummyData } from "./patientDummy";
-import Scrollbar from "../../../components/Scrollbar/Scrollbar";
-import Button from "../../../components/Button/Button";
 import { IoMdAddCircleOutline } from "react-icons/io";
+import { LuEye } from "react-icons/lu";
+import { MdDeleteOutline } from "react-icons/md";
 import { useState } from "react";
+import { dummyData } from "../../Patient/PatientRecords/patientDummy";
 import { useNavigate } from "react-router-dom";
-import PopupForm from "../PopupForm/PopupForm";
 
 const header = [
   "ID BỆNH NHÂN",
-  "TÊN BỆNH NHÂN",
-  "NĂM SINH",
-  "GIỚI TÍNH",
-  "SĐT",
+  "BUỔI ĐIỀU TRỊ",
+  "NGÀY ĐIỀU TRỊ",
+  "BÁC SĨ ĐIỀU TRỊ",
+  "KẾ HOẠCH",
 ];
 
-const PatientRecords = () => {
+const ByPlan = () => {
   const data = [...dummyData];
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenPopupForm, setIsOpenPopupForm] = useState(false);
@@ -29,9 +30,19 @@ const PatientRecords = () => {
     marginLeft: "80%",
   }
 
-  const buttonContent = {
-    name: <IoMdAddCircleOutline />,
-    title: "Thêm hồ sơ",
+  const viewContent = {
+    name: <LuEye size="20px"/>,
+    title: "",
+  }
+
+  const addContent = {
+    name: <IoMdAddCircleOutline size="20px"/>,
+    title: "",
+  }
+
+  const deleteContent = {
+    name: <MdDeleteOutline size="20px"/>,
+    title: "",
   }
 
   const handleDropdownOpen = (value) => {
@@ -73,10 +84,10 @@ const PatientRecords = () => {
 
   return (<>
     <SliderCategory />
-    <PatientRecordsWrapper>
-      {isOpenPopupForm && <PopupForm handleClosePopup={handleCreatePatient}/>}
+    <ByPlanWrapper>
+      {/* {isOpenPopupForm && <PopupForm handleClosePopp={handleCreatePatient}/>} */}
       <div className="patient-record-title">DANH SÁCH HỒ SƠ BỆNH NHÂN</div>
-      <Table style={{ width: "80%", height: "50%", maxWidth: "1200px" }}>
+      <Table style={{ width: "80%", height: "60%", maxWidth: "1200px" }}>
         <TableHead style={{ height: "50px", borderBottom: "2px solid" }}>
           {header?.map((headerItem) => {
             return <span >{headerItem}</span>
@@ -84,82 +95,39 @@ const PatientRecords = () => {
         </TableHead>
         <Scrollbar data={content} />
       </Table>
-      <ButtonGroup>
-        <Button
-          content={buttonContent}
-          bgColor={"var(--bg-blue-color)"}
-          style={{ margin: "5vh 0 5vh 65%", color: "black" }}
-          onClick={handleCreatePatient}
-        />
-      </ButtonGroup>
-    </PatientRecordsWrapper>
+      <ButtonGroup style={{display: "flex"}}>
+          <Button style={{backgroundColor: "var(--btn-color-3)"}}><IoMdAddCircleOutline size="20px"/> TẠO MỚI BIỂU ĐIỆU TR</Button>
+          <Button style={{backgroundColor: "var(--btn-color-1)"}}><IoMdAddCircleOutline size="20px"/></Button>
+          <Button style={{backgroundColor: "var(--btn-color-2)"}}><MdDeleteOutline size="20px"/></Button>
+        </ButtonGroup>
+    </ByPlanWrapper>
   </>);
 }
 
-export default PatientRecords;
+export default ByPlan;
 
-const PatientRecordsWrapper = styled.div` 
+const ByPlanWrapper = styled.div`
   width: 100%;
-  position: relative;
-  .patient-record-title {
-    margin-left: 15%;
+  .prescription-title {
+    margin-left: 10%;
     font-weight: 700;
-    font-size: 25px;
+    font-size: 20px;
   }
 `
 
-export const Table = styled.div`
-  background-color: var(--table-bg-color);
-  width: 100%;
-  margin: 0 auto;
-  margin-top: 2%;
+const ButtonGroup = styled.div`
+  display: flex;
+  justify-content: space-around;
+  padding: 5vh 20%;
+  margin: 0 20%;
+  gap: 20px;
 `
 
-export const TableHead = styled.div`
-  display: grid;
-  grid-template-columns: repeat(${header.length + 1}, 1fr);
+const Button = styled.button`
   padding: 10px;
-  border-bottom: 1px solid var(--grey-line-color);
-  font-weight: 700;
-  text-align: center;
-  background-color: var(--bg-blue-color); 
-`
-
-export const TableRow = styled.div`
-  display: grid;
-  grid-template-columns: repeat(${header.length + 1}, 1fr);
-  padding: 10px;
-  border-bottom: 1px solid var(--grey-line-color);
-  text-align: center;
-  font-size: 18px;
-`
-
-export const ButtonGroup = styled.div`
-  width: 100%;
-`
-
-export const DropdownWrapper = styled.div`
-  position: relative;
-`
-
-export const Dropdown = styled.div`
-  position: absolute;
-  top: 0;
-  right: 15%;
+  border-radius: 15px;
+  width: 200px;
   border: none;
-  width: 100%;
-  background-color: var(--dropdown-bg-color);
-  text-align: left;
-  z-index: 1;
-`
-
-export const DropdownItem = styled.div`
   padding: 10px;
-  font-size: 15px;
-  cursor: pointer;  
-  border-bottom: 1px solid;
-
-  &:hover {
-    background-color: var(--dropdown-hover-bg-color);
-  }
+  min-width: 100px;
 `

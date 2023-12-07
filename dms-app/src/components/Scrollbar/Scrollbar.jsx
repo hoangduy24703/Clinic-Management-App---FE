@@ -3,7 +3,6 @@ import PropTypes from "prop-types"
 import { ScrollbarWrapper } from "./styles"
 
 export const Scrollbar = ({data}) => {
-    console.log(data);
     return (
         <ScrollbarWrapper>
           {data}

@@ -40,7 +40,7 @@ const SliderCategory = () => {
         navigate("/patient-records");
         break;
       case 1:
-        //navigate cho nay
+        navigate("/treatment-plan");
         break;
       case 2:
         // naviagte cho nay
@@ -49,10 +49,10 @@ const SliderCategory = () => {
         // naviagte cho nay
         break;
       case 4:
-        // naviagte cho nay
+        navigate("/prescription");
         break;
       case 5:
-        // naviagte cho nay
+        navigate("/bills");
         break;
       case 6:
         // naviagte cho nay

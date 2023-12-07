@@ -3,6 +3,11 @@ import { Routes, Route } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.css';
 import PatientRecords from "./pages/Patient/PatientRecords/PatientRecords";
 import PatientDetails from "./pages/Patient/PatientDetails/PatientDetails";
+import TreatmentPlan from "./pages/Treatment/TreatmentPlan/TreatmentPlan";
+import Prescription from "./pages/Prescription/Prescription/Prescription";
+import PrescriptionDetail from "./pages/Prescription/PrecsriptionDetail/PrescriptionDetail";
+import Bills from "./pages/Bill/Bills";
+import ByPlan from "./pages/Treatment/ByPlan/ByPlan";
 
 function App() {
   return (
@@ -10,6 +15,11 @@ function App() {
       <Route path="/login" element={<Login/>} />
       <Route path="/patient-records" element={<PatientRecords />} />
       <Route path="/patient-records/:idPatient" element={<PatientDetails />} />
+      <Route path="/treatment-plan" element={<TreatmentPlan />}/>
+      <Route path="/prescription" element={<Prescription />}/>
+      <Route path="/prescription/prescription-detail" element={<PrescriptionDetail />}/>
+      <Route path="/bills" element={<Bills />} />
+      <Route path="/treatment-plan/by-plan" element={<ByPlan />} />
     </Routes>
   );
 }

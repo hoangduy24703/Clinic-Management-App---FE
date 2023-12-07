@@ -17,9 +17,16 @@ code {
   --form-color: rgba(128, 128, 128, 0.1);
   --primary-color: #0000FF;
   --bg-grey-color: #EAECED;
+  --bg-grey-1-color: #E9ECEE;
   --bg-blue-color: #6E9FC0;
+  --bg-blue-2-color: #A3CAE9;
   --btn-blue-color: #39597E;
   --table-bg-color: #ffffff;
   --grey-line-color: #ACACAC;
+  --dropdown-bg-color: #b0c8d8;
+  --dropdown-hover-bg-color: #a0c9e4;
+  --btn-color-1: #71D99D;
+  --btn-color-2: #D97171;
+  --btn-color-3: #6E9FC0;
 }
 
