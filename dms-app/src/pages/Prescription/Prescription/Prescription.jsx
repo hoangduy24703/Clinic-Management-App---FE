@@ -1,13 +1,13 @@
 import SliderCategory from "../../../components/Slider/SliderCategory";
 import styled from "styled-components";
 import { Table, TableHead, TableRow, ButtonGroup, Dropdown, DropdownWrapper, DropdownItem } from "../../Patient/PatientRecords/PatientRecords";
-import Button from "../../../components/Button/Button";
 import Scrollbar from "../../../components/Scrollbar/Scrollbar";
 import { AiOutlineMore } from "react-icons/ai";
 // import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { dummyData } from "./dummyPre";
 import { IoMdAddCircleOutline } from "react-icons/io";
+import Search from "../../../components/Search/Search";
 
 const header = [
   "ID Đơn Thuốc",
@@ -21,7 +21,7 @@ const Prescription = () => {
   const data = [...dummyData];
   const [isOpen, setIsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
-  // const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState();
   
   const handleDropdownOpen = (value) => {
     setSelectedItem(value.idDonThuoc);
@@ -36,6 +36,11 @@ const Prescription = () => {
   const buttonContent = {
     name: <IoMdAddCircleOutline />,
     title: "Thêm mới",
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("Search", searchTerm);
   }
 
   const content = data?.map((dataItem, index) => {
@@ -60,7 +65,10 @@ const Prescription = () => {
   return <>
     <SliderCategory />
     <PrescriptionWrapper>
-      <div className="prescription-title">DANH SÁCH HỒ SƠ BỆNH NHÂN</div>
+      {/* <div className="prescription-title">DANH SÁCH HỒ SƠ BỆNH NHÂN</div> */}
+        <div style={{display: "flex"}}>
+          <Search onSubmit={handleSubmit} content={" Nhập mã đơn thuốc "} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
+        </div>
         <Table style={{ width: "80%", height: "50%", maxWidth: "1200px" }}>
           <TableHead style={{ height: "50px", borderBottom: "2px solid" }}>
             {header?.map((headerItem) => {
@@ -70,11 +78,7 @@ const Prescription = () => {
           <Scrollbar data={content} />
         </Table>
         <ButtonGroup>
-          <Button
-            content={buttonContent}
-            bgColor={"var(--bg-blue-color)"}
-            style={{ margin: "5vh 0 5vh 80%", color: "black" }}
-          />
+
         </ButtonGroup>
     </PrescriptionWrapper>
   </>;

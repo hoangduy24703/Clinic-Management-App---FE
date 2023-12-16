@@ -1,24 +1,16 @@
 import SliderCategory from "../../../components/Slider/SliderCategory";
 import styled from "styled-components";
 import Button from "../../../components/Button/Button";
-import PopupFormKHDT from "../PopupFormTreatment/PopupFormKHDT";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import PopupFormBDT from "../PopupFormTreatment/PopupFormBDT";
-import PopupFormBDTDate from "../ByDate/PopupFormBDTDate";
 
 const content = [
   {
     name: "",
-    title: "Tìm kiếm BĐT từ ngày A đến ngày B"
+    title: "Tìm kiếm theo bác sĩ"
   },
   {
     name: "",
-    title: "Tìm kiếm BĐT theo bệnh nhân"
-  },
-  {
-    name: "",
-    title: "Tìm kiếm KHĐT theo bệnh nhân"
+    title: "Tìm kiếm theo bệnh nhân"
   },
   {
     name: "",
@@ -27,40 +19,28 @@ const content = [
   {
     name: "",
     title: "Tạo mới buổi điều trị"
-  },
+  }
 ]
 
 const TreatmentPlan = () => {
   const navigate = useNavigate();
-  const [isOpenPopupFormKHDT, setIsOpenPopupFormKHDT] = useState(false);
-  const [isOpenPopupFormBDT, setIsOpenPopupFormBDT] = useState(false);
-
   const handleNavigate = (key) => {
     switch (key) {
       case 0:
-        navigate("/treatment-plan/by-date");
+        navigate("/treatment-plan/by-plan");
         break;
       case 1:
-        navigate("/treatment-plan/by-patient");
+        navigate("/treatment-plan/by-plan");
         break;
       case 2:
-        navigate("/treatment-plan/by-patient");
+        navigate("/treatment-plan/by-plan");
         break;
       case 3:
-        setIsOpenPopupFormKHDT(true);
-        break;
-      case 4:
-        setIsOpenPopupFormBDT(true);
+        navigate("/treatment-plan/by-plan");
         break;
       default:
     }
   }
-
-  const handleClosePopup = () => {
-    setIsOpenPopupFormKHDT(false);
-    setIsOpenPopupFormBDT(false);
-  }
-
   const btnStyle = {
     boxShadow: "4px 4px 2px black",
     color: "black",
@@ -70,8 +50,6 @@ const TreatmentPlan = () => {
   
   return (<>
     <SliderCategory />
-    {isOpenPopupFormKHDT && <PopupFormKHDT handleClosePopup={handleClosePopup}/>}
-    {isOpenPopupFormBDT && <PopupFormBDT handleClosePopup={handleClosePopup}/>}
     <TreatmentPlanBody>
       {content.map((item, index) => {
         return <Button content={item} bgColor={"var(--bg-grey-color)"} style={btnStyle} key={index} onClick={() => handleNavigate(index)} />

@@ -1,7 +1,6 @@
 import SliderCategory from "../../../components/Slider/SliderCategory";
 import styled from "styled-components";
 import { Table, TableHead, TableRow, ButtonGroup, Dropdown, DropdownWrapper, DropdownItem } from "../../Patient/PatientRecords/PatientRecords";
-import Button from "../../../components/Button/Button";
 import Scrollbar from "../../../components/Scrollbar/Scrollbar";
 import { useState } from "react";
 import { AiOutlineMore } from "react-icons/ai";
@@ -67,11 +66,6 @@ const PrescriptionDetail = () => {
           <Scrollbar data={content} />
         </Table>
         <ButtonGroup>
-          <Button
-            content={buttonContent}
-            bgColor={"var(--bg-blue-color)"}
-            style={{ margin: "5vh 0 5vh 80%", color: "black" }}
-          />
         </ButtonGroup>
     </PrescriptionDetailWrapper>
   </>;

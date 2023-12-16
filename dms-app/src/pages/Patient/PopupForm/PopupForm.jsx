@@ -1,30 +1,29 @@
 import { useState } from "react";
 import styled from "styled-components";
 import Form from 'react-bootstrap/Form';
-import Button from "../../../components/Button/Button";
+// import Button from "../../../components/Button/Button";
 import { IoMdClose } from "react-icons/io";
 import { IoMdAddCircleOutline } from "react-icons/io";
 
 const PopupForm = ({handleClosePopup}) => {
-  const [id, setId] = useState("");
   const [name, setName] = useState("");
-  const [gender, setGender] = useState("");
-  const [address, setAddress] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phongkham, setPhongkham] = useState("");
   const [bornYear, setBornYear] = useState("");
+  const [gender, setGender] = useState("");
   const [age, setAge] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
   const [status, setStatus] = useState("");
   const [overview, setOverview] = useState("");
   const [contraindicatedDrugs, setContraindicatedDrugs] = useState("");
+  const [password, setPassword] = useState("");
+  const [bacsimd, setBacsimd] = useState("");
+
 
   const FormGroupStyle = {
     display: "flex",
     width: "100%"
-  }
-
-  const buttonContent = {
-    name: <IoMdAddCircleOutline size="20px"/>,
-    title: "Tạo"
   }
 
   return (<>
@@ -32,13 +31,13 @@ const PopupForm = ({handleClosePopup}) => {
       <Form>
         <IoMdClose style={{marginLeft: "105%", marginTop: "-20%", cursor: "pointer"}} size="30px" onClick={handleClosePopup}/>
         <div className="popup-title">THÊM MỚI HỒ SƠ BỆNH NHÂN</div>
-        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle} >
-          <Form.Label style={{width: "300px", fontWeight: "700"}}>ID BỆNH NHÂN</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập ID bệnh nhân " onChange={(event) => { setId(event.target.value) }} value={id} style={{width: "100%"}}/>
-        </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>HỌ VÀ TÊN</Form.Label>
           <Form.Control type="text" placeholder=" Nhập tên bệnh nhân " onChange={(event) => { setName(event.target.value) }} value={name} style={{width: "100%"}}/>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
+          <Form.Label style={{width: "300px", fontWeight: "700"}}>PHÒNG KHÁM</Form.Label>
+          <Form.Control type="text" placeholder=" Nhập ID phòng khám " onChange={(event) => { setPhongkham(event.target.value) }} value={phongkham} style={{width: "100%"}}/>
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle} >
           <Form.Label style={{width: "300px", fontWeight: "700"}}>GIỚI TÍNH</Form.Label>
@@ -72,9 +71,22 @@ const PopupForm = ({handleClosePopup}) => {
           <Form.Label style={{width: "300px", fontWeight: "700"}}>THUỐC CHỐNG CHỈ ĐỊNH</Form.Label>
           <Form.Control type="text" placeholder=" Thông tin chống chỉ định " onChange={(event) => { setContraindicatedDrugs(event.target.value) }} value={contraindicatedDrugs} style={{width: "100%"}}/>
         </Form.Group>
-        <Form.Group >
-          <Button content={buttonContent} bgColor={"var( --bg-blue-2-color)"} style={{ right:"10px", position: "absolute", color: "black"}} onClick={handleClosePopup} />
+        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
+          <Form.Label style={{width: "300px", fontWeight: "700"}}>EMAIL</Form.Label>
+          <Form.Control type="text" placeholder=" Nhập email " onChange={(event) => { setEmail(event.target.value) }} value={email} style={{width: "100%"}}/>
         </Form.Group>
+        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
+          <Form.Label style={{width: "300px", fontWeight: "700"}}>PASSWORD</Form.Label>
+          <Form.Control type="text" placeholder=" Nhập mật khẩu " onChange={(event) => { setPassword(event.target.value) }} value={password} style={{width: "100%"}}/>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
+          <Form.Label style={{width: "300px", fontWeight: "700"}}>BÁC SĨ MẶC ĐỊNH</Form.Label>
+          <Form.Control type="password" placeholder=" Nhập bác sĩ mặc định " onChange={(event) => { setBacsimd(event.target.value) }} value={bacsimd} style={{width: "100%"}}/>
+        </Form.Group>
+        <ButtonGroup>
+          <Button className="btn-cancel" onClick={handleClosePopup}>HỦY</Button>
+          <Button className="btn-create"><IoMdAddCircleOutline size="20px"/> TẠO </Button>
+        </ButtonGroup>
       </Form>
     </PopupWrapper>
   </>)
@@ -84,11 +96,12 @@ export default PopupForm;
 
 const PopupWrapper = styled.div`
   position: absolute;
-  top: 10%;
-  left: 25%;
-  right: 25%;
+  top: 5%;
+  left: 22%;
+  right: 22%;
   z-index: 2;
   padding: 5vw;
+  padding-bottom: 2vw;
   background-color: var(--bg-grey-1-color);
   border-radius: 10px;
   border: 1px solid;
@@ -100,4 +113,21 @@ const PopupWrapper = styled.div`
     margin-bottom: 4vh;
     margin-top: -5vh;
   }
+`
+const ButtonGroup = styled.div`
+  display: flex;
+  padding-top: 2vh;
+  .btn-cancel {
+    background-color: var(--grey-line-color);
+  }
+  .btn-create {
+    background-color: var( --btn-color-1);
+  }
+`
+
+const Button = styled.button`
+  border-radius: 10px;
+  border: none;
+  margin: 0 auto;
+  padding: 10px 30px;
 `

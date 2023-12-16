@@ -1,6 +1,6 @@
 import Form from 'react-bootstrap/Form';
 import styled from 'styled-components';
-import Button from '../../components/Button/Button';
+// import Button from '../../components/Button/Button';
 import { postLogin } from '../../api/auth/auth';
 import { useState } from 'react';
 
@@ -25,15 +25,15 @@ const Login = () => {
       <FormWrapper>
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label>Username</Form.Label>
-            <Form.Control type="text" placeholder=" Enter username " onChange={(event) => setUsername(event.target.value)} value={username}/>
+            <Form.Label>PHONE NUMBER</Form.Label>
+            <Form.Control type="text" placeholder=" Enter phone number " onChange={(event) => setUsername(event.target.value)} value={username}/>
           </Form.Group>
           <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1" >
-            <Form.Label>Password</Form.Label>
+            <Form.Label>PASSWORD</Form.Label>
             <Form.Control type="password" placeholder=" Enter password" onChange={(event) => setPassword(event.target.value)} value={password}/>
           </Form.Group>
-          <Form.Group>
-            <Button content={buttonContent} bgColor={"var(--primary-color)"} style={{margin: "0 27%"}}/>
+          <Form.Group style={{display: "flex"}}>
+            <Button>SIGN IN</Button>
           </Form.Group>
         </Form>
       </FormWrapper>
@@ -57,5 +57,14 @@ const Title = styled.h1`
   margin-top: 10vh;
 `
 
+const Button = styled.button`
+  border: none;
+  margin: 0 auto;
+  border-radius: 15px;
+  padding: 15px;
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: 700;
+`
 export default Login;
 

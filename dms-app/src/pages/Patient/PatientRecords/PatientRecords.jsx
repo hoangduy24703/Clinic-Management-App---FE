@@ -1,13 +1,17 @@
 import SliderCategory from "../../../components/Slider/SliderCategory";
 import styled from "styled-components";
 import { AiOutlineMore } from "react-icons/ai";
-import { dummyData } from "./patientDummy";
 import Scrollbar from "../../../components/Scrollbar/Scrollbar";
-import Button from "../../../components/Button/Button";
+// import Button from "../../../components/Button/Button";
 import { IoMdAddCircleOutline } from "react-icons/io";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PopupForm from "../PopupForm/PopupForm";
+import { useDispatch } from "react-redux";
+import Search from "../../../components/Search/Search";
+import moment from "moment";
+import { setPatientSelected } from "../../../redux/slice/patientSlice";
+import { postDanhSachBenhNhan } from "../../../api/patient/patient";
 
 const header = [
   "ID BỆNH NHÂN",
@@ -18,11 +22,23 @@ const header = [
 ];
 
 const PatientRecords = () => {
-  const data = [...dummyData];
+  // const data = [...dummyData];
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenPopupForm, setIsOpenPopupForm] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
-  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [dataPatient, setDataPatient] = useState([]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    console.log("Search", searchTerm);
+    const result = await postDanhSachBenhNhan(searchTerm);
+    console.log(result);
+    setDataPatient(result?.data?.data);
+  };
 
   const categoryStyle = {
     cursor: "pointer",
@@ -30,17 +46,23 @@ const PatientRecords = () => {
   }
 
   const buttonContent = {
-    name: <IoMdAddCircleOutline />,
-    title: "Thêm hồ sơ",
+    name: <IoMdAddCircleOutline size="20px"/>,
+    title: "THÊM HỒ SƠ BỆNH NHÂN",
   }
 
   const handleDropdownOpen = (value) => {
-    setSelectedItem(value.idBenhNhan);
+    setSelectedItem(value.IDBENHNHAN);
     setIsOpen(!isOpen);
   }
 
-  const handleOnNavigatePatient = () => {
-    navigate("/patient-records/:idPatient");
+  const handleViewPatient = async () => {
+    console.log(selectedItem);
+    dispatch(setPatientSelected(selectedItem));
+    navigate(`/patient-records/${selectedItem}`)
+  }
+
+  const handleUpdatePatient = () => {
+
   }
 
   const handleDeletePatient = () => {
@@ -51,31 +73,37 @@ const PatientRecords = () => {
     setIsOpenPopupForm(!isOpenPopupForm);
   }
 
-  const content = data?.map((dataItem, index) => {
+  useEffect(() => {
+    console.log(dataPatient);
+  }, [dataPatient]);
+
+  const content = dataPatient?.map((dataItem, index) => {
     return <TableRow key={index}>
-      <span>{dataItem.idBenhNhan}</span>
-      <span>{dataItem.tenBenhNhan}</span>
-      <span>{dataItem.namSinh}</span>
-      <span>{dataItem.gioiTinh}</span>
-      <span>{dataItem.sdt}</span>
+      <span>{dataItem.IDBENHNHAN}</span>
+      <span>{dataItem.TENBN}</span>
+      <span>{moment(dataItem.NAMSINHBN).format("DD/MM/YYYY")}</span>
+      <span>{dataItem.GIOITINHBN}</span>
+      <span>{dataItem.SODIENTHOAIBN}</span>
       <DropdownWrapper>
         <AiOutlineMore style={categoryStyle} onClick={() => handleDropdownOpen(dataItem)}/>
-        {isOpen && selectedItem === dataItem.idBenhNhan && 
+        {isOpen && selectedItem === dataItem.IDBENHNHAN && 
         <Dropdown>
-          <DropdownItem onClick={handleOnNavigatePatient}>Xem thông tin hồ sơ</DropdownItem>
-          <DropdownItem onClick={handleOnNavigatePatient}>Sửa thông tin hồ sơ</DropdownItem>
+          <DropdownItem onClick={handleViewPatient}>Xem thông tin hồ sơ</DropdownItem>
+          <DropdownItem onClick={handleUpdatePatient}>Sửa thông tin hồ sơ</DropdownItem>
           <DropdownItem onClick={handleDeletePatient}>Xóa hồ sơ bệnh nhân</DropdownItem>
         </Dropdown>}
       </DropdownWrapper>
     </TableRow>
   })
 
-
   return (<>
-    <SliderCategory />
+    <SliderCategory/>
+    <div style={{display: "flex"}}>
+      <Search onSubmit={handleSubmit} content={" Nhập tên bệnh nhân "} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
+    </div>
+    {isOpenPopupForm && <PopupForm handleClosePopup={handleCreatePatient}/>}
     <PatientRecordsWrapper>
-      {isOpenPopupForm && <PopupForm handleClosePopup={handleCreatePatient}/>}
-      <div className="patient-record-title">DANH SÁCH HỒ SƠ BỆNH NHÂN</div>
+      {/* <div className="patient-record-title">DANH SÁCH HỒ SƠ BỆNH NHÂN</div> */}
       <Table style={{ width: "80%", height: "50%", maxWidth: "1200px" }}>
         <TableHead style={{ height: "50px", borderBottom: "2px solid" }}>
           {header?.map((headerItem) => {
@@ -83,15 +111,10 @@ const PatientRecords = () => {
           })}
         </TableHead>
         <Scrollbar data={content} />
+        <ButtonGroup>
+          <Button onClick={handleCreatePatient}>{buttonContent.name} {buttonContent.title}</Button>
+        </ButtonGroup>
       </Table>
-      <ButtonGroup>
-        <Button
-          content={buttonContent}
-          bgColor={"var(--bg-blue-color)"}
-          style={{ margin: "5vh 0 5vh 65%", color: "black" }}
-          onClick={handleCreatePatient}
-        />
-      </ButtonGroup>
     </PatientRecordsWrapper>
   </>);
 }
@@ -102,7 +125,7 @@ const PatientRecordsWrapper = styled.div`
   width: 100%;
   position: relative;
   .patient-record-title {
-    margin-left: 15%;
+    margin-left: 1%;
     font-weight: 700;
     font-size: 25px;
   }
@@ -113,6 +136,8 @@ export const Table = styled.div`
   width: 100%;
   margin: 0 auto;
   margin-top: 2%;
+  position: relative;
+  border-radius: 15px;
 `
 
 export const TableHead = styled.div`
@@ -123,6 +148,8 @@ export const TableHead = styled.div`
   font-weight: 700;
   text-align: center;
   background-color: var(--bg-blue-color); 
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
 `
 
 export const TableRow = styled.div`
@@ -136,6 +163,17 @@ export const TableRow = styled.div`
 
 export const ButtonGroup = styled.div`
   width: 100%;
+  position: absolute;
+`
+
+const Button = styled.button`
+  background-color: var(--bg-blue-color);
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  position: absolute;
+  right: 0;
+  top: 1vh;
 `
 
 export const DropdownWrapper = styled.div`

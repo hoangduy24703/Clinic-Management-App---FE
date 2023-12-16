@@ -6,7 +6,7 @@ import { useState } from "react";
 import { AiOutlineMore } from "react-icons/ai";
 import { dummyData } from "./dummyBill";
 import { IoMdAddCircleOutline } from "react-icons/io";
-import Button from "../../components/Button/Button";
+// import Button from "../../components/Button/Button";
 
 const header = [
   "ID Hóa Đơn",
@@ -70,11 +70,6 @@ const Bills = () => {
           <Scrollbar data={content} />
         </Table>
         <ButtonGroup>
-          <Button
-            content={buttonContent}
-            bgColor={"var(--bg-blue-color)"}
-            style={{ margin: "5vh 0 5vh 80%", color: "black" }}
-          />
         </ButtonGroup>
     </BillsWrapper>
   </>;
