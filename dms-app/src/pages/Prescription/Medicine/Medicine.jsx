@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import Search from "../../../components/Search/Search";
 import moment from "moment";
 import { getLoaiThuoc } from "../../../api/donthuoc/donthuoc";
+import PopupFormMed from "./PopUpFormMed";
 
 
 const header = [
@@ -25,7 +26,7 @@ const Medicine = () => {
   // const data = [...dummyData];'
   const [data, setData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  // const [isOpenPopupForm, setIsOpenPopupForm] = useState(false);
+  const [isOpenPopupFormThuoc, setIsOpenPopupFormThuoc] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
@@ -35,19 +36,30 @@ const Medicine = () => {
     marginLeft: "80%",
   }
 
+  const buttonContent = {
+    name: "",
+    title: "THÊM MỚI THUỐC"
+  }
   const handleDropdownOpen = (value) => {
     setSelectedItem(value.IDTHUOC);
     setIsOpen(!isOpen);
   }
 
   const handleOnNavigate = () => {
-    navigate("/patient-records/:idPatient");
+    // navigate("/patient-records/:idPatient");
   }
 
   const handleDelete = () => {
     
   }
+  const handleCreateThuoc = ()=>{
+    setIsOpenPopupFormThuoc(true);
+  }
 
+  function handleClosePopup ()
+  {
+    setIsOpenPopupFormThuoc (false);
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -71,6 +83,7 @@ const Medicine = () => {
         {isOpen && selectedItem === dataItem.IDTHUOC && 
         <Dropdown>
           <DropdownItem onClick={handleOnNavigate}>Sửa loại thuốc</DropdownItem>
+          
         </Dropdown>}
       </DropdownWrapper>
     </CustomTableRow>
@@ -83,7 +96,7 @@ const Medicine = () => {
       <Search onSubmit={handleSubmit} content={" Nhập tên thuốc "} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
     </div>
     <MedicineWrapper>
-      {/* <div className="patient-record-title">DANH SÁCH HỒ SƠ BỆNH NHÂN</div> */}
+      {isOpenPopupFormThuoc && <PopupFormMed handleClosePopup={handleClosePopup} />}
       <Table style={{ width: "80%", height: "50%", maxWidth: "1200px" }}>
         <CustomTableHead style={{ height: "50px", borderBottom: "2px solid" }}>
           {header?.map((headerItem) => {
@@ -91,9 +104,9 @@ const Medicine = () => {
           })}
         </CustomTableHead>
         <Scrollbar data={content} />
-        <ButtonGroup>
-          {/* <Button onClick={handleCreatePatient}>{buttonContent.name} {buttonContent.title}</Button> */}
-        </ButtonGroup>
+        {/* <ButtonGroup> */}
+          <Button onClick={handleCreateThuoc}>{buttonContent.name} {buttonContent.title}</Button>
+        {/* </ButtonGroup> */}
       </Table>
     </MedicineWrapper>
   </div>);
@@ -103,29 +116,36 @@ export default Medicine;
 
 const MedicineWrapper = styled.div`
   width: 100%;
-  .prescription-title {
-    margin-left: 10%;
-    font-weight: 700;
-    font-size: 20px;
-  }
+  position: relative;
+
+  // .prescription-title {
+  //   margin-left: 10%;
+  //   font-weight: 700;
+  //   font-size: 20px;
+  // }
 `
 
-const ButtonGroup = styled.div`
-  display: flex;
-  justify-content: space-around;
-  padding: 5vh 20%;
-  margin: 0 20%;
-  gap: 20px;
-`
-
-// const Button = styled.button`
-//   padding: 10px;
-//   border-radius: 15px;
-//   width: 200px;
-//   border: none;
-//   padding: 10px;
-//   min-width: 100px;
+// const ButtonGroup = styled.div`
+//   display: flex;
+//   justify-content: space-around;
+//   padding: 5vh 20%;
+//   margin: 0 20%;
+//   gap: 20px;
 // `
+
+const Button = styled.button`
+  padding: 10px;
+  border-radius: 15px;
+  width: 200px;
+  border: none;
+  padding: 10px;
+  min-width: 100px;
+  position: absolute;
+  right: 0;
+  bottom: -8vh;
+  background-color: var(--bg-blue-color);
+  font-weight: 700;
+`
 
 const CustomTableHead = styled(TableHead)`
   grid-template-columns: repeat(${header.length + 1}, 1fr);

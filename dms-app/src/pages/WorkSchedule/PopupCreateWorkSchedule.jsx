@@ -3,75 +3,56 @@ import styled from "styled-components";
 import Form from 'react-bootstrap/Form';
 import { IoMdClose } from "react-icons/io";
 import { IoMdAddCircleOutline } from "react-icons/io";
-import { postThemLichHen } from "../../api/lichhen/lichhen";
+
 import DatePicker from "react-datepicker";
+import { postThemLichLamViec } from "../../api/lichlamviec/lichlamviec";
 
 const PopupFormCreateWorkSchedule = ({handleClosePopup}) => {  
-  const [ngayhen, setNgayhen] = useState("");
-  const [thoigianhen, setThoigianhen] = useState("");
-  const [tinhtrang, setTinhtrang] = useState("");
-  const [phong, setPhong] = useState("");
-  const [ghichu, setGhichu] = useState("");
-  const [bacsi, setBacsi] = useState("");
-  const [benhnhan, setBenhnhan] = useState("");
-  const [trokham, setTrokham] = useState("");
+  const [idnhanvien, setIDNhanVien] = useState("");
+  const [ngay, setNgay] = useState("");
+  const [idcalam, setIDCaLam] = useState("");
+  
 
-  async function handleAddKHDT() {
-    // KIỂM TRA ĐIỀU KIỆN
-    await postThemLichHen(ngayhen, thoigianhen, tinhtrang, phong, ghichu, bacsi, benhnhan, trokham);
-    alert("TẠO KẾ HOẠCH ĐIỀU TRỊ THÀNH CÔNG");
-  }
-
+  
   const FormGroupStyle = {
     display: "flex",
     width: "100%"
+  }
+async function handleAddLichLamViec() {
+    // KIỂM TRA ĐIỀU KIỆN
+    console.log("co chay")
+    await postThemLichLamViec(idnhanvien, ngay, idcalam)
+    console.log("co chay 2")
+    const a  = Prompt("TẠO KẾ HOẠCH ĐIỀU TRỊ THÀNH CÔNG");
+
   }
 
   return (<>
     <PopupWrapper>
       <Form>
         <IoMdClose style={{marginLeft: "105%", marginTop: "-20%", cursor: "pointer"}} size="30px" onClick={handleClosePopup}/>
-        <div className="popup-title">THÊM MỚI LỊCH HẸN</div>
+        <div className="popup-title">THÊM MỚI LỊCH LÀM VIỆC</div>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
-          <Form.Label style={{width: "300px", fontWeight: "700"}}>NGÀY HẸN</Form.Label>
+          <Form.Label style={{width: "300px", fontWeight: "700"}}>ID NHÂN VIÊN</Form.Label>
+          <Form.Control type="text" placeholder=" Nhập ID Nhân Viên " onChange={(event) => { setIDNhanVien(event.target.value) }} value={idnhanvien} style={{width: "100%"}}/>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
+          <Form.Label style={{width: "300px", fontWeight: "700"}}>LỊCH LÀM VIỆC</Form.Label>
           <CustomDatePicker
-            selected={ngayhen}
-            onChange={(date) => setNgayhen(date)}
+            selected={ngay}
+            onChange={(date) => setNgay(date)}
             dateFormat="dd/MM/yyyy"
             placeholderText=" Chọn ngày"
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
-          <Form.Label style={{width: "300px", fontWeight: "700"}}>THỜI GIAN HẸN</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập mô tả " onChange={(event) => { setThoigianhen(event.target.value) }} value={thoigianhen} style={{width: "100%"}}/>
+          <Form.Label style={{width: "300px", fontWeight: "700"}}>ID CA LÀM</Form.Label>
+        <Form.Control type="text" placeholder=" Nhập ID Ca Làm " onChange={(event) => { setIDCaLam(event.target.value) }} value={idcalam} style={{width: "100%"}}/>
         </Form.Group>
-        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
-          <Form.Label style={{width: "300px", fontWeight: "700"}}>PHÒNG</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập trạng thái " onChange={(event) => { setPhong(event.target.value) }} value={phong} style={{width: "100%"}}/>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
-          <Form.Label style={{width: "300px", fontWeight: "700"}}>TÌNH TRẠNG</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập ghi chú " onChange={(event) => { setTinhtrang(event.target.value) }} value={tinhtrang} style={{width: "100%"}}/>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
-          <Form.Label style={{width: "300px", fontWeight: "700"}}>GHI CHÚ</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập tổng giá " onChange={(event) => { setGhichu(event.target.value) }} value={ghichu} style={{width: "100%"}}/>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
-          <Form.Label style={{width: "300px", fontWeight: "700"}}>BỆNH NHÂN</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập id bệnh nhân " onChange={(event) => { setBenhnhan(event.target.value) }} value={benhnhan} style={{width: "100%"}}/>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
-          <Form.Label style={{width: "300px", fontWeight: "700"}}>BÁC SĨ PHỤ TRÁCH</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập tên id bác sĩ phụ trách " onChange={(event) => { setBacsi(event.target.value) }} value={bacsi} style={{width: "100%"}}/>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
-          <Form.Label style={{width: "300px", fontWeight: "700"}}>TRỢ KHÁM</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập tên id bác sĩ phụ trách " onChange={(event) => { setTrokham(event.target.value) }} value={trokham} style={{width: "100%"}}/>
-        </Form.Group>
+    
         <ButtonGroup>
           <Button className="btn-cancel" onClick={handleClosePopup}>HỦY</Button>
-          <Button className="btn-create"><IoMdAddCircleOutline size="20px" onClick={handleAddKHDT}/> TẠO </Button>
+          <Button className="btn-create"><IoMdAddCircleOutline size="20px" onClick={handleAddLichLamViec}/> TẠO </Button>
         </ButtonGroup>
       </Form>
     </PopupWrapper>

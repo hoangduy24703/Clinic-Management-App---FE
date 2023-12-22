@@ -37,13 +37,17 @@ const Prescription = () => {
     padding: "10px",
     margin: "3vh"
   }
-
+  const buttonContent = {
+    name: "",
+    title: "THÊM MỚI THUỐC"
+  }
   return (<>
     <SliderCategory />
     <PrescriptionBody>
       {content.map((item, index) => {
         return <Button content={item} bgColor={"var(--bg-grey-color)"} style={btnStyle} key={index} onClick={() => handleNavigate(index)} />
       })}
+      
     </PrescriptionBody>
   </>);
 }
