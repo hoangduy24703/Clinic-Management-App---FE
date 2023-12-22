@@ -27,3 +27,25 @@ export async function postLichHenDayToDay(NGAY_A, NGAY_B) {
     NGAY_B: NGAY_B
   })
 }
+
+export async function postThemLichHen(NGAYHEN, THOIGIANHEN, TINHTRANG, PHONG, GHICHU, BACSI, BENHNHAN, TROKHAM) {
+  return await api.post(`/lichhen/createLH`, {
+    NGAYHEN: NGAYHEN,
+    THOIGIANHEN: THOIGIANHEN,
+    TINHTRANG: TINHTRANG,
+    PHONG: PHONG,
+    GHICHU: GHICHU,
+    BACSI: BACSI,
+    BENHNHAN: BENHNHAN, 
+    TROKHAM: TROKHAM
+  })
+}
+
+export async function postXoaLichHen(NGAYHEN, THOIGIANHEN, BACSI, BENHNHAN) {
+  return await api.post(`/lichhen/deleteLH`, {
+    NGAYHEN: NGAYHEN,
+    THOIGIANHEN: THOIGIANHEN,
+    BACSI: BACSI,
+    BENHNHAN: BENHNHAN
+  })
+}
