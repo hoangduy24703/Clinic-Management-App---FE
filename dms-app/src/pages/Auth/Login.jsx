@@ -3,22 +3,39 @@ import styled from 'styled-components';
 // import Button from '../../components/Button/Button';
 import { postLogin } from '../../api/auth/auth';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setIsLogin } from '../../redux/slice/authSlice';
+import { useEffect } from 'react';
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [auth, setAuth] = useState();
+  const [role, setRole] = useState("");
+  const [idPhongkham, setIdPhongkham] = useState("");
+  const dispatch = useDispatch();
 
   async function handleSubmit(event) {
     event.preventDefault();
-    setAuth(postLogin({username, password}));
+    const auth = await postLogin(username, password);
+    console.log(auth?.data?.data);
+    setRole(auth?.data?.data?.LOAINV);
+    setIdPhongkham(auth?.data?.IDPHONGKHAM);
     setUsername("");
     setPassword("");
+    if (auth?.data?.isSuccess !== false) {
+      dispatch(setIsLogin(true));
+      // localStorage.setItem("isLogin", JSON.stringify(true));
+      // localStorage.setItem("role", JSON.stringify(role));
+      // localStorage.setItem("idPhongKham", JSON.stringify(idPhongkham));
+    }
+    else {
+      dispatch(setIsLogin(false));
+      // localStorage.setItem("isLogin", JSON.stringify(false));
+      // localStorage.setItem("role", JSON.stringify(null));
+      // localStorage.setItem("idPhongKham", JSON.stringify(null));
+    }
   }
-  const buttonContent = {
-    name: "",
-    title: "SIGN IN",
-  }
+
   return (
     <LoginContainer>
       <Title >DENTAL MANAGEMENT SYSTEM</Title>

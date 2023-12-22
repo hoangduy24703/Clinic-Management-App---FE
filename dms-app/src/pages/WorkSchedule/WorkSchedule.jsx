@@ -1,6 +1,6 @@
-import { Table, TableRow, TableHead, Dropdown, DropdownItem, DropdownWrapper } from "../../Patient/PatientRecords/PatientRecords";
-import SliderCategory from "../../../components/Slider/SliderCategory";
-import Scrollbar from "../../../components/Scrollbar/Scrollbar";
+import { Table, TableHead, TableRow, Dropdown, DropdownItem, DropdownWrapper } from "../Patient/PatientRecords/PatientRecords";
+import SliderCategory from "../../components/Slider/SliderCategory";
+import Scrollbar from "../../components/Scrollbar/Scrollbar";
 import styled from "styled-components";
 import { AiOutlineMore } from "react-icons/ai";
 import { useEffect, useState } from "react";
@@ -8,18 +8,17 @@ import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import DatePicker from 'react-datepicker';
 import Form from 'react-bootstrap/Form';
-import { getListBDTbyDate } from "../../../api/dieutri/dieutri";
+import { postLichLamViec } from "../../api/lichlamviec/lichlamviec";
 
 const header = [
-  "ID BỆNH NHÂN",
-  "BUỔI ĐIỀU TRỊ",
-  "KẾ HOẠCH ĐIỀU TRỊ",
-  "BÁC SĨ ĐIỀU TRỊ",
-  "NGÀY ĐIỀU TRỊ",
+  "ID NHÂN VIÊN",
+  "NGÀY",
+  "CA LÀM",
 ];
 
-const ByDate = () => {
-  const [dataBDT, setDataBDT] = useState([]);
+
+const WorkScheduleByDate = () => {
+  const [data, setData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
   const [ngayA, setNgayA] = useState(null);
@@ -38,12 +37,12 @@ const ByDate = () => {
   }
 
   const handleDropdownOpen = (value) => {
-    setSelectedItem(value.IDBUOIDIEUTRI);
+    setSelectedItem(value.IDNHANVIEN);
     setIsOpen(!isOpen);
   }
 
   const handleOnNavigate = () => {
-    // navigate("/patient-records/:idPatient");
+    navigate("/patient-records/:idPatient");
   }
 
   const handleDelete = () => {
@@ -54,25 +53,27 @@ const ByDate = () => {
     e.preventDefault();
     const dateA = moment(ngayA).format("YYYY-MM-DD");
     const dateB = moment(ngayB).format("YYYY-MM-DD");
-    const data = await getListBDTbyDate(dateA, dateB);
-    console.log(data?.data?.data?.listBDT);
-    setDataBDT(data?.data?.data?.listBDT);
+    const data = await postLichLamViec(dateA, dateB);
+    console.log(data);
+    setData(data?.data?.data?.listBDT);
   }
 
-  const content = dataBDT?.map((dataItem, index) => {
+  useEffect(() => {
+    console.log(moment(ngayA).format("YYYY-MM-DD"));
+    console.log(moment(ngayB).format("YYYY-MM-DD"));
+  }, [ngayA, ngayB])
+
+  const content = data?.map((dataItem, index) => {
     return <TableRow key={index}>
-      <span>{dataItem.BNKHAMLE}</span>
-      <span>{dataItem.IDBUOIDIEUTRI}</span>
-      <span>{dataItem.KEHOACHDT}</span>
-      <span>{dataItem.KHAMCHINH}</span>
-      <span>{moment(dataItem.NGAYDT).format("DD/MM/YYYY")}</span>
+      <span>{dataItem.IDNHANVIEN}</span>
+      <span>{moment(dataItem.NGAY).format("DD/MM/YYYY")}</span>
+      <span>{dataItem.CALAM}</span>
       <DropdownWrapper>
         <AiOutlineMore style={categoryStyle} onClick={() => handleDropdownOpen(dataItem)} />
-        {isOpen && selectedItem === dataItem.IDBUOIDIEUTRI &&
+        {isOpen && selectedItem === dataItem.IDNHANVIEN &&
           <Dropdown>
-            <DropdownItem onClick={handleOnNavigate}>Xem buổi điều trị</DropdownItem>
-            <DropdownItem onClick={handleOnNavigate}>Sửa buổi điều trị</DropdownItem>
-            <DropdownItem onClick={handleDelete}>Xóa buổi điều trị</DropdownItem>
+            <DropdownItem onClick={handleOnNavigate}>Sửa lịch làm việc</DropdownItem>
+            <DropdownItem onClick={handleDelete}>Xóa lịch làm việc</DropdownItem>
           </Dropdown>}
       </DropdownWrapper>
     </TableRow>
@@ -81,7 +82,7 @@ const ByDate = () => {
 
   return (<div style={{ marginBottom: "5vh" }}>
     <SliderCategory />
-    <ByDateWrapper>
+    <WorkScheduleByDateWrapper>
       {/* <div className="patient-record-title">DANH SÁCH HỒ SƠ BỆNH NHÂN</div> */}
       <FormWrapper onSubmit={handleSubmit}>
         <Form.Group style={FormGroupStyle}>
@@ -115,13 +116,13 @@ const ByDate = () => {
         </TableHead>
         <Scrollbar data={content} />
       </Table>
-    </ByDateWrapper>
+    </WorkScheduleByDateWrapper>
   </div>);
 }
 
-export default ByDate;
+export default WorkScheduleByDate;
 
-const ByDateWrapper = styled.div`
+const WorkScheduleByDateWrapper = styled.div`
   width: 100%;
   .prescription-title {
     margin-left: 10%;

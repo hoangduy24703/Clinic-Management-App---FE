@@ -3,16 +3,11 @@ import SliderCategory from "../../../components/Slider/SliderCategory";
 import Scrollbar from "../../../components/Scrollbar/Scrollbar";
 import styled from "styled-components";
 import { AiOutlineMore } from "react-icons/ai";
-import { IoMdAddCircleOutline } from "react-icons/io";
-import { LuEye } from "react-icons/lu";
-import { MdDeleteOutline } from "react-icons/md";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import {dummyData} from "../../Patient/PatientRecords/patientDummy";
 import Search from "../../../components/Search/Search";
 import { getListBDTbyID } from '../../../api/dieutri/dieutri';
+import BDTDetail from "../BDTDetail/BDTDetail";
 import moment from "moment";
-
 
 const header = [
   "ID BỆNH NHÂN",
@@ -23,13 +18,11 @@ const header = [
 ];
 
 const ByPatient = () => {
-  // const data = [...dummyData];'
-  const [dataPatient, setDataPatient] = useState([]);
+  const [data, setData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  // const [isOpenPopupForm, setIsOpenPopupForm] = useState(false);
+  const [isOpenPopupBDT, setIsOpenPopupBDT] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
   const [searchTerm, setSearchTerm] = useState('');
-  const navigate = useNavigate();
 
   const categoryStyle = {
     cursor: "pointer",
@@ -41,11 +34,11 @@ const ByPatient = () => {
     setIsOpen(!isOpen);
   }
 
-  const handleOnNavigatePatient = () => {
-    navigate("/patient-records/:idPatient");
+  const handleOnViewBDT = () => {
+    setIsOpenPopupBDT(true);
   }
 
-  const handleDeletePatient = () => {
+  const handleDelete = () => {
     
   }
 
@@ -56,11 +49,10 @@ const ByPatient = () => {
     const result = await getListBDTbyID(searchTerm);
     console.log(result);
     console.log(result?.data?.data?.listBDT)
-    setDataPatient(result?.data?.data?.listBDT);
+    setData(result?.data?.data?.listBDT);
   }
-  
 
-  const content = dataPatient?.map((dataItem, index) => {
+  const content = data?.map((dataItem, index) => {
     return <TableRow key={index}>
       <span>{dataItem.BNKHAMLE}</span>
       <span>{dataItem.IDBUOIDIEUTRI}</span>
@@ -71,14 +63,13 @@ const ByPatient = () => {
         <AiOutlineMore style={categoryStyle} onClick={() => handleDropdownOpen(dataItem)}/>
         {isOpen && selectedItem === dataItem.IDBUOIDIEUTRI && 
         <Dropdown>
-          <DropdownItem onClick={handleOnNavigatePatient}>Xem buổi điều trị</DropdownItem>
-          <DropdownItem onClick={handleOnNavigatePatient}>Sửa buổi điều trị</DropdownItem>
-          <DropdownItem onClick={handleDeletePatient}>Xóa buổi điều trị</DropdownItem>
+          <DropdownItem onClick={handleOnViewBDT}>Xem buổi điều trị</DropdownItem>
+          <DropdownItem onClick={handleOnViewBDT}>Sửa buổi điều trị</DropdownItem>
+          <DropdownItem onClick={handleDelete}>Xóa buổi điều trị</DropdownItem>
         </Dropdown>}
       </DropdownWrapper>
     </TableRow>
-  })
-
+  });
 
   return (<div style={{marginBottom: "5vh"}}>
     <SliderCategory />
@@ -86,11 +77,11 @@ const ByPatient = () => {
       <Search onSubmit={handleSubmit} content={" Nhập mã bệnh nhân "} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
     </div>
     <ByPatientWrapper>
-      {/* <div className="patient-record-title">DANH SÁCH HỒ SƠ BỆNH NHÂN</div> */}
+      {isOpenPopupBDT && <BDTDetail title={"BUỔI ĐIỀU TRỊ " + selectedItem} IDBUOIDIEUTRI={selectedItem}/>}
       <Table style={{ width: "80%", height: "50%", maxWidth: "1200px" }}>
         <TableHead style={{ height: "50px", borderBottom: "2px solid" }}>
           {header?.map((headerItem) => {
-            return <span >{headerItem}</span>
+            return <span>{headerItem}</span>
           })}
         </TableHead>
         <Scrollbar data={content} />
@@ -120,6 +111,8 @@ const ButtonGroup = styled.div`
   margin: 0 20%;
   gap: 20px;
 `
+
+
 
 // const Button = styled.button`
 //   padding: 10px;

@@ -3,21 +3,26 @@ import SliderCategory from "../../../components/Slider/SliderCategory";
 import Scrollbar from "../../../components/Scrollbar/Scrollbar";
 import styled from "styled-components";
 import { AiOutlineMore } from "react-icons/ai";
+import { IoMdAddCircleOutline } from "react-icons/io";
+import { LuEye } from "react-icons/lu";
+import { MdDeleteOutline } from "react-icons/md";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {dummyData} from "../../Patient/PatientRecords/patientDummy";
 import Search from "../../../components/Search/Search";
 import { getListBDTbyID } from '../../../api/dieutri/dieutri';
 import moment from "moment";
 
+
 const header = [
-  "ID BỆNH NHÂN",
-  "BUỔI ĐIỀU TRỊ",
-  "KẾ HOẠCH ĐIỀU TRỊ",
-  "BÁC SĨ ĐIỀU TRỊ",
-  "NGÀY ĐIỀU TRỊ",
+  "ID THUỐC",
+  "TÊN THUỐC",
+  "SỐ LƯỢNG",
+  "GIÁ",
 ];
 
-const KHDTByPatient = () => {
+const Medicine = () => {
+  // const data = [...dummyData];'
   const [data, setData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   // const [isOpenPopupForm, setIsOpenPopupForm] = useState(false);
@@ -31,12 +36,12 @@ const KHDTByPatient = () => {
   }
 
   const handleDropdownOpen = (value) => {
-    setSelectedItem(value.IDBUOIDIEUTRI);
+    setSelectedItem(value.IDTHUOC);
     setIsOpen(!isOpen);
   }
 
   const handleOnNavigate = () => {
-    // navigate("/patient-records/:idPatient");
+    navigate("/patient-records/:idPatient");
   }
 
   const handleDelete = () => {
@@ -56,28 +61,29 @@ const KHDTByPatient = () => {
 
   const content = data?.map((dataItem, index) => {
     return <TableRow key={index}>
-      <span>{dataItem.BNKHAMLE}</span>
-      <span>{dataItem.IDBUOIDIEUTRI}</span>
-      <span>{dataItem.KEHOACHDT}</span>
-      <span>{dataItem.KHAMCHINH}</span>
-      <span>{moment(dataItem.NGAYDT).format("DD/MM/YYYY")}</span>
+      <span>{dataItem.IDTHUOC}</span>
+      <span>{dataItem.TENTHUOC}</span>
+      <span>{dataItem.SOLUONG}</span>
+      <span>{dataItem.GIA}</span>
       <DropdownWrapper>
         <AiOutlineMore style={categoryStyle} onClick={() => handleDropdownOpen(dataItem)}/>
-        {isOpen && selectedItem === dataItem.IDBUOIDIEUTRI && 
+        {isOpen && selectedItem === dataItem.IDTHUOC && 
         <Dropdown>
-          <DropdownItem onClick={handleOnNavigate}>Sửa kế hoạch điều trị</DropdownItem>
-          <DropdownItem onClick={handleDelete}>Xóa kế hoạch điều trị</DropdownItem>
+          <DropdownItem onClick={handleOnNavigate}>Xem buổi điều trị</DropdownItem>
+          <DropdownItem onClick={handleOnNavigate}>Sửa buổi điều trị</DropdownItem>
+          <DropdownItem onClick={handleDelete}>Xóa buổi điều trị</DropdownItem>
         </Dropdown>}
       </DropdownWrapper>
     </TableRow>
   })
 
+
   return (<div style={{marginBottom: "5vh"}}>
     <SliderCategory />
     <div style={{display: "flex"}}>
-      <Search onSubmit={handleSubmit} content={" Nhập mã bệnh nhân "} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
+      <Search onSubmit={handleSubmit} content={" Nhập mã thuốc "} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
     </div>
-    <KHDTByPatientWrapper>
+    <MedicineWrapper>
       {/* <div className="patient-record-title">DANH SÁCH HỒ SƠ BỆNH NHÂN</div> */}
       <Table style={{ width: "80%", height: "50%", maxWidth: "1200px" }}>
         <TableHead style={{ height: "50px", borderBottom: "2px solid" }}>
@@ -90,13 +96,13 @@ const KHDTByPatient = () => {
           {/* <Button onClick={handleCreatePatient}>{buttonContent.name} {buttonContent.title}</Button> */}
         </ButtonGroup>
       </Table>
-    </KHDTByPatientWrapper>
+    </MedicineWrapper>
   </div>);
 }
 
-export default KHDTByPatient;
+export default Medicine;
 
-const KHDTByPatientWrapper = styled.div`
+const MedicineWrapper = styled.div`
   width: 100%;
   .prescription-title {
     margin-left: 10%;

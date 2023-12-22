@@ -1,9 +1,12 @@
 import api from "../index";
 
-export async function postLogin(payload) {
+export async function postLogin(username, password) {
   try {
-    const request = { ...payload };
-    const response = await api.post('/auth/login', request);
+    const request = { 
+      SDT: username,
+      MATKHAU: password
+     };
+    const response = await api.post('/dangnhap', request);
     return response;
   } catch(error) {
     console.log("Login failed", error.message);

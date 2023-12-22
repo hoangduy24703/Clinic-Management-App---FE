@@ -1,6 +1,6 @@
-import { Table, TableRow, TableHead, Dropdown, DropdownItem, DropdownWrapper } from "../../Patient/PatientRecords/PatientRecords";
-import SliderCategory from "../../../components/Slider/SliderCategory";
-import Scrollbar from "../../../components/Scrollbar/Scrollbar";
+import { Table, TableHead, TableRow, Dropdown, DropdownItem, DropdownWrapper } from "../Patient/PatientRecords/PatientRecords";
+import SliderCategory from "../../components/Slider/SliderCategory";
+import Scrollbar from "../../components/Scrollbar/Scrollbar";
 import styled from "styled-components";
 import { AiOutlineMore } from "react-icons/ai";
 import { useEffect, useState } from "react";
@@ -8,18 +8,19 @@ import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import DatePicker from 'react-datepicker';
 import Form from 'react-bootstrap/Form';
-import { getListBDTbyDate } from "../../../api/dieutri/dieutri";
+import { postLichHenDayToDay } from "../../api/lichhen/lichhen";
 
 const header = [
-  "ID BỆNH NHÂN",
-  "BUỔI ĐIỀU TRỊ",
-  "KẾ HOẠCH ĐIỀU TRỊ",
-  "BÁC SĨ ĐIỀU TRỊ",
-  "NGÀY ĐIỀU TRỊ",
+  "BỆNH NHÂN",
+  "KHÁM CHÍNH",
+  "TRỢ KHÁM",
+  "NGÀY",
+  "TÌNH TRẠNG",
 ];
 
-const ByDate = () => {
-  const [dataBDT, setDataBDT] = useState([]);
+
+const ScheduleByDate = () => {
+  const [data, setData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
   const [ngayA, setNgayA] = useState(null);
@@ -43,7 +44,7 @@ const ByDate = () => {
   }
 
   const handleOnNavigate = () => {
-    // navigate("/patient-records/:idPatient");
+    navigate("/patient-records/:idPatient");
   }
 
   const handleDelete = () => {
@@ -54,12 +55,16 @@ const ByDate = () => {
     e.preventDefault();
     const dateA = moment(ngayA).format("YYYY-MM-DD");
     const dateB = moment(ngayB).format("YYYY-MM-DD");
-    const data = await getListBDTbyDate(dateA, dateB);
+    const data = await postLichHenDayToDay(dateA, dateB);
     console.log(data?.data?.data?.listBDT);
-    setDataBDT(data?.data?.data?.listBDT);
+    setData(data?.data?.data?.listBDT);
   }
 
-  const content = dataBDT?.map((dataItem, index) => {
+  useEffect(() => {
+    console.log(moment(ngayA).format("YYYY-MM-DD"));
+  }, [ngayA, ngayB])
+
+  const content = data?.map((dataItem, index) => {
     return <TableRow key={index}>
       <span>{dataItem.BNKHAMLE}</span>
       <span>{dataItem.IDBUOIDIEUTRI}</span>
@@ -70,9 +75,8 @@ const ByDate = () => {
         <AiOutlineMore style={categoryStyle} onClick={() => handleDropdownOpen(dataItem)} />
         {isOpen && selectedItem === dataItem.IDBUOIDIEUTRI &&
           <Dropdown>
-            <DropdownItem onClick={handleOnNavigate}>Xem buổi điều trị</DropdownItem>
-            <DropdownItem onClick={handleOnNavigate}>Sửa buổi điều trị</DropdownItem>
-            <DropdownItem onClick={handleDelete}>Xóa buổi điều trị</DropdownItem>
+            <DropdownItem onClick={handleOnNavigate}>Sửa lịch hẹn</DropdownItem>
+            <DropdownItem onClick={handleDelete}>Xóa lịch hẹn</DropdownItem>
           </Dropdown>}
       </DropdownWrapper>
     </TableRow>
@@ -81,14 +85,14 @@ const ByDate = () => {
 
   return (<div style={{ marginBottom: "5vh" }}>
     <SliderCategory />
-    <ByDateWrapper>
+    <ScheduleByDateWrapper>
       {/* <div className="patient-record-title">DANH SÁCH HỒ SƠ BỆNH NHÂN</div> */}
       <FormWrapper onSubmit={handleSubmit}>
         <Form.Group style={FormGroupStyle}>
           <Form.Label style={{width: "100px", fontWeight: "700"}}>TỪ NGÀY</Form.Label>
           <DatePicker
-          selected={ngayA}
-          onChange={(date) => setNgayA(date)}
+          selected={ngayB}
+          onChange={(date) => setNgayB(date)}
           dateFormat="dd/MM/yyyy"
           placeholderText=" Chọn ngày bắt đầu"
         />
@@ -96,8 +100,8 @@ const ByDate = () => {
         <Form.Group style={FormGroupStyle}>
           <Form.Label style={{width: "100px", fontWeight: "700"}}>ĐẾN NGÀY</Form.Label>
           <DatePicker
-          selected={ngayB}
-          onChange={(date) => setNgayB(date)}
+          selected={ngayA}
+          onChange={(date) => setNgayA(date)}
           dateFormat="dd/MM/yyyy"
           placeholderText=" Chọn ngày bắt đầu"
         />
@@ -115,13 +119,13 @@ const ByDate = () => {
         </TableHead>
         <Scrollbar data={content} />
       </Table>
-    </ByDateWrapper>
+    </ScheduleByDateWrapper>
   </div>);
 }
 
-export default ByDate;
+export default ScheduleByDate;
 
-const ByDateWrapper = styled.div`
+const ScheduleByDateWrapper = styled.div`
   width: 100%;
   .prescription-title {
     margin-left: 10%;

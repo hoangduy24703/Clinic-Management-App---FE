@@ -1,27 +1,25 @@
-import { Table, TableHead, TableRow, Dropdown, DropdownItem, DropdownWrapper } from "../Patient/PatientRecords/PatientRecords";
-import SliderCategory from "../../components/Slider/SliderCategory";
-import Scrollbar from "../../components/Scrollbar/Scrollbar";
-import Search from "../../components/Search/Search";
-import styled from "styled-components";
-import { AiOutlineMore } from "react-icons/ai";
+import { TableRow, Dropdown, DropdownItem, DropdownWrapper, Table, TableHead } from "../Patient/PatientRecords/PatientRecords";
 import { useState } from "react";
+import SliderCategory from "../../components/Slider/SliderCategory";
 import { useNavigate } from "react-router-dom";
+import { postLichHenIDNS } from "../../api/lichhen/lichhen";
 import moment from "moment";
-import { getHoaDon } from "../../api/hoadon/hoadon";
-
+import { AiOutlineMore } from "react-icons/ai";
+import styled from "styled-components";
+import Search from "../../components/Search/Search";
+import Scrollbar from "../../components/Scrollbar/Scrollbar";
 
 const header = [
-  "ID THUỐC",
-  "TÊN THUỐC",
-  "SỐ LƯỢNG",
-  "GIÁ",
+  "BỆNH NHÂN",
+  "KHÁM CHÍNH",
+  "TRỢ KHÁM",
+  "NGÀY",
+  "TÌNH TRẠNG",
 ];
 
-const Bills = () => {
-  // const data = [...dummyData];'
+export default function ScheduleByClinic() {
   const [data, setData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  // const [isOpenPopupForm, setIsOpenPopupForm] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
@@ -32,7 +30,7 @@ const Bills = () => {
   }
 
   const handleDropdownOpen = (value) => {
-    setSelectedItem(value.IDTHUOC);
+    setSelectedItem(value.BACSI);
     setIsOpen(!isOpen);
   }
 
@@ -48,22 +46,22 @@ const Bills = () => {
     e.preventDefault();
     
     console.log("Search", searchTerm);
-    const result = await getHoaDon(searchTerm);
+    const result = await postLichHenIDNS(searchTerm);
     console.log(result);
     console.log(result?.data?.data?.listBDT)
     setData(result?.data?.data?.listBDT);
   }
-  
 
   const content = data?.map((dataItem, index) => {
     return <TableRow key={index}>
-      <span>{dataItem.IDTHUOC}</span>
-      <span>{dataItem.TENTHUOC}</span>
-      <span>{dataItem.SOLUONG}</span>
-      <span>{dataItem.GIA}</span>
+      <span>{dataItem.IDBENHNHAN}</span>
+      <span>{dataItem.BACSI}</span>
+      <span>{dataItem.TROKHAM}</span>
+      <span>{moment(dataItem.NGAYHEN).format("DD/MM/YYYY")}</span>
+      <span>{dataItem.TINHTRANG}</span>
       <DropdownWrapper>
         <AiOutlineMore style={categoryStyle} onClick={() => handleDropdownOpen(dataItem)}/>
-        {isOpen && selectedItem === dataItem.IDTHUOC && 
+        {isOpen && selectedItem === dataItem.IDBUOIDIEUTRI && 
         <Dropdown>
           <DropdownItem onClick={handleOnNavigate}>Xem buổi điều trị</DropdownItem>
           <DropdownItem onClick={handleOnNavigate}>Sửa buổi điều trị</DropdownItem>
@@ -73,13 +71,12 @@ const Bills = () => {
     </TableRow>
   })
 
-
-  return (<div style={{marginBottom: "5vh"}}>
+  return(<>
     <SliderCategory />
     <div style={{display: "flex"}}>
-      <Search onSubmit={handleSubmit} content={" Nhập mã thuốc "} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
+      <Search onSubmit={handleSubmit} content={" Nhập mã phòng khám "} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
     </div>
-    <BillWrapper>
+    <ScheduleByClinicWrapper>
       {/* <div className="patient-record-title">DANH SÁCH HỒ SƠ BỆNH NHÂN</div> */}
       <Table style={{ width: "80%", height: "50%", maxWidth: "1200px" }}>
         <TableHead style={{ height: "50px", borderBottom: "2px solid" }}>
@@ -88,17 +85,15 @@ const Bills = () => {
           })}
         </TableHead>
         <Scrollbar data={content} />
-        <ButtonGroup>
-          {/* <Button onClick={handleCreatePatient}>{buttonContent.name} {buttonContent.title}</Button> */}
-        </ButtonGroup>
+        {/* <ButtonGroup>
+          <Button onClick={handleCreatePatient}>{buttonContent.name} {buttonContent.title}</Button>
+        </ButtonGroup> */}
       </Table>
-    </BillWrapper>
-  </div>);
+    </ScheduleByClinicWrapper>
+  </>); 
 }
 
-export default Bills;
-
-const BillWrapper = styled.div`
+const ScheduleByClinicWrapper = styled.div`
   width: 100%;
   .prescription-title {
     margin-left: 10%;
@@ -114,12 +109,3 @@ const ButtonGroup = styled.div`
   margin: 0 20%;
   gap: 20px;
 `
-
-// const Button = styled.button`
-//   padding: 10px;
-//   border-radius: 15px;
-//   width: 200px;
-//   border: none;
-//   padding: 10px;
-//   min-width: 100px;
-// `

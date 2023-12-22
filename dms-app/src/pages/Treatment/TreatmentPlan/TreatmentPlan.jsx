@@ -5,7 +5,7 @@ import PopupFormKHDT from "../PopupFormTreatment/PopupFormKHDT";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import PopupFormBDT from "../PopupFormTreatment/PopupFormBDT";
-import PopupFormBDTDate from "../ByDate/PopupFormBDTDate";
+// import PopupFormBDTDate from "../ByDate/PopupFormBDTDate";
 
 const content = [
   {
@@ -44,7 +44,7 @@ const TreatmentPlan = () => {
         navigate("/treatment-plan/by-patient");
         break;
       case 2:
-        navigate("/treatment-plan/by-patient");
+        navigate("/treatment-plan/KHDT-by-patient");
         break;
       case 3:
         setIsOpenPopupFormKHDT(true);
@@ -82,7 +82,7 @@ const TreatmentPlan = () => {
 
 export default TreatmentPlan;
 
-const TreatmentPlanBody = styled.div`
+export const TreatmentPlanBody = styled.div`
   display: grid;
   grid-template-columns: repeat(${content.length - 2}, 400px);
   padding: 40px;

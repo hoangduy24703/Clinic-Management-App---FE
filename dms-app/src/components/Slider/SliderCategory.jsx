@@ -5,16 +5,19 @@ import { useNavigate, useHistory } from 'react-router-dom';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
+import { useDispatch } from "react-redux";
+import { setIsLogin } from "../../redux/slice/authSlice";
 
 const SliderCategory = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch()
 
   var settings = {
     dots: true,
     infinite: false,
     speed: 500,
-    slidesToShow: 6,
-    slidesToScroll: 8,
+    slidesToShow: 7,
+    slidesToScroll: 10,
   };
 
   const getScreenSize = () => {
@@ -36,30 +39,37 @@ const SliderCategory = () => {
 
   function handleSelectPage(key) {
     switch(key) {
-      case 0:
-        navigate("/patient-records");
+      case 0: 
+        navigate("/dashboard");
         break;
       case 1:
-        navigate("/treatment-plan");
+        navigate("/patient-records");
         break;
       case 2:
-        // naviagte cho nay
+        navigate("/treatment-plan");
         break;
       case 3:
-        // naviagte cho nay
+        navigate("/appointment-schedule");
         break;
       case 4:
-        navigate("/prescription");
+        navigate("/work-schedule/by-date");
         break;
       case 5:
-        navigate("/bills");
+        navigate("/prescription");
         break;
       case 6:
-        // naviagte cho nay
+        navigate("/bills");
         break;
       case 7:
-          // naviagte cho nay
-          break;
+        // naviagte cho nay
+        break;
+      case 8:
+        navigate("/staff");
+        break;
+      case 9:
+        dispatch(setIsLogin(false));
+        // localStorage.setItem("isLogin", JSON.stringify(false));
+        break;
       default:
     }
   }

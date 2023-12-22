@@ -1,26 +1,25 @@
-import { Table, TableRow, TableHead, Dropdown, DropdownItem, DropdownWrapper } from "../../Patient/PatientRecords/PatientRecords";
-import SliderCategory from "../../../components/Slider/SliderCategory";
-import Scrollbar from "../../../components/Scrollbar/Scrollbar";
-import styled from "styled-components";
-import { AiOutlineMore } from "react-icons/ai";
+import { TableRow, Dropdown, DropdownItem, DropdownWrapper, Table, TableHead } from "../Patient/PatientRecords/PatientRecords";
 import { useState } from "react";
+import SliderCategory from "../../components/Slider/SliderCategory";
 import { useNavigate } from "react-router-dom";
-import Search from "../../../components/Search/Search";
-import { getListBDTbyID } from '../../../api/dieutri/dieutri';
+import { postLichHenIDBN } from "../../api/lichhen/lichhen";
 import moment from "moment";
+import { AiOutlineMore } from "react-icons/ai";
+import styled from "styled-components";
+import Search from "../../components/Search/Search";
+import Scrollbar from "../../components/Scrollbar/Scrollbar";
 
 const header = [
-  "ID BỆNH NHÂN",
-  "BUỔI ĐIỀU TRỊ",
-  "KẾ HOẠCH ĐIỀU TRỊ",
-  "BÁC SĨ ĐIỀU TRỊ",
-  "NGÀY ĐIỀU TRỊ",
+  "BỆNH NHÂN",
+  "KHÁM CHÍNH",
+  "TRỢ KHÁM",
+  "NGÀY",
+  "TÌNH TRẠNG",
 ];
 
-const KHDTByPatient = () => {
+export default function ScheduleByPatient() {
   const [data, setData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  // const [isOpenPopupForm, setIsOpenPopupForm] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
@@ -36,7 +35,7 @@ const KHDTByPatient = () => {
   }
 
   const handleOnNavigate = () => {
-    // navigate("/patient-records/:idPatient");
+    navigate("/patient-records/:idPatient");
   }
 
   const handleDelete = () => {
@@ -47,37 +46,37 @@ const KHDTByPatient = () => {
     e.preventDefault();
     
     console.log("Search", searchTerm);
-    const result = await getListBDTbyID(searchTerm);
+    const result = await postLichHenIDBN(searchTerm);
     console.log(result);
     console.log(result?.data?.data?.listBDT)
     setData(result?.data?.data?.listBDT);
   }
-  
 
   const content = data?.map((dataItem, index) => {
     return <TableRow key={index}>
-      <span>{dataItem.BNKHAMLE}</span>
-      <span>{dataItem.IDBUOIDIEUTRI}</span>
-      <span>{dataItem.KEHOACHDT}</span>
+      <span>{dataItem.IDBENHNHAN}</span>
       <span>{dataItem.KHAMCHINH}</span>
+      <span>{dataItem.TROKHAM}</span>
       <span>{moment(dataItem.NGAYDT).format("DD/MM/YYYY")}</span>
+      <span>{dataItem.TINHTRANG}</span>
       <DropdownWrapper>
         <AiOutlineMore style={categoryStyle} onClick={() => handleDropdownOpen(dataItem)}/>
         {isOpen && selectedItem === dataItem.IDBUOIDIEUTRI && 
         <Dropdown>
-          <DropdownItem onClick={handleOnNavigate}>Sửa kế hoạch điều trị</DropdownItem>
-          <DropdownItem onClick={handleDelete}>Xóa kế hoạch điều trị</DropdownItem>
+          <DropdownItem onClick={handleOnNavigate}>Xem buổi điều trị</DropdownItem>
+          <DropdownItem onClick={handleOnNavigate}>Sửa buổi điều trị</DropdownItem>
+          <DropdownItem onClick={handleDelete}>Xóa buổi điều trị</DropdownItem>
         </Dropdown>}
       </DropdownWrapper>
     </TableRow>
   })
 
-  return (<div style={{marginBottom: "5vh"}}>
+  return(<>
     <SliderCategory />
     <div style={{display: "flex"}}>
       <Search onSubmit={handleSubmit} content={" Nhập mã bệnh nhân "} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
     </div>
-    <KHDTByPatientWrapper>
+    <ScheduleByPatientWrapper>
       {/* <div className="patient-record-title">DANH SÁCH HỒ SƠ BỆNH NHÂN</div> */}
       <Table style={{ width: "80%", height: "50%", maxWidth: "1200px" }}>
         <TableHead style={{ height: "50px", borderBottom: "2px solid" }}>
@@ -90,13 +89,11 @@ const KHDTByPatient = () => {
           {/* <Button onClick={handleCreatePatient}>{buttonContent.name} {buttonContent.title}</Button> */}
         </ButtonGroup>
       </Table>
-    </KHDTByPatientWrapper>
-  </div>);
+    </ScheduleByPatientWrapper>
+  </>); 
 }
 
-export default KHDTByPatient;
-
-const KHDTByPatientWrapper = styled.div`
+const ScheduleByPatientWrapper = styled.div`
   width: 100%;
   .prescription-title {
     margin-left: 10%;
@@ -112,12 +109,3 @@ const ButtonGroup = styled.div`
   margin: 0 20%;
   gap: 20px;
 `
-
-// const Button = styled.button`
-//   padding: 10px;
-//   border-radius: 15px;
-//   width: 200px;
-//   border: none;
-//   padding: 10px;
-//   min-width: 100px;
-// `
