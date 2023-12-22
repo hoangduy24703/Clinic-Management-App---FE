@@ -20,10 +20,14 @@ const PopupFormCreateWorkSchedule = ({handleClosePopup}) => {
   }
 async function handleAddLichLamViec() {
     // KIỂM TRA ĐIỀU KIỆN
-    console.log("co chay")
+    // console.log("co chay")
+    let date = new Date(ngay)
+    let temp = date.setDate(date.getDate() + 2);
+    setNgay(temp)
+    // console.log(temp)
     await postThemLichLamViec(idnhanvien, ngay, idcalam)
-    console.log("co chay 2")
-    const a  = Prompt("TẠO KẾ HOẠCH ĐIỀU TRỊ THÀNH CÔNG");
+    // console.log("co chay 2")
+    // const a  = Prompt("TẠO KẾ HOẠCH ĐIỀU TRỊ THÀNH CÔNG");
 
   }
 
@@ -39,6 +43,7 @@ async function handleAddLichLamViec() {
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>LỊCH LÀM VIỆC</Form.Label>
           <CustomDatePicker
+            // utcOffset={0}
             selected={ngay}
             onChange={(date) => setNgay(date)}
             dateFormat="dd/MM/yyyy"
@@ -52,7 +57,7 @@ async function handleAddLichLamViec() {
     
         <ButtonGroup>
           <Button className="btn-cancel" onClick={handleClosePopup}>HỦY</Button>
-          <Button className="btn-create"><IoMdAddCircleOutline size="20px" onClick={handleAddLichLamViec}/> TẠO </Button>
+          <Button className="btn-create" onClick={handleAddLichLamViec}><IoMdAddCircleOutline size="20px" /> TẠO </Button>
         </ButtonGroup>
       </Form>
     </PopupWrapper>
