@@ -77,7 +77,7 @@ const ByPatient = () => {
       <Search onSubmit={handleSubmit} content={" Nhập mã bệnh nhân "} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
     </div>
     <ByPatientWrapper>
-      {isOpenPopupBDT && <BDTDetail title={"BUỔI ĐIỀU TRỊ " + selectedItem} IDBUOIDIEUTRI={selectedItem}/>}
+      {isOpenPopupBDT && <BDTDetail title={"BUỔI ĐIỀU TRỊ " + selectedItem} ID={selectedItem} setIsOpenPopup={setIsOpenPopupBDT}/>}
       <Table style={{ width: "80%", height: "50%", maxWidth: "1200px" }}>
         <TableHead style={{ height: "50px", borderBottom: "2px solid" }}>
           {header?.map((headerItem) => {

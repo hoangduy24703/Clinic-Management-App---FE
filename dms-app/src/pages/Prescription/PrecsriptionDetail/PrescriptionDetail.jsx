@@ -8,7 +8,6 @@ import { LuEye } from "react-icons/lu";
 import { MdDeleteOutline } from "react-icons/md";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {dummyData} from "../../Patient/PatientRecords/patientDummy";
 import Search from "../../../components/Search/Search";
 import { getListBDTbyID } from '../../../api/dieutri/dieutri';
 import moment from "moment";

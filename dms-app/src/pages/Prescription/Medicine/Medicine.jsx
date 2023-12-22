@@ -8,17 +8,17 @@ import { LuEye } from "react-icons/lu";
 import { MdDeleteOutline } from "react-icons/md";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {dummyData} from "../../Patient/PatientRecords/patientDummy";
 import Search from "../../../components/Search/Search";
-import { getListBDTbyID } from '../../../api/dieutri/dieutri';
 import moment from "moment";
+import { getLoaiThuoc } from "../../../api/donthuoc/donthuoc";
 
 
 const header = [
   "ID THUỐC",
   "TÊN THUỐC",
-  "SỐ LƯỢNG",
-  "GIÁ",
+  "THÀNH PHẦN",
+  "GIÁ THUỐC",
+  "ĐƠN VỊ TÍNH",
 ];
 
 const Medicine = () => {
@@ -52,45 +52,44 @@ const Medicine = () => {
     e.preventDefault();
     
     console.log("Search", searchTerm);
-    const result = await getListBDTbyID(searchTerm);
+    const result = await getLoaiThuoc(searchTerm);
     console.log(result);
-    console.log(result?.data?.data?.listBDT)
-    setData(result?.data?.data?.listBDT);
+    console.log(result?.data?.data?.listDonThuoc);
+    setData(result?.data?.data?.listDonThuoc);
   }
   
 
   const content = data?.map((dataItem, index) => {
-    return <TableRow key={index}>
+    return <CustomTableRow key={index}>
       <span>{dataItem.IDTHUOC}</span>
       <span>{dataItem.TENTHUOC}</span>
-      <span>{dataItem.SOLUONG}</span>
-      <span>{dataItem.GIA}</span>
+      <span>{dataItem.THANHPHAN}</span>
+      <span>{dataItem.GIATHUOC}</span>
+      <span>{dataItem.DONVITINH}</span>
       <DropdownWrapper>
         <AiOutlineMore style={categoryStyle} onClick={() => handleDropdownOpen(dataItem)}/>
         {isOpen && selectedItem === dataItem.IDTHUOC && 
         <Dropdown>
-          <DropdownItem onClick={handleOnNavigate}>Xem buổi điều trị</DropdownItem>
-          <DropdownItem onClick={handleOnNavigate}>Sửa buổi điều trị</DropdownItem>
-          <DropdownItem onClick={handleDelete}>Xóa buổi điều trị</DropdownItem>
+          <DropdownItem onClick={handleOnNavigate}>Sửa loại thuốc</DropdownItem>
         </Dropdown>}
       </DropdownWrapper>
-    </TableRow>
+    </CustomTableRow>
   })
 
 
   return (<div style={{marginBottom: "5vh"}}>
     <SliderCategory />
     <div style={{display: "flex"}}>
-      <Search onSubmit={handleSubmit} content={" Nhập mã thuốc "} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
+      <Search onSubmit={handleSubmit} content={" Nhập tên thuốc "} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
     </div>
     <MedicineWrapper>
       {/* <div className="patient-record-title">DANH SÁCH HỒ SƠ BỆNH NHÂN</div> */}
       <Table style={{ width: "80%", height: "50%", maxWidth: "1200px" }}>
-        <TableHead style={{ height: "50px", borderBottom: "2px solid" }}>
+        <CustomTableHead style={{ height: "50px", borderBottom: "2px solid" }}>
           {header?.map((headerItem) => {
             return <span >{headerItem}</span>
           })}
-        </TableHead>
+        </CustomTableHead>
         <Scrollbar data={content} />
         <ButtonGroup>
           {/* <Button onClick={handleCreatePatient}>{buttonContent.name} {buttonContent.title}</Button> */}
@@ -127,3 +126,10 @@ const ButtonGroup = styled.div`
 //   padding: 10px;
 //   min-width: 100px;
 // `
+
+const CustomTableHead = styled(TableHead)`
+  grid-template-columns: repeat(${header.length + 1}, 1fr);
+` 
+const CustomTableRow = styled(TableRow)`
+grid-template-columns: repeat(${header.length + 1}, 1fr);
+` 

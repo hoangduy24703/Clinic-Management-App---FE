@@ -77,11 +77,11 @@ const PopupForm = ({handleClosePopup}) => {
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>PASSWORD</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập mật khẩu " onChange={(event) => { setPassword(event.target.value) }} value={password} style={{width: "100%"}}/>
+          <Form.Control type="password" placeholder=" Nhập mật khẩu " onChange={(event) => { setPassword(event.target.value) }} value={password} style={{width: "100%"}}/>
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>BÁC SĨ MẶC ĐỊNH</Form.Label>
-          <Form.Control type="password" placeholder=" Nhập bác sĩ mặc định " onChange={(event) => { setBacsimd(event.target.value) }} value={bacsimd} style={{width: "100%"}}/>
+          <Form.Control type="text" placeholder=" Nhập bác sĩ mặc định " onChange={(event) => { setBacsimd(event.target.value) }} value={bacsimd} style={{width: "100%"}}/>
         </Form.Group>
         <ButtonGroup>
           <Button className="btn-cancel" onClick={handleClosePopup}>HỦY</Button>

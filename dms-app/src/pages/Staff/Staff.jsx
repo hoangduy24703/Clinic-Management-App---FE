@@ -46,9 +46,6 @@ export default function Staff() {
       <span>{dataItem.LOAINV}</span>
       <span>{dataItem.MATKHAU}</span>
       <span>{dataItem.IDPHONGKHAM}</span>
-      <DropdownWrapper>
-        <AiOutlineMore style={categoryStyle}/>
-      </DropdownWrapper>
     </CustomTableRow>
   });
 
@@ -78,9 +75,9 @@ const StaffWrapper = styled.div`
 `
 
 const CustomTableRow = styled(TableRow)`
-  grid-template-columns: repeat(${header.length + 1}, 1fr);
+  grid-template-columns: repeat(${header.length}, 1fr);
 `
 
 const CustomerTableHead = styled(TableHead)`
-  grid-template-columns: repeat(${header.length + 1}, 1fr);
+  grid-template-columns: repeat(${header.length}, 1fr);
 `

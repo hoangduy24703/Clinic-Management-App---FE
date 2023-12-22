@@ -99,8 +99,7 @@ const PatientDetails = () => {
         </PatientRightItems>
       </PatientRight>
       <ButtonGroup style={{bottom: "-10px"}}>
-        <Button style={{right: "150px", backgroundColor: "var(--btn-color-3)"}}>CHỈNH SỬA</Button>
-        <Button style={{right: "0", backgroundColor: "var(--btn-color-2)"}}>XÓA</Button>
+        <Button style={{right: "0", backgroundColor: "var(--btn-color-3)"}}>CHỈNH SỬA</Button>
       </ButtonGroup>
     </PatientDetailsWrapper>    
   </Wrapper>);

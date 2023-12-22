@@ -53,5 +53,7 @@ export async function addChiTietDonThuoc(idthuoc, iddonthuoc, soluong) {
 }
 
 export async function getLoaiThuoc(tenthuoc) {
-  return await api.get(`/donthuoc/getLoaiThuoc/${tenthuoc}`);
+  return await api.post(`/donthuoc/getLoaiThuoc`, {
+    tenthuoc: tenthuoc
+  });
 }

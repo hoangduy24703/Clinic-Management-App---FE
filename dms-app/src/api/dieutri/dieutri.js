@@ -11,6 +11,11 @@ export async function getListBDTbyDate(DATEA, DATEB) {
   return response;
 }
 
+export async function getListKHbyID(IDBENHNHAN) {
+  const response = await api.get(`/dieutri/ListKH/benhnhan/${IDBENHNHAN}`);
+  return response;
+}
+
 export async function getKeHoach(IDKEHOACHDIEUTRI) {
   const response = await api.get(`/dieutri/KeHoach/${IDKEHOACHDIEUTRI}`);
   return response;

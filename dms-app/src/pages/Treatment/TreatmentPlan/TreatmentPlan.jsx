@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Button from "../../../components/Button/Button";
 import PopupFormKHDT from "../PopupFormTreatment/PopupFormKHDT";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import PopupFormBDT from "../PopupFormTreatment/PopupFormBDT";
 // import PopupFormBDTDate from "../ByDate/PopupFormBDTDate";
 
@@ -68,7 +68,7 @@ const TreatmentPlan = () => {
     margin: "3vh"
   }
   
-  return (<>
+  return (<Fragment>
     <SliderCategory />
     {isOpenPopupFormKHDT && <PopupFormKHDT handleClosePopup={handleClosePopup}/>}
     {isOpenPopupFormBDT && <PopupFormBDT handleClosePopup={handleClosePopup}/>}
@@ -77,7 +77,7 @@ const TreatmentPlan = () => {
         return <Button content={item} bgColor={"var(--bg-grey-color)"} style={btnStyle} key={index} onClick={() => handleNavigate(index)} />
       })}
     </TreatmentPlanBody>
-  </>);
+  </Fragment>);
 }
 
 export default TreatmentPlan;

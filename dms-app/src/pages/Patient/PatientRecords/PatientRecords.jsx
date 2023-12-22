@@ -65,10 +65,6 @@ const PatientRecords = () => {
 
   }
 
-  const handleDeletePatient = () => {
-    
-  }
-
   const handleCreatePatient = () => {
     setIsOpenPopupForm(!isOpenPopupForm);
   }
@@ -90,7 +86,6 @@ const PatientRecords = () => {
         <Dropdown>
           <DropdownItem onClick={handleViewPatient}>Xem thông tin hồ sơ</DropdownItem>
           <DropdownItem onClick={handleUpdatePatient}>Sửa thông tin hồ sơ</DropdownItem>
-          <DropdownItem onClick={handleDeletePatient}>Xóa hồ sơ bệnh nhân</DropdownItem>
         </Dropdown>}
       </DropdownWrapper>
     </TableRow>

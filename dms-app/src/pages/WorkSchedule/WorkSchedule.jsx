@@ -12,15 +12,19 @@ import { postLichLamViec } from "../../api/lichlamviec/lichlamviec";
 
 const header = [
   "ID NHÂN VIÊN",
+  "TÊN NHÂN VIÊN",
   "NGÀY",
-  "CA LÀM",
+  "THÁNG",
+  "NĂM",
+  "ID CA LÀM",
+  "KHUNG GIỜ",
 ];
-
 
 const WorkScheduleByDate = () => {
   const [data, setData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
+  const [searchTerm, setSearchTerm] = useState("");
   const [ngayA, setNgayA] = useState(null);
   const [ngayB, setNgayB] = useState(null);
 
@@ -53,9 +57,9 @@ const WorkScheduleByDate = () => {
     e.preventDefault();
     const dateA = moment(ngayA).format("YYYY-MM-DD");
     const dateB = moment(ngayB).format("YYYY-MM-DD");
-    const data = await postLichLamViec(dateA, dateB);
+    const data = await postLichLamViec(searchTerm, dateA, dateB);
     console.log(data);
-    setData(data?.data?.data?.listBDT);
+    setData(data?.data?.data);  
   }
 
   useEffect(() => {
@@ -64,10 +68,14 @@ const WorkScheduleByDate = () => {
   }, [ngayA, ngayB])
 
   const content = data?.map((dataItem, index) => {
-    return <TableRow key={index}>
+    return <CustomTableRow key={index}>
       <span>{dataItem.IDNHANVIEN}</span>
-      <span>{moment(dataItem.NGAY).format("DD/MM/YYYY")}</span>
-      <span>{dataItem.CALAM}</span>
+      <span>{dataItem.TENNV}</span>
+      <span>{dataItem.NGAY}</span>
+      <span>{dataItem.THANG}</span>
+      <span>{dataItem.NAM}</span>
+      <span>{dataItem.IDCALAM}</span>
+      <span>{dataItem.KHUNGGIO}</span>
       <DropdownWrapper>
         <AiOutlineMore style={categoryStyle} onClick={() => handleDropdownOpen(dataItem)} />
         {isOpen && selectedItem === dataItem.IDNHANVIEN &&
@@ -76,7 +84,7 @@ const WorkScheduleByDate = () => {
             <DropdownItem onClick={handleDelete}>Xóa lịch làm việc</DropdownItem>
           </Dropdown>}
       </DropdownWrapper>
-    </TableRow>
+    </CustomTableRow>
   })
 
 
@@ -100,20 +108,26 @@ const WorkScheduleByDate = () => {
           selected={ngayB}
           onChange={(date) => setNgayB(date)}
           dateFormat="dd/MM/yyyy"
-          placeholderText=" Chọn ngày bắt đầu"
+          placeholderText=" Chọn ngày kết thúc"
         />
         </Form.Group>
+        <Input
+          type="text"
+          placeholder={"Nhập mã nha sĩ"}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
         <Form.Group style={FormGroupStyle}>
           <Button>SEARCH</Button>
         </Form.Group>
       </FormWrapper>
       
       <Table style={{ width: "80%", height: "50%", maxWidth: "1200px" }}>
-        <TableHead style={{ height: "50px", borderBottom: "2px solid" }}>
+        <CustomTableHead style={{ height: "50px", borderBottom: "2px solid" }}>
           {header?.map((headerItem) => {
             return <span >{headerItem}</span>
           })}
-        </TableHead>
+        </CustomTableHead>
         <Scrollbar data={content} />
       </Table>
     </WorkScheduleByDateWrapper>
@@ -145,4 +159,17 @@ const Button = styled.button`
   min-width: 100px;
   background-color: var(--bg-blue-color);
   font-weight: 700;
+`
+
+const CustomTableHead = styled(TableHead)`
+  grid-template-columns: repeat(${header.length + 1}, 1fr);
+` 
+const CustomTableRow = styled(TableRow)`
+  grid-template-columns: repeat(${header.length + 1}, 1fr);
+`
+
+const Input = styled.input`
+  padding: 8px;
+  width: 400px;
+  margin: 0 auto;
 `

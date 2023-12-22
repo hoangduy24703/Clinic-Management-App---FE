@@ -9,6 +9,7 @@ import moment from "moment";
 import DatePicker from 'react-datepicker';
 import Form from 'react-bootstrap/Form';
 import { getListBDTbyDate } from "../../../api/dieutri/dieutri";
+import BDTDetail from "../BDTDetail/BDTDetail";
 
 const header = [
   "ID BỆNH NHÂN",
@@ -21,6 +22,7 @@ const header = [
 const ByDate = () => {
   const [dataBDT, setDataBDT] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenPopupBDT, setIsOpenPopupBDT] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
   const [ngayA, setNgayA] = useState(null);
   const [ngayB, setNgayB] = useState(null);
@@ -42,11 +44,15 @@ const ByDate = () => {
     setIsOpen(!isOpen);
   }
 
-  const handleOnNavigate = () => {
-    // navigate("/patient-records/:idPatient");
+  const handleOnView = () => {
+    setIsOpenPopupBDT(true);
   }
 
   const handleDelete = () => {
+
+  }
+
+  const handleOnUpdate = () => {
 
   }
 
@@ -70,8 +76,8 @@ const ByDate = () => {
         <AiOutlineMore style={categoryStyle} onClick={() => handleDropdownOpen(dataItem)} />
         {isOpen && selectedItem === dataItem.IDBUOIDIEUTRI &&
           <Dropdown>
-            <DropdownItem onClick={handleOnNavigate}>Xem buổi điều trị</DropdownItem>
-            <DropdownItem onClick={handleOnNavigate}>Sửa buổi điều trị</DropdownItem>
+            <DropdownItem onClick={handleOnView}>Xem buổi điều trị</DropdownItem>
+            <DropdownItem onClick={handleOnUpdate}>Sửa buổi điều trị</DropdownItem>
             <DropdownItem onClick={handleDelete}>Xóa buổi điều trị</DropdownItem>
           </Dropdown>}
       </DropdownWrapper>
@@ -106,7 +112,7 @@ const ByDate = () => {
           <Button>SEARCH</Button>
         </Form.Group>
       </FormWrapper>
-      
+      {isOpenPopupBDT && <BDTDetail title={"BUỔI ĐIỀU TRỊ " + selectedItem} IDBUOIDIEUTRI={selectedItem} setIsOpenPopup={setIsOpenPopupBDT}/>}
       <Table style={{ width: "80%", height: "50%", maxWidth: "1200px" }}>
         <TableHead style={{ height: "50px", borderBottom: "2px solid" }}>
           {header?.map((headerItem) => {

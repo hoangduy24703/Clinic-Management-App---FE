@@ -6,37 +6,44 @@ import { AiOutlineMore } from "react-icons/ai";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Search from "../../../components/Search/Search";
-import { getListBDTbyID } from '../../../api/dieutri/dieutri';
+import { getListKHbyID } from '../../../api/dieutri/dieutri';
+import KHDTDetail from "../KHDTDetail/KHDTDetail";
 import moment from "moment";
 
 const header = [
-  "ID BỆNH NHÂN",
-  "BUỔI ĐIỀU TRỊ",
-  "KẾ HOẠCH ĐIỀU TRỊ",
-  "BÁC SĨ ĐIỀU TRỊ",
-  "NGÀY ĐIỀU TRỊ",
+  "ID ĐIỀU TRỊ",
+  "ID BỆNH NHÂN", 
+  "BS PHỤ TRÁCH",
+  "TRẠNG THÁI",
+  "MÔ TẢ",
+  "GHI CHÚ",
 ];
 
 const KHDTByPatient = () => {
   const [data, setData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  // const [isOpenPopupForm, setIsOpenPopupForm] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
   const [searchTerm, setSearchTerm] = useState('');
-  const navigate = useNavigate();
+  const [isOpenPopupKHDT, setIsOpenPopupKHDT] = useState(false);
 
   const categoryStyle = {
     cursor: "pointer",
     marginLeft: "80%",
   }
 
+  const buttonContent = {
+    name: "",
+    title: "THÊM MỚI KẾ HOẠCH"
+  }
+
   const handleDropdownOpen = (value) => {
-    setSelectedItem(value.IDBUOIDIEUTRI);
+    setSelectedItem(value.IDDIEUTRI);
     setIsOpen(!isOpen);
   }
 
-  const handleOnNavigate = () => {
+  const handleOnView = () => {
     // navigate("/patient-records/:idPatient");
+    setIsOpenPopupKHDT(true);
   }
 
   const handleDelete = () => {
@@ -47,29 +54,32 @@ const KHDTByPatient = () => {
     e.preventDefault();
     
     console.log("Search", searchTerm);
-    const result = await getListBDTbyID(searchTerm);
-    console.log(result);
-    console.log(result?.data?.data?.listBDT)
+    const result = await getListKHbyID(searchTerm);
     setData(result?.data?.data?.listBDT);
+  }
+
+  const handleCreateKHDT = async () => {
+
   }
   
 
   const content = data?.map((dataItem, index) => {
-    return <TableRow key={index}>
-      <span>{dataItem.BNKHAMLE}</span>
-      <span>{dataItem.IDBUOIDIEUTRI}</span>
-      <span>{dataItem.KEHOACHDT}</span>
-      <span>{dataItem.KHAMCHINH}</span>
-      <span>{moment(dataItem.NGAYDT).format("DD/MM/YYYY")}</span>
+    return <CustomTableRow key={index}>
+      <span>{dataItem.IDDIEUTRI}</span>
+      <span>{dataItem.BENHNHAN}</span>
+      <span>{dataItem.BSPHUTRACH}</span>
+      <span>{dataItem.TRANGTHAI}</span>
+      <span>{dataItem.MOTAKHDT}</span>
+      <span>{dataItem.GHICHUKHDT}</span>
       <DropdownWrapper>
         <AiOutlineMore style={categoryStyle} onClick={() => handleDropdownOpen(dataItem)}/>
-        {isOpen && selectedItem === dataItem.IDBUOIDIEUTRI && 
+        {isOpen && selectedItem === dataItem.IDDIEUTRI && 
         <Dropdown>
-          <DropdownItem onClick={handleOnNavigate}>Sửa kế hoạch điều trị</DropdownItem>
+          <DropdownItem onClick={handleOnView}>Xem chi tiết KHĐT</DropdownItem>
           <DropdownItem onClick={handleDelete}>Xóa kế hoạch điều trị</DropdownItem>
         </Dropdown>}
       </DropdownWrapper>
-    </TableRow>
+    </CustomTableRow>
   })
 
   return (<div style={{marginBottom: "5vh"}}>
@@ -78,17 +88,15 @@ const KHDTByPatient = () => {
       <Search onSubmit={handleSubmit} content={" Nhập mã bệnh nhân "} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
     </div>
     <KHDTByPatientWrapper>
-      {/* <div className="patient-record-title">DANH SÁCH HỒ SƠ BỆNH NHÂN</div> */}
+      {isOpenPopupKHDT && <KHDTDetail title={"KẾ HOẠCH " + selectedItem} ID={selectedItem} setIsOpenPopup={setIsOpenPopupKHDT}/>}
       <Table style={{ width: "80%", height: "50%", maxWidth: "1200px" }}>
-        <TableHead style={{ height: "50px", borderBottom: "2px solid" }}>
+        <CustomTableHead style={{ height: "50px", borderBottom: "2px solid" }}>
           {header?.map((headerItem) => {
             return <span >{headerItem}</span>
           })}
-        </TableHead>
+        </CustomTableHead>
         <Scrollbar data={content} />
-        <ButtonGroup>
-          {/* <Button onClick={handleCreatePatient}>{buttonContent.name} {buttonContent.title}</Button> */}
-        </ButtonGroup>
+        <Button onClick={handleCreateKHDT}>{buttonContent.name} {buttonContent.title}</Button>
       </Table>
     </KHDTByPatientWrapper>
   </div>);
@@ -98,6 +106,7 @@ export default KHDTByPatient;
 
 const KHDTByPatientWrapper = styled.div`
   width: 100%;
+  position: relative;
   .prescription-title {
     margin-left: 10%;
     font-weight: 700;
@@ -105,19 +114,33 @@ const KHDTByPatientWrapper = styled.div`
   }
 `
 
-const ButtonGroup = styled.div`
-  display: flex;
-  justify-content: space-around;
-  padding: 5vh 20%;
-  margin: 0 20%;
-  gap: 20px;
+// const ButtonGroup = styled.div`
+
+//   display: flex;
+//   justify-content: space-around;
+//   padding: 5vh 20%;
+//   margin: 0 20%;
+//   gap: 20px;
+// `
+
+const Button = styled.button`
+  padding: 10px;
+  border-radius: 15px;
+  width: 200px;
+  border: none;
+  padding: 10px;
+  min-width: 100px;
+  position: absolute;
+  right: 0;
+  bottom: -6vh;
+  background-color: var(--bg-blue-color);
+  font-weight: 700;
 `
 
-// const Button = styled.button`
-//   padding: 10px;
-//   border-radius: 15px;
-//   width: 200px;
-//   border: none;
-//   padding: 10px;
-//   min-width: 100px;
-// `
+const CustomTableHead = styled(TableHead)`
+  grid-template-columns: repeat(${header.length + 1}, 1fr);
+`
+
+const CustomTableRow = styled(TableRow)`
+  grid-template-columns: repeat(${header.length + 1}, 1fr);
+`

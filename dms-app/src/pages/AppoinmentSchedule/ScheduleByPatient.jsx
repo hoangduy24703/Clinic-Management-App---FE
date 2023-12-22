@@ -8,6 +8,7 @@ import { AiOutlineMore } from "react-icons/ai";
 import styled from "styled-components";
 import Search from "../../components/Search/Search";
 import Scrollbar from "../../components/Scrollbar/Scrollbar";
+import DatePicker from "react-datepicker";
 
 const header = [
   "BỆNH NHÂN",
@@ -22,6 +23,7 @@ export default function ScheduleByPatient() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
   const [searchTerm, setSearchTerm] = useState('');
+  const [date, setDate] = useState(null); 
   const navigate = useNavigate();
 
   const categoryStyle = {
@@ -48,8 +50,8 @@ export default function ScheduleByPatient() {
     console.log("Search", searchTerm);
     const result = await postLichHenIDBN(searchTerm);
     console.log(result);
-    console.log(result?.data?.data?.listBDT)
-    setData(result?.data?.data?.listBDT);
+    console.log(result?.data?.data)
+    setData(result?.data?.data);
   }
 
   const content = data?.map((dataItem, index) => {
@@ -74,7 +76,21 @@ export default function ScheduleByPatient() {
   return(<>
     <SliderCategory />
     <div style={{display: "flex"}}>
-      <Search onSubmit={handleSubmit} content={" Nhập mã bệnh nhân "} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
+    <FormSearch onSubmit={handleSubmit}>
+        <Input
+          type="text"
+          placeholder={"Nhập mã bệnh nhân"}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <CustomDatePicker
+          selected={date}
+          onChange={(date) => setDate(date)}
+          dateFormat="dd/MM/yyyy"
+          placeholderText=" Chọn ngày"
+        />
+        <Button type="submit">Search</Button>
+      </FormSearch>
     </div>
     <ScheduleByPatientWrapper>
       {/* <div className="patient-record-title">DANH SÁCH HỒ SƠ BỆNH NHÂN</div> */}
@@ -108,4 +124,26 @@ const ButtonGroup = styled.div`
   padding: 5vh 20%;
   margin: 0 20%;
   gap: 20px;
+`
+
+const FormSearch = styled.form`
+  display: flex;
+  margin: 20px auto;
+  gap: 10px;
+`
+
+const Input = styled.input`
+  padding: 8px;
+  width: 400px;
+`
+
+const Button = styled.button`
+  padding: 8px;
+  cursor: pointer;
+  border: none;
+  background-color: var(--bg-blue-color);
+  border-radius: 10px;
+`
+const CustomDatePicker = styled(DatePicker)`
+  padding: 10px;
 `
