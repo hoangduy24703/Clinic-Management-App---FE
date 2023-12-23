@@ -8,7 +8,6 @@ const PopupFormCTR = ({ handleClosePopup, setRangDieuTri, RangDieuTri }) => {
   const [tenRang, setTenRang] = useState("");
   const [matDieuTri, setMatDieuTri] = useState("");
 
-
   const FormGroupStyle = {
     display: "flex",
     width: "100%"

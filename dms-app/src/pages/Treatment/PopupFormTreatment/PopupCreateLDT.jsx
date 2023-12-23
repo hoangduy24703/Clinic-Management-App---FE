@@ -6,56 +6,66 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import PopupFormCTR from "./PopupFormCTR";
-import { addBDT } from "../../../api/dieutri/dieutri";
 
-const PopupFormLDT = ({ handleClosePopup, ctdt }) => {
+const PopupFormLDT = ({ handleClosePopup, setLoaiDieuTri, loaiDieuTri }) => {
   const [madieutri, setMadieutri] = useState('');
   const [RangDieuTri, setRangDieuTri] = useState([]);
   const [isOpenPopupCTR, setIsOpenPopupCTR] = useState(false);
-  const [isOpenPopupLDT, setIsOpenPopupLDT] = useState(false);
-  const [loaiDieuTri, setLoaiDieuTri] = useState([]);
 
   const FormGroupStyle = {
     display: "flex",
     width: "100%",
   }
 
-  useEffect(() => {
-    console.log(RangDieuTri);
-  }, [RangDieuTri])
+  function handleClosePopupCTR() {
+    setIsOpenPopupCTR(false);
+  }
 
+  function handleAddCTR(e) {
+    e.preventDefault();
+    setIsOpenPopupCTR(true);
+  }
 
+  function handleCreateLDT(e) {
+    e.preventDefault();
+    setLoaiDieuTri([...loaiDieuTri, {
+      MADIEUTRI: madieutri,
+      rangdt: RangDieuTri
+    }]);
+    handleClosePopup();
+  }
 
   return (<>
     <PopupWrapper>
-      {isOpenPopupCTR && <PopupFormCTR />}
-      {/* <Form>
+      {isOpenPopupCTR && <PopupFormCTR handleClosePopup={handleClosePopupCTR} setRangDieuTri={setRangDieuTri} RangDieuTri={RangDieuTri}/>}
+      <Form>
         <IoMdClose style={{ marginLeft: "105%", marginTop: "-20%", cursor: "pointer" }} size="30px" onClick={handleClosePopup} />
-        <div className="popup-title">THÊM MỚI CHI TIẾT ĐIỀU TRỊ</div>
+        <div className="popup-title">THÊM MỚI LOẠI ĐIỀU TRỊ</div>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
-          <Form.Label style={{ width: "300px", fontWeight: "700" }}>LOẠI ĐIỀU TRỊ</Form.Label>
+          <Form.Label style={{ width: "300px", fontWeight: "700" }}>MÃ ĐIỀU TRỊ</Form.Label>
           <Form.Control type="text" placeholder=" Nhập mã điều trị " onChange={(event) => { setMadieutri(event.target.value) }} value={madieutri} style={{ width: "100%" }} />
         </Form.Group>
-        <div style={{ height: "300px", overflowY: "scroll", backgroundColor: "var(--bg-grey-1-color)" }}>
+        <div style={{height: "300px", overflowY: "scroll"}}>
           {RangDieuTri?.map((item, index) => {
-            return <div style={{ padding: "10px" }}>
-              <h5>Mặt răng {index + 1}</h5>
-              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
-                <Form.Label style={{ width: "300px", fontWeight: "700" }}>TÊN RĂNG</Form.Label>
-                <Form.Control type="text" value={item.TENRANG} style={{ width: "80%" }} />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
-                <Form.Label style={{ width: "300px", fontWeight: "700" }}>MẶT ĐIỀU TRỊ</Form.Label>
-                <Form.Control type="text" value={item.MATDIEUTRI} style={{ width: "80%" }} />
-              </Form.Group>
-            </div>
+            return <>
+            <h4 style={{textAlign: "center"}}>Mặt răng {index + 1}</h4>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
+              <Form.Label style={{ width: "300px", fontWeight: "700" }}>TÊN RĂNG</Form.Label>
+              <Form.Control type="text" placeholder=" Nhập tên điều trị " value={item.TENRANG} style={{ width: "90%", marginRight:"10px" }} />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
+              <Form.Label style={{ width: "300px", fontWeight: "700" }}>MẶT ĐIỀU TRỊ</Form.Label>
+              <Form.Control type="text" placeholder=" Nhập mặt điều trị " value={item.MATDIEUTRI} style={{ width: "90%", marginRight:"10px" }} />
+            </Form.Group>
+            </>
           })}
         </div>
         <ButtonGroup>
           <Button className="btn-cancel" onClick={handleClosePopup}>HỦY</Button>
-          <Button className="btn-create" onClick={() => {}}><IoMdAddCircleOutline size="20px" /> TẠO </Button>
+          <Button className="btn-add-ctr" onClick={handleAddCTR}>THÊM CHI TIẾT RĂNG</Button>
+          <Button className="btn-create" onClick={handleCreateLDT}>TẠO</Button>
         </ButtonGroup>
-      </Form> */}
+      </Form>
     </PopupWrapper>
   </>)
 }

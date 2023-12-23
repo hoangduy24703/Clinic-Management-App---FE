@@ -5,76 +5,60 @@ import { IoMdClose } from "react-icons/io";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import PopupFormCTR from "./PopupFormCTR";
-import { addBDT } from "../../../api/dieutri/dieutri";
+import PopupFormLDT from "./PopupCreateLDT";
 
-const PopupFormCTDT = ({ handleClosePopup, ctdt }) => {
-  const [madieutri, setMadieutri] = useState('');
-  const [RangDieuTri, setRangDieuTri] = useState([]);
-  const [isOpenPopupCTR, setIsOpenPopupCTR] = useState(false);
+const PopupFormCTDT = ({ handleClosePopup, ctdt, bdt, setBDT, handleCloseBDT }) => {
   const [isOpenPopupLDT, setIsOpenPopupLDT] = useState(false);
   const [loaiDieuTri, setLoaiDieuTri] = useState([]);
-
   const FormGroupStyle = {
     display: "flex",
     width: "100%",
   }
 
-  useEffect(() => {
-    console.log(RangDieuTri);
-  }, [RangDieuTri])
-
   async function handleAddBDT(e) {
     e.preventDefault();
+    setBDT({
+      tongquan: ctdt,
+      chitietdieutri: loaiDieuTri,
+    })
+    handleClosePopup();
+    handleCloseBDT();
     // KIỂM TRA ĐIỀU KIỆN
     // await addBDT(mabenhnhan, idbuoidieutri, mota, ghichu, ngay, khamchinh, trokham, kehoach);
     // alert("TẠO BUỔI ĐIỀU TRỊ THÀNH CÔNG");
   }
 
-  function handleAddCTR(e) {
-    e.preventDefault();
-    setIsOpenPopupCTR(true);
-  }
-
-  function handleCloseAddCTR() {
-    setIsOpenPopupCTR(false);
-  }
-
   function handleAddLDT(e) {
     e.preventDefault();
-    
+    setIsOpenPopupLDT(true);
   }
+
+  function handleClosePopupLDT() {
+    setIsOpenPopupLDT(false);
+  }
+
+  useEffect(() => {
+    console.log(bdt);
+  }, [bdt])
 
   return (<>
     <PopupWrapper>
-      {isOpenPopupCTR && <PopupFormCTR handleClosePopup={handleCloseAddCTR} setRangDieuTri={setRangDieuTri} RangDieuTri={RangDieuTri} />}
+      {isOpenPopupLDT && <PopupFormLDT handleClosePopup={handleClosePopupLDT} setLoaiDieuTri={setLoaiDieuTri} loaiDieuTri={loaiDieuTri}/>}
       <Form>
-        <IoMdClose style={{ marginLeft: "105%", marginTop: "-20%", cursor: "pointer" }} size="30px" onClick={handleClosePopup} />
+        <IoMdClose style={{ position: "absolute" , right: "10px", top:"5px"}} size="30px" onClick={handleClosePopup} />
         <div className="popup-title">THÊM MỚI CHI TIẾT ĐIỀU TRỊ</div>
-        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
-          <Form.Label style={{ width: "300px", fontWeight: "700" }}>LOẠI ĐIỀU TRỊ</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập mã điều trị " onChange={(event) => { setMadieutri(event.target.value) }} value={madieutri} style={{ width: "100%" }} />
-        </Form.Group>
-        <div style={{ height: "300px", overflowY: "scroll", backgroundColor: "var(--bg-grey-1-color)" }}>
-          {RangDieuTri?.map((item, index) => {
-            return <div style={{ padding: "10px" }}>
-              <h5>Mặt răng {index + 1}</h5>
-              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
-                <Form.Label style={{ width: "300px", fontWeight: "700" }}>TÊN RĂNG</Form.Label>
-                <Form.Control type="text" value={item.TENRANG} style={{ width: "80%" }} />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
-                <Form.Label style={{ width: "300px", fontWeight: "700" }}>MẶT ĐIỀU TRỊ</Form.Label>
-                <Form.Control type="text" value={item.MATDIEUTRI} style={{ width: "80%" }} />
-              </Form.Group>
-            </div>
+        <div style={{height: "370px", overflowY: "scroll"}}>
+          {loaiDieuTri?.map((itemLdt) => {
+            return <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
+              <Form.Label style={{ width: "300px", fontWeight: "700" }}>LOẠI ĐIỀU TRỊ</Form.Label>
+              <Form.Control type="text" placeholder=" Nhập mã điều trị " value={itemLdt.MADIEUTRI} style={{ width: "100%" }} />
+            </Form.Group>
           })}
         </div>
         <ButtonGroup>
-          <Button className="btn-add-ctr" onClick={handleAddCTR}>THÊM CHI TIẾT RĂNG</Button>
-          <Button className="btn-add-ldt" onClick={() => {}}>THÊM LOẠI ĐIỀU TRỊ</Button>
+          <Button className="btn-add-ldt" onClick={handleAddLDT}>THÊM LOẠI ĐIỀU TRỊ</Button>
           <Button className="btn-cancel" onClick={handleClosePopup}>HỦY</Button>
-          <Button className="btn-create" onClick={handleAddBDT}><IoMdAddCircleOutline size="20px" /> TẠO </Button>
+          <Button className="btn-create" onClick={handleAddBDT}> TẠO </Button>
         </ButtonGroup>
       </Form>
     </PopupWrapper>
@@ -109,14 +93,22 @@ const PopupWrapper = styled.div`
 const ButtonGroup = styled.div`
   display: flex;
   padding-top: 2vh;
+  
   .btn-cancel {
     background-color: var(--grey-line-color);
+    font-weight: 700;
   }
   .btn-create {
     background-color: var( --btn-color-1);
+    font-weight: 700;
   }
   .btn-add-ctr {
     background-color: var(--bg-blue-color);
+    font-weight: 700;
+  }
+  .btn-add-ldt {
+    background-color: var(--bg-blue-color);
+    font-weight: 700;
   }
 `
 

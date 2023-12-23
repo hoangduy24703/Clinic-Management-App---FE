@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Form from 'react-bootstrap/Form';
 import { IoMdClose } from "react-icons/io";
@@ -17,6 +17,7 @@ const PopupFormBDT = ({handleClosePopup}) => {
   const [kehoach, setKehoach] = useState('');
   const [nextStep, setNextStep] = useState(false); 
   const [ctdt, setCtdt ]= useState({});
+  const [bdt, setBDT] = useState({});
 
   const FormGroupStyle = {
     display: "flex",
@@ -27,26 +28,29 @@ const PopupFormBDT = ({handleClosePopup}) => {
     e.preventDefault();
     // if (!mabenhnhan || !ngay || !khamchinh || !kehoach)
     //   return;
-    // setCtdt({
-    //   mabenhnhan: mabenhnhan,
-    //   mota: mota,
-    //   ghichu: ghichu,
-    //   ngay: ngay,
-    //   khamchinh: khamchinh,
-    //   trokham: trokham,
-    //   kehoach: kehoach,
-    // })
+    setCtdt({
+      mabenhnhan: mabenhnhan,
+      mota: mota,
+      ghichu: ghichu,
+      ngay: ngay,
+      khamchinh: khamchinh,
+      trokham: trokham,
+      kehoach: kehoach,
+    })
     setNextStep(true);
   }
 
   function handleCloseNextStep() {
     setNextStep(false);
-    
   }
+
+  useEffect(() => {
+    console.log(bdt);
+  }, [bdt]);
 
   return (<>
     <PopupWrapper>
-      {nextStep && <PopupFormCTDT handleClosePopup={handleCloseNextStep} ctdt={ctdt}/> }
+      {nextStep && <PopupFormCTDT handleClosePopup={handleCloseNextStep} ctdt={ctdt} bdt={bdt} setBDT={setBDT} handleCloseBDT={handleClosePopup}/> }
       <Form>
         <IoMdClose style={{position: "absolute", right: "20px", top: "10px"}} size="30px" onClick={handleClosePopup}/>
         <div className="popup-title">THÊM MỚI BUỔI ĐIỀU TRỊ</div>
