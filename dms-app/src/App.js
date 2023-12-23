@@ -25,16 +25,19 @@ import { useSelector } from "react-redux";
 
 function App() {
   const isLogin = useSelector(state => state.auth.isLogin);
-  // const [isLoginLocal, setIsLoginLocal] = useState(false);
-  // useEffect(() => {
-  //   setIsLoginLocal(localStorage.getItem("isLogin"));
-  // }, [isLoginLocal])
+  const isLoginLocal = Boolean(localStorage.getItem("isLogin"));
+  const role = localStorage.getItem("role");
+  
+  useEffect(() => {
+    console.log(isLoginLocal, role);
+  },[isLoginLocal, role])
+
   return (
     <>
-    {!isLogin && <Navigate to="/" />}
+    {!isLoginLocal && <Navigate to="/" />}
     <Routes>
-      <Route path="/" element={isLogin ? <Navigate to="/dashboard" /> : <Login isLogin={isLogin}/>} />
-      {isLogin &&
+      <Route path="/" element={isLoginLocal? <Navigate to="/dashboard" /> : <Login />} />
+      {isLoginLocal &&
       <>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/patient-records" element={<PatientRecords />} />

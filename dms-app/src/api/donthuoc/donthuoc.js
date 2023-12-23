@@ -45,7 +45,7 @@ export async function addDonThuoc(iddonthuoc, ngaycap, idbuoidieutri) {
 
 export async function addChiTietDonThuoc(idthuoc, iddonthuoc, soluong) {
   const request = {
-    idthuoc: iddonthuoc,
+    idthuoc: idthuoc,
     iddonthuoc: iddonthuoc,
     soluong: soluong
   }

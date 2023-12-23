@@ -10,31 +10,24 @@ import { useEffect } from 'react';
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
   const [role, setRole] = useState("");
-  const [idPhongkham, setIdPhongkham] = useState("");
+  const [idPhongkham, setIdPhongKham] = useState("");
+
   const dispatch = useDispatch();
 
   async function handleSubmit(event) {
     event.preventDefault();
     const auth = await postLogin(username, password);
-    console.log(auth?.data?.data);
-    setRole(auth?.data?.data?.LOAINV);
-    setIdPhongkham(auth?.data?.IDPHONGKHAM);
+
     setUsername("");
     setPassword("");
-    if (auth?.data?.isSuccess !== false) {
-      dispatch(setIsLogin(true));
-      // localStorage.setItem("isLogin", JSON.stringify(true));
-      // localStorage.setItem("role", JSON.stringify(role));
-      // localStorage.setItem("idPhongKham", JSON.stringify(idPhongkham));
-    }
-    else {
-      dispatch(setIsLogin(false));
-      // localStorage.setItem("isLogin", JSON.stringify(false));
-      // localStorage.setItem("role", JSON.stringify(null));
-      // localStorage.setItem("idPhongKham", JSON.stringify(null));
-    }
+    dispatch(setIsLogin(true));
+    localStorage.setItem("isLogin", auth?.data?.isSuccess);
+    localStorage.setItem("role", auth?.data?.data[0]?.LOAINV);
   }
+
+
 
   return (
     <LoginContainer>

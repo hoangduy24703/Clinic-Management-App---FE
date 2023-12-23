@@ -57,10 +57,6 @@ const KHDTByPatient = () => {
     const result = await getListKHbyID(searchTerm);
     setData(result?.data?.data?.listBDT);
   }
-
-  const handleCreateKHDT = async () => {
-
-  }
   
 
   const content = data?.map((dataItem, index) => {
@@ -96,7 +92,6 @@ const KHDTByPatient = () => {
           })}
         </CustomTableHead>
         <Scrollbar data={content} />
-        <Button onClick={handleCreateKHDT}>{buttonContent.name} {buttonContent.title}</Button>
       </Table>
     </KHDTByPatientWrapper>
   </div>);

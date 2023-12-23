@@ -67,8 +67,8 @@ const SliderCategory = () => {
         navigate("/staff");
         break;
       case 9:
-        dispatch(setIsLogin(false));
-        // localStorage.setItem("isLogin", JSON.stringify(false));
+        // dispatch(setIsLogin(false));
+        localStorage.setItem("isLogin", JSON.stringify(false));
         break;
       default:
     }

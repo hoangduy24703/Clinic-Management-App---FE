@@ -61,7 +61,7 @@ const ScheduleByDate = () => {
   }
 
   useEffect(() => {
-    console.log(moment(ngayA).format("YYYY-MM-DD"));
+    console.log(moment(ngayA).format("YYYY-MM-DD"), moment(ngayB).format("YYYY-MM-DD"));
   }, [ngayA, ngayB])
 
   const content = data?.map((dataItem, index) => {
