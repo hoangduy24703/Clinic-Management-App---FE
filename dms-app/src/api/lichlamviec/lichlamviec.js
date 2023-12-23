@@ -9,6 +9,7 @@ export async function postLichLamViec(ID_NHASI, NGAY_A, NGAY_B) {
 }
 
 export async function postThemLichLamViec(ID_NHANVIEN, NGAY, ID_CALAM) {
+  // console.log("run here")
   return await api.post(`/lichlamviec/createLLV`, {
     ID_NHANVIEN: ID_NHANVIEN,
     NGAY: NGAY,

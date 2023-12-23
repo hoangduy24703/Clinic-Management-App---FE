@@ -9,7 +9,7 @@ import moment from "moment";
 import DatePicker from 'react-datepicker';
 import Form from 'react-bootstrap/Form';
 import { postLichLamViec } from "../../api/lichlamviec/lichlamviec";
-
+import PopupFormCreateWorkSchedule from "./PopupCreateWorkSchedule";
 const header = [
   "ID NHÂN VIÊN",
   "TÊN NHÂN VIÊN",
@@ -27,12 +27,17 @@ const WorkScheduleByDate = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [ngayA, setNgayA] = useState(null);
   const [ngayB, setNgayB] = useState(null);
-
+  const [isOpenPopUpFormLichLamViec, setIsOpenPopUpFormLichLamViec] = useState(false);
   const navigate = useNavigate();
 
   const FormGroupStyle = {
     display: "flex",
     margin: "10px auto"
+  }
+
+  const buttonContent = {
+    name: "",
+    title: "THÊM MỚI LỊCH LÀM VIỆC"
   }
 
   const categoryStyle = {
@@ -46,13 +51,19 @@ const WorkScheduleByDate = () => {
   }
 
   const handleOnNavigate = () => {
-    navigate("/patient-records/:idPatient");
+    // navigate("/patient-records/:idPatient");
   }
 
   const handleDelete = () => {
 
   }
-
+  const handleCreateLichLamViec = ()=>{
+    setIsOpenPopUpFormLichLamViec(true);
+  }
+  function handleClosePopup ()
+  {
+    setIsOpenPopUpFormLichLamViec(false);
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
     const dateA = moment(ngayA).format("YYYY-MM-DD");
@@ -93,6 +104,7 @@ const WorkScheduleByDate = () => {
     <WorkScheduleByDateWrapper>
       {/* <div className="patient-record-title">DANH SÁCH HỒ SƠ BỆNH NHÂN</div> */}
       <FormWrapper onSubmit={handleSubmit}>
+      {isOpenPopUpFormLichLamViec && <PopupFormCreateWorkSchedule handleClosePopup={handleClosePopup} />}
         <Form.Group style={FormGroupStyle}>
           <Form.Label style={{width: "100px", fontWeight: "700"}}>TỪ NGÀY</Form.Label>
           <DatePicker
@@ -129,6 +141,9 @@ const WorkScheduleByDate = () => {
           })}
         </CustomTableHead>
         <Scrollbar data={content} />
+        {/* <ButtonGroup> */}
+          <Button style={{marginLeft:"50%"}}onClick={handleCreateLichLamViec}>{buttonContent.name} {buttonContent.title}</Button>
+        {/* </ButtonGroup> */}
       </Table>
     </WorkScheduleByDateWrapper>
   </div>);

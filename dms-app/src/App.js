@@ -24,21 +24,26 @@ import { useSelector } from "react-redux";
 
 
 function App() {
-  const isLogin = useSelector(state => state.auth.isLogin);
-  const isLoginLocal = Boolean(localStorage.getItem("isLogin"));
-  const role = localStorage.getItem("role");
-  
+  const login = useSelector(state => state.auth.isLogin);
+  const [isLoginLocal, setIsLoginLocal]= useState(localStorage.getItem("isLogin"));
+  const [role, setRole] = useState(localStorage.getItem("role"));
+  const [isLogin, setIsLogin] = useState(false);
+
   useEffect(() => {
     console.log(isLoginLocal, role);
-  },[isLoginLocal, role])
+    setIsLoginLocal(localStorage.getItem("isLogin"));
+    setRole(localStorage.getItem("role"));
+    if (isLoginLocal === "true") 
+      setIsLogin(true);
+    else 
+      setIsLogin(false);
+
+  }, [login]);
 
   return (
     <>
-    {!isLoginLocal && <Navigate to="/" />}
     <Routes>
-      <Route path="/" element={isLoginLocal? <Navigate to="/dashboard" /> : <Login />} />
-      {isLoginLocal &&
-      <>
+        <Route path="/" element={<Login />}/>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/patient-records" element={<PatientRecords />} />
         <Route path="/patient-records/:patientId" element={<PatientDetails />} />
@@ -57,8 +62,6 @@ function App() {
         <Route path="/prescription/medicine" element={<Medicine/>} />
         <Route path="/treatment-plan/KHDT-by-patient" element={<KHDTByPatient />} />
         <Route path="/staff" element={<Staff />} />
-      </>
-      }
     </Routes>
     </>
   );

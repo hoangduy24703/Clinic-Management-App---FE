@@ -22,9 +22,17 @@ const Login = () => {
 
     setUsername("");
     setPassword("");
-    dispatch(setIsLogin(true));
-    localStorage.setItem("isLogin", auth?.data?.isSuccess);
-    localStorage.setItem("role", auth?.data?.data[0]?.LOAINV);
+    console.log(auth);
+    if (auth?.data?.isSuccess) {
+      dispatch(setIsLogin(true));
+      localStorage.setItem("isLogin", JSON.stringify(auth?.data?.isSuccess));
+      localStorage.setItem("role", JSON.stringify(auth?.data?.data[0]?.LOAINV));
+    }
+    else {
+      dispatch(setIsLogin(false));
+      localStorage.setItem("isLogin", auth?.data?.isSuccess);
+      localStorage.setItem("role", null);
+    }
   }
 
 

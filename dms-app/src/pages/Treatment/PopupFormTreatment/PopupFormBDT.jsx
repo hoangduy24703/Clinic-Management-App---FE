@@ -2,44 +2,57 @@ import { useState } from "react";
 import styled from "styled-components";
 import Form from 'react-bootstrap/Form';
 import { IoMdClose } from "react-icons/io";
-import { IoMdAddCircleOutline } from "react-icons/io";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import PopupFormCTDT from "./PopupCreateCTDT";
 import { addBDT } from "../../../api/dieutri/dieutri";
 
 const PopupFormBDT = ({handleClosePopup}) => {
   const [mabenhnhan, setMabenhnhan] = useState('');
-  const [idbuoidieutri, setIdbuoidieutri] = useState('') 
   const [mota, setMota] = useState('');
   const [ghichu, setGhichu] = useState('');
   const [ngay, setNgay] = useState(null);
   const [khamchinh, setKhamchinh] = useState('');
   const [trokham, setTrokham] = useState('');
   const [kehoach, setKehoach] = useState('');
+  const [nextStep, setNextStep] = useState(false); 
+  const [ctdt, setCtdt ]= useState({});
 
   const FormGroupStyle = {
     display: "flex",
     width: "100%"
   }
 
-  async function handleAddBDT() {
-    // KIỂM TRA ĐIỀU KIỆN
-    await addBDT(mabenhnhan, idbuoidieutri, mota, ghichu, ngay, khamchinh, trokham, kehoach);
-    alert("TẠO BUỔI ĐIỀU TRỊ THÀNH CÔNG");
+  function handleNextStep(e) {
+    e.preventDefault();
+    // if (!mabenhnhan || !ngay || !khamchinh || !kehoach)
+    //   return;
+    // setCtdt({
+    //   mabenhnhan: mabenhnhan,
+    //   mota: mota,
+    //   ghichu: ghichu,
+    //   ngay: ngay,
+    //   khamchinh: khamchinh,
+    //   trokham: trokham,
+    //   kehoach: kehoach,
+    // })
+    setNextStep(true);
+  }
+
+  function handleCloseNextStep() {
+    setNextStep(false);
+    
   }
 
   return (<>
     <PopupWrapper>
+      {nextStep && <PopupFormCTDT handleClosePopup={handleCloseNextStep} ctdt={ctdt}/> }
       <Form>
-        <IoMdClose style={{marginLeft: "105%", marginTop: "-20%", cursor: "pointer"}} size="30px" onClick={handleClosePopup}/>
+        <IoMdClose style={{position: "absolute", right: "20px", top: "10px"}} size="30px" onClick={handleClosePopup}/>
         <div className="popup-title">THÊM MỚI BUỔI ĐIỀU TRỊ</div>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>ID BỆNH NHÂN</Form.Label>
           <Form.Control type="text" placeholder=" Nhập mã bệnh nhân " onChange={(event) => { setMabenhnhan(event.target.value) }} value={mabenhnhan} style={{width: "100%"}}/>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
-          <Form.Label style={{width: "300px", fontWeight: "700"}}>ID BUỔI ĐIỀU TRỊ</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập id buổi điều trị " onChange={(event) => { setIdbuoidieutri(event.target.value) }} value={idbuoidieutri} style={{width: "100%"}}/>
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>MÔ TẢ</Form.Label>
@@ -71,8 +84,8 @@ const PopupFormBDT = ({handleClosePopup}) => {
           <Form.Control type="text" placeholder=" Nhập id kế hoạch điều trị " onChange={(event) => { setKehoach(event.target.value) }} value={kehoach} style={{width: "100%"}}/>
         </Form.Group>
         <ButtonGroup>
-          <Button className="btn-cancel" onClick={handleClosePopup}>HỦY</Button>
-          <Button className="btn-create" onClick={handleAddBDT}><IoMdAddCircleOutline size="20px"/> TẠO </Button>
+          <button className="btn-cancel" onClick={handleClosePopup}>HỦY</button>
+          <button className="btn-create" onClick={handleNextStep} >TIẾP</button>
         </ButtonGroup>
       </Form>
     </PopupWrapper>
@@ -82,16 +95,19 @@ const PopupFormBDT = ({handleClosePopup}) => {
 export default PopupFormBDT;
 
 const PopupWrapper = styled.div`
-  position: absolute;
+  position: fixed;
   top: 10%;
-  left: 22%;
-  right: 22%;
+  left: 20%;
+  right: 20%;
+  bottom: 20%;
   z-index: 2;
   padding: 5vw;
   padding-bottom: 2vw;
   background-color: var(--bg-grey-1-color);
   border-radius: 10px;
   border: 1px solid;
+  width: auto;
+  height: auto;
 
   .popup-title {
     font-size: 20px;
@@ -106,15 +122,20 @@ const ButtonGroup = styled.div`
   padding-top: 2vh;
   .btn-cancel {
     background-color: var(--grey-line-color);
+    border-radius: 10px;
+    border: none;
+    margin: 0 auto;
+    padding: 10px 30px;
   }
   .btn-create {
     background-color: var( --btn-color-1);
+    border-radius: 10px;
+    border: none;
+    margin: 0 auto;
+    padding: 10px 30px;
   }
 `
 
 const Button = styled.button`
-  border-radius: 10px;
-  border: none;
-  margin: 0 auto;
-  padding: 10px 30px;
+  
 `

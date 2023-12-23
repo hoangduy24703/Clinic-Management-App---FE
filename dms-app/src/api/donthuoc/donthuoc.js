@@ -16,6 +16,7 @@ export async function addLoaiThuoc(idthuoc, tenthuoc, thanhphan, donvitinh, giat
     donvitinh: donvitinh,
     giathuoc: giathuoc
   }
+  console.log(donvitinh)
   return await api.post(`/donthuoc/addLoaiThuoc`, request);
 }
 
