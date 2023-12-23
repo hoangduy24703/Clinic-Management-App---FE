@@ -8,36 +8,45 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { getHoaDon } from "../../api/hoadon/hoadon";
-
+import BillsDetail from "./BillsDetail/BillsDetail";
 
 const header = [
-  "ID THUỐC",
-  "TÊN THUỐC",
-  "SỐ LƯỢNG",
-  "GIÁ",
+  "ID HÓA ĐƠN",
+  "TỔNG TIỀN",
+  "NGÀY GIAO DỊCH",
+  "TÊN BỆNH NHÂN",
+  "ID BUỔI ĐIỀU TRỊ"
 ];
 
-const Bills = () => {
+const BillsByPatient = () => {
   // const data = [...dummyData];'
+  // const [data, setData] = useState([]);
+  // const [isOpen, setIsOpen] = useState(false);
+  // // const [isOpenPopupForm, setIsOpenPopupForm] = useState(false);
+  // const [selectedItem, setSelectedItem] = useState();
+  // const [searchTerm, setSearchTerm] = useState('');
+  // const navigate = useNavigate();
+
   const [data, setData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  // const [isOpenPopupForm, setIsOpenPopupForm] = useState(false);
+  const [isOpenPopupBill, setIsOpenPopupBill] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
   const [searchTerm, setSearchTerm] = useState('');
-  const navigate = useNavigate();
-
   const categoryStyle = {
     cursor: "pointer",
     marginLeft: "80%",
   }
 
   const handleDropdownOpen = (value) => {
-    setSelectedItem(value.IDTHUOC);
+    setSelectedItem(value.IDHOADON);
     setIsOpen(!isOpen);
   }
 
+  const handleOnViewBill = () => {
+    setIsOpenPopupBill(true);
+  }
   const handleOnNavigate = () => {
-    navigate("/patient-records/:idPatient");
+    // navigate("/patient-records/:idPatient");
   }
 
   const handleDelete = () => {
@@ -50,23 +59,24 @@ const Bills = () => {
     console.log("Search", searchTerm);
     const result = await getHoaDon(searchTerm);
     console.log(result);
-    // setData(result?.data?.data?.listBDT);
+    setData(result?.data?.data?.listhoadon);
   }
   
 
   const content = data?.map((dataItem, index) => {
     return <TableRow key={index}>
-      <span>{dataItem.IDTHUOC}</span>
-      <span>{dataItem.TENTHUOC}</span>
-      <span>{dataItem.SOLUONG}</span>
-      <span>{dataItem.GIA}</span>
+      <span>{dataItem.IDHOADON}</span>
+      <span>{dataItem.TONGTIEN}</span>
+      <span>{moment(dataItem.NGAYGIAODICH).format("DD/MM/YYYY")}</span>
+      <span>{dataItem.TENBN}</span>
+      <span>{dataItem.IDBUOIDIEUTRI}</span>
       <DropdownWrapper>
         <AiOutlineMore style={categoryStyle} onClick={() => handleDropdownOpen(dataItem)}/>
-        {isOpen && selectedItem === dataItem.IDTHUOC && 
+        {isOpen && selectedItem === dataItem.IDHOADON && 
         <Dropdown>
-          <DropdownItem onClick={handleOnNavigate}>Xem buổi điều trị</DropdownItem>
-          <DropdownItem onClick={handleOnNavigate}>Sửa buổi điều trị</DropdownItem>
-          <DropdownItem onClick={handleDelete}>Xóa buổi điều trị</DropdownItem>
+          <DropdownItem onClick={handleOnViewBill}>Xem hóa đơn</DropdownItem>
+          {/* <DropdownItem onClick={handleOnNavigate}>Sửa hóa đơn</DropdownItem>
+          <DropdownItem onClick={handleDelete}>Xóa buổi điều trị</DropdownItem> */}
         </Dropdown>}
       </DropdownWrapper>
     </TableRow>
@@ -76,10 +86,11 @@ const Bills = () => {
   return (<div style={{marginBottom: "5vh"}}>
     <SliderCategory />
     <div style={{display: "flex"}}>
-      <Search onSubmit={handleSubmit} content={" Nhập mã thuốc "} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
+      <Search onSubmit={handleSubmit} content={" Nhập ID bệnh nhân "} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
     </div>
     <BillWrapper>
       {/* <div className="patient-record-title">DANH SÁCH HỒ SƠ BỆNH NHÂN</div> */}
+      {isOpenPopupBill && <BillsDetail title={"HÓA ĐƠN " + selectedItem} ID={selectedItem} setIsOpenPopup={setIsOpenPopupBill}/>}
       <Table style={{ width: "80%", height: "50%", maxWidth: "1200px" }}>
         <TableHead style={{ height: "50px", borderBottom: "2px solid" }}>
           {header?.map((headerItem) => {
@@ -95,7 +106,7 @@ const Bills = () => {
   </div>);
 }
 
-export default Bills;
+export default BillsByPatient;
 
 const BillWrapper = styled.div`
   width: 100%;

@@ -21,7 +21,7 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import Staff from "./pages/Staff/Staff";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-
+import BillsByPatient from "./pages/Bill/BIllsByPatient";
 
 function App() {
   const login = useSelector(state => state.auth.isLogin);
@@ -62,6 +62,7 @@ function App() {
         <Route path="/prescription/medicine" element={<Medicine/>} />
         <Route path="/treatment-plan/KHDT-by-patient" element={<KHDTByPatient />} />
         <Route path="/staff" element={<Staff />} />
+        <Route path ="/bills/bills-by-patient" element = {<BillsByPatient/>}/>
     </Routes>
     </>
   );
