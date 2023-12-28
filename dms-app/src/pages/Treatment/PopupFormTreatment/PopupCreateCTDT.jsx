@@ -6,6 +6,7 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import PopupFormLDT from "./PopupCreateLDT";
+import { addBDT } from "../../../api/dieutri/dieutri";
 
 const PopupFormCTDT = ({ handleClosePopup, ctdt, bdt, setBDT, handleCloseBDT }) => {
   const [isOpenPopupLDT, setIsOpenPopupLDT] = useState(false);
@@ -24,8 +25,8 @@ const PopupFormCTDT = ({ handleClosePopup, ctdt, bdt, setBDT, handleCloseBDT }) 
     handleClosePopup();
     handleCloseBDT();
     // KIỂM TRA ĐIỀU KIỆN
-    // await addBDT(mabenhnhan, idbuoidieutri, mota, ghichu, ngay, khamchinh, trokham, kehoach);
-    // alert("TẠO BUỔI ĐIỀU TRỊ THÀNH CÔNG");
+    await addBDT(bdt);
+    alert("TẠO BUỔI ĐIỀU TRỊ THÀNH CÔNG");
   }
 
   function handleAddLDT(e) {

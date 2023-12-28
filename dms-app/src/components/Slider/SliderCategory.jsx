@@ -61,7 +61,7 @@ const SliderCategory = () => {
         navigate("/bills");
         break;
       case 7:
-        // naviagte cho nay
+        navigate("/statistic");
         break;
       case 8:
         navigate("/staff");

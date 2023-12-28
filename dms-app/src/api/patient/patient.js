@@ -2,6 +2,7 @@ import api from "../index";
 
 export async function getChiTietBenhNhan(IDBENHNHAN) {
   try {
+    console.log(IDBENHNHAN);
     const response = await api.get(`/hosobenhnhan/${IDBENHNHAN}`);
     return response;
   }

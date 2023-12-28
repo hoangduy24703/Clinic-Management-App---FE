@@ -16,7 +16,8 @@ const PopupFormCreateSchedule = ({handleClosePopup}) => {
   const [benhnhan, setBenhnhan] = useState("");
   const [trokham, setTrokham] = useState("");
 
-  async function handleAddKHDT() {
+  async function handleAddKHDT(e) {
+    e.preventDefault();
     // KIỂM TRA ĐIỀU KIỆN
     await postThemLichHen(ngayhen, thoigianhen, tinhtrang, phong, ghichu, bacsi, benhnhan, trokham);
     alert("TẠO KẾ HOẠCH ĐIỀU TRỊ THÀNH CÔNG");

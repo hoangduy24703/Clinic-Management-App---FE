@@ -26,16 +26,9 @@ export async function getBDT(IDBUOIDIEUTRI) {
   return response;
 }
 
-export async function addBDT(MABENHNHAN, IDBUOIDIEUTRI, MOTA, GHICHU, NGAY, KHAMCHINH, TROKHAM, KEHOACH) {
+export async function addBDT(bdt) {
   const request = {
-    MABENHNHAN: MABENHNHAN,
-    IDBUOIDIEUTRI: IDBUOIDIEUTRI, 
-    MOTA: MOTA,
-    GHICHU: GHICHU,
-    NGAY: NGAY,
-    KHAMCHINH: KHAMCHINH,
-    TROKHAM: TROKHAM,
-    KEHOACH: KEHOACH
+    ...bdt
   }
   const response = await api.post(`/dieutri/addBDT`, request);
   return response;

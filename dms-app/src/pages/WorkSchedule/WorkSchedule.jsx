@@ -142,7 +142,7 @@ const WorkScheduleByDate = () => {
         </CustomTableHead>
         <Scrollbar data={content} />
         {/* <ButtonGroup> */}
-          <Button style={{marginLeft:"50%"}}onClick={handleCreateLichLamViec}>{buttonContent.name} {buttonContent.title}</Button>
+          <Button style={{position: "absolute", width: "300px", right: 0, bottom: "-7vh"}}onClick={handleCreateLichLamViec}>{buttonContent.name} {buttonContent.title}</Button>
         {/* </ButtonGroup> */}
       </Table>
     </WorkScheduleByDateWrapper>
@@ -153,6 +153,7 @@ export default WorkScheduleByDate;
 
 const WorkScheduleByDateWrapper = styled.div`
   width: 100%;
+  position: relative;
   .prescription-title {
     margin-left: 10%;
     font-weight: 700;

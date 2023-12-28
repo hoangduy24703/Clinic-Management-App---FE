@@ -3,37 +3,28 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import SliderCategory from "../../components/Slider/SliderCategory";
 import Button from "../../components/Button/Button";
-import PopupFormCreateBill from "./PopupCreateBills";
 
 const content = [
   {
     name: "",
-    title: "Xem hóa đơn theo bệnh nhân"
+    title: "Xem hóa báo cáo điều trị"
   },
   {
     name: "",
-    title: "Xem hóa đơn theo ngày"
-  },
-  {
-    name: "",
-    title: "Thêm mới hóa đơn"
+    title: "Xem báo cáo lịch hẹn"
   },
 ]
 
-const Bills = () => {
+const Statistic = () => {
   const navigate = useNavigate();
-  const [isOpenPopupCreateBill, setIsOpenPopupCreateBill] = useState(false);
 
   const handleNavigate = (key) => {
     switch (key) {
       case 0:
-        navigate("/bills/bills-by-patient");
+        navigate("/statistic/statistic-treatment");
         break;
       case 1:
-        navigate("/bills/bills-by-date");
-        break;
-      case 2:
-        setIsOpenPopupCreateBill(true);
+        navigate("/statistic/statistic-appointment-schedule");
         break;
       default:
     }
@@ -48,18 +39,17 @@ const Bills = () => {
   
   return (<>
     <SliderCategory />
-    {isOpenPopupCreateBill && <PopupFormCreateBill handleClosePopup={() => setIsOpenPopupCreateBill(false)}/>}
-    <PrescriptionBody>
+    <StatisticBody>
       {content.map((item, index) => {
         return <Button content={item} bgColor={"var(--bg-grey-color)"} style={btnStyle} key={index} onClick={() => handleNavigate(index)} />
       })}
-    </PrescriptionBody>
+    </StatisticBody>
   </>);
 }
 
-export default Bills;
+export default Statistic;
 
-export const PrescriptionBody = styled.div`
+export const StatisticBody = styled.div`
   display: grid;
   grid-template-columns: repeat(${content.length - 2}, 400px);
   padding: 40px;

@@ -22,6 +22,10 @@ import Staff from "./pages/Staff/Staff";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import BillsByPatient from "./pages/Bill/BIllsByPatient";
+import BillsByDate from "./pages/Bill/BillsByDate";
+import Statistic from "./pages/Statistic/Statistic";
+import ListAppointmentSchedule from "./pages/Statistic/ListAppointmentSchedule";
+import ListTreatment from "./pages/Statistic/ListTreatment";
 
 function App() {
   const login = useSelector(state => state.auth.isLogin);
@@ -63,6 +67,10 @@ function App() {
         <Route path="/treatment-plan/KHDT-by-patient" element={<KHDTByPatient />} />
         <Route path="/staff" element={<Staff />} />
         <Route path ="/bills/bills-by-patient" element = {<BillsByPatient/>}/>
+        <Route path="/bills/bills-by-date" element = {<BillsByDate />} />
+        <Route path="/statistic" element={<Statistic />} />
+        <Route path="/statistic/statistic-appointment-schedule" element={<ListAppointmentSchedule />} />
+        <Route path="/statistic/statistic-treatment" element={<ListTreatment />} />
     </Routes>
     </>
   );

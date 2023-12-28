@@ -26,8 +26,8 @@ const PopupFormBDT = ({handleClosePopup}) => {
 
   function handleNextStep(e) {
     e.preventDefault();
-    // if (!mabenhnhan || !ngay || !khamchinh || !kehoach)
-    //   return;
+    if (!mabenhnhan || !ngay || !khamchinh || !kehoach)
+      return;
     setCtdt({
       mabenhnhan: mabenhnhan,
       mota: mota,
@@ -126,12 +126,14 @@ const ButtonGroup = styled.div`
   padding-top: 2vh;
   .btn-cancel {
     background-color: var(--grey-line-color);
+    font-weight: 700;
     border-radius: 10px;
     border: none;
     margin: 0 auto;
     padding: 10px 30px;
   }
   .btn-create {
+    font-weight: 700;
     background-color: var( --btn-color-1);
     border-radius: 10px;
     border: none;

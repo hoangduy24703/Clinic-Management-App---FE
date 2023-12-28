@@ -35,11 +35,10 @@ export async function getChiTietDonThuoc(iddonthuoc) {
   return await api.get(`/donthuoc/chitietdonthuoc/${iddonthuoc}`);
 }
 
-export async function addDonThuoc(iddonthuoc, ngaycap, idbuoidieutri) {
+export async function addDonThuoc(donthuoc, chitietdonthuoc) {
   const request = {
-    iddonthuoc: iddonthuoc,
-    ngaycap: ngaycap,
-    idbuoidieutri: idbuoidieutri
+    donthuoc: donthuoc,
+    chitietdonthuoc: chitietdonthuoc
   }
   return await api.post(`/donthuoc/addDonThuoc`, request);
 }

@@ -14,7 +14,8 @@ const PopupFormKHDT = ({handleClosePopup}) => {
   const [idbenhnhan, setIdbenhnhan] = useState('');
   const [bsphutrach, setBsphutrach] = useState('');
 
-  async function handleAddKHDT() {
+  async function handleAddKHDT(e) {
+    e.preventDefault();
     // KIỂM TRA ĐIỀU KIỆN
     await addKeHoach(idkhdt, mota, trangthai, ghichu, tonggia, idbenhnhan, bsphutrach);
     alert("TẠO KẾ HOẠCH ĐIỀU TRỊ THÀNH CÔNG");

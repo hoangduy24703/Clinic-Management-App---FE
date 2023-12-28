@@ -18,6 +18,7 @@ const PatientDetails = () => {
 
   async function loadData() {
     const patientData = await getChiTietBenhNhan(patientId);
+    console.log(patientData);
     setPatientData(patientData);
   }
 

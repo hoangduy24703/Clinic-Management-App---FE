@@ -1,56 +1,70 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Form from 'react-bootstrap/Form';
 import { IoMdClose } from "react-icons/io";
-import { IoMdAddCircleOutline } from "react-icons/io";
 import { addDonThuoc } from "../../../api/donthuoc/donthuoc";
 import DatePicker from "react-datepicker";
-import PopupCreatePrescriptionDetail from "./PopupCreatePrescriptionDetail";
 
-const PopupCreatePrescription = ({handleClosePopup}) => {  
-  const [ngaycap, setNgaycap] = useState("");
-  const [idbuoidieutri, setIdbuoidieutri] = useState("");
-  const [isOpenPopupCreateChiTiet, setIsOpenPopupCreateChiTiet] = useState(false);
+export default function PopupCreatePrescriptionDetail({setIsOpenPopupCreateChiTiet, ngaycap, idbuoidieutri, handleCloseDonThuoc}) {
+  const [idthuoc, setIdthuoc] = useState('');
+  const [soluong, setSoluong] = useState('');
+  const [obj, setObj] = useState({});
 
-  function handleNextStep(e) {
+  async function handleAddDonThuoc(e) {
     e.preventDefault();
-    setIsOpenPopupCreateChiTiet(true);
+    setObj({
+      donthuoc: {
+        ngaycap: ngaycap,
+        idbuoidieutri: idbuoidieutri
+      },
+      chitietdonthuoc: {
+        idthuoc: idthuoc,
+        soluong: soluong,
+      }
+    })
+    const a = await addDonThuoc(obj);
+    setIsOpenPopupCreateChiTiet(false);
+    handleCloseDonThuoc();
+    if (a) 
+      alert("THÊM ĐƠN THUỐC THÀNH CÔNG");
+    else 
+      alert("THÊM ĐƠN THUỐC THẤT BẠI");
   }
+
+  const handleClosePopup = () => {
+    setIsOpenPopupCreateChiTiet(false);
+  }
+
+  useEffect(() => {
+    console.log(obj);
+  }, [obj]);
 
   const FormGroupStyle = {
     display: "flex",
     width: "100%"
   }
 
-  return (<>
+  return <>
     <PopupWrapper>
-      {isOpenPopupCreateChiTiet && <PopupCreatePrescriptionDetail setIsOpenPopupCreateChiTiet={setIsOpenPopupCreateChiTiet} ngaycap={ngaycap} idbuoidieutri={idbuoidieutri} handleCloseDonThuoc={handleClosePopup}/>}
       <Form>
         <IoMdClose style={{marginLeft: "105%", marginTop: "-20%", cursor: "pointer"}} size="30px" onClick={handleClosePopup}/>
         <div className="popup-title">THÊM MỚI ĐƠN THUỐC</div>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
-          <Form.Label style={{width: "300px", fontWeight: "700"}}>NGÀY CẤP</Form.Label>
-          <CustomDatePicker
-            selected={ngaycap}
-            onChange={(date) => setNgaycap(date)}
-            dateFormat="dd/MM/yyyy"
-            placeholderText=" Chọn ngày cấp"
-          />
+          <Form.Label style={{width: "300px", fontWeight: "700"}}>ID THUỐC</Form.Label>
+          <Form.Control type="text" placeholder=" Nhập id thuốc " onChange={(event) => { setIdthuoc(event.target.value) }} value={idthuoc} style={{width: "100%"}}/>
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
-          <Form.Label style={{width: "300px", fontWeight: "700"}}>ID BUỔI ĐIỀU TRỊ</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập mã buổi điều trị " onChange={(event) => { setIdbuoidieutri(event.target.value) }} value={idbuoidieutri} style={{width: "100%"}}/>
+          <Form.Label style={{width: "300px", fontWeight: "700"}}>SỐ LƯỢNG</Form.Label>
+          <Form.Control type="text" placeholder=" Nhập số lượng " onChange={(event) => { setSoluong(event.target.value) }} value={Number(soluong)} style={{width: "100%"}}/>
         </Form.Group>
         <ButtonGroup>
           <Button className="btn-cancel" onClick={handleClosePopup}>HỦY</Button>
-          <Button className="btn-create" onClick={handleNextStep}> TIẾP </Button>
+          <Button className="btn-create" onClick={handleAddDonThuoc}> TẠO </Button>
         </ButtonGroup>
       </Form>
     </PopupWrapper>
-  </>)
+  </>
 }
-
-export default PopupCreatePrescription;
 
 const PopupWrapper = styled.div`
   position: fixed;

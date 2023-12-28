@@ -40,7 +40,7 @@ const PopupFormCTR = ({ handleClosePopup, setRangDieuTri, RangDieuTri }) => {
         </div>
         <ButtonGroup>
           <Button className="btn-cancel" onClick={handleClosePopup}>HỦY</Button>
-          <Button className="btn-create" onClick={handleAddCTR}>THÊM </Button>
+          <Button className="btn-create" onClick={handleAddCTR}>THÊM</Button>
         </ButtonGroup>
       </Form>
     </PopupWrapper>
@@ -76,12 +76,15 @@ const ButtonGroup = styled.div`
   display: flex;
   padding-top: 2vh;
   .btn-cancel {
+    font-weight: 700;
     background-color: var(--grey-line-color);
   }
   .btn-create {
+    font-weight: 700;
     background-color: var( --btn-color-1);
   }
   .btn-add {
+    font-weight: 700;
     background-color: var(--bg-blue-color);
   }
 `

@@ -12,13 +12,13 @@ const PopupFormCreateWorkSchedule = ({handleClosePopup}) => {
   const [ngay, setNgay] = useState("");
   const [idcalam, setIDCaLam] = useState("");
   
-
-  
   const FormGroupStyle = {
     display: "flex",
     width: "100%"
   }
-async function handleAddLichLamViec() {
+
+  async function handleAddLichLamViec(e) {
+    e.preventDefault();
     // KIỂM TRA ĐIỀU KIỆN
     // console.log("co chay")
     let date = new Date(ngay)
@@ -27,8 +27,6 @@ async function handleAddLichLamViec() {
     // console.log(temp)
     await postThemLichLamViec(idnhanvien, ngay, idcalam)
     // console.log("co chay 2")
-    // const a  = Prompt("TẠO KẾ HOẠCH ĐIỀU TRỊ THÀNH CÔNG");
-
   }
 
   return (<>

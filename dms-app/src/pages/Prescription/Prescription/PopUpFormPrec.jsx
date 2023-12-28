@@ -33,7 +33,8 @@ const PopupFormMed = ({handleClosePopup}) => {
 //     setDonVi(selectedOption);
 //     console.log(`Option selected:`, selectedOption);
 //   };
-  async function handleAddThuoc() {
+  async function handleAddThuoc(e) {
+    e.preventDefault();
     // KIỂM TRA ĐIỀU KIỆN
     await addLoaiThuoc("DC100000", tenthuoc, thanhphan, donvitinh, giathuoc)
     // alert("THÊM THUỐC THÀNH CÔNG");
