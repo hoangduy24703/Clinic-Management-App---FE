@@ -22,22 +22,26 @@ const PopupFormCreateBill = ({handleClosePopup}) => {
   async function handleAddHoaDon(e) {
     // KIỂM TRA ĐIỀU KIỆN
     e.preventDefault();
-    await addHoaDon(loaithanhtoan, ghichuhoadon, ngaygiaodich, idbenhnhan, idbuoidieutri)
-    alert("TẠO HÓA ĐƠN THÀNH CÔNG");
+    const result = await addHoaDon(loaithanhtoan, ghichuhoadon, ngaygiaodich, idbenhnhan, idbuoidieutri)
+    let isSuccess=result?.data?.isSuccess
+    if (isSuccess == true)
+    { alert("TẠO HÓA ĐƠN THÀNH CÔNG");
+    }
+    else alert("KHÔNG THÀNH CÔNG")
   }
 
   return (<>
     <PopupWrapper>
       <Form>
         <IoMdClose style={{marginLeft: "105%", marginTop: "-20%", cursor: "pointer"}} size="30px" onClick={handleClosePopup}/>
-        <div className="popup-title">THÊM MỚI BUỔI ĐIỀU TRỊ</div>
+        <div className="popup-title">THÊM MỚI HÓA ĐƠN</div>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>ID BUỔI ĐIỀU TRỊ</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập id buổi điều trị " onChange={(event) => { setGhichuhoadon(event.target.value) }} value={ghichuhoadon} style={{width: "100%"}}/>
+          <Form.Control type="text" placeholder=" Nhập id buổi điều trị " onChange={(event) => { setIdbuoidieutri(event.target.value) }} value={idbuoidieutri} style={{width: "100%"}}/>
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>ID BỆNH NHÂN</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập id bệnh nhân " onChange={(event) => { setGhichuhoadon(event.target.value) }} value={ghichuhoadon} style={{width: "100%"}}/>
+          <Form.Control type="text" placeholder=" Nhập id bệnh nhân " onChange={(event) => { setIdbenhnhan(event.target.value) }} value={idbenhnhan} style={{width: "100%"}}/>
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>GHI CHÚ</Form.Label>
