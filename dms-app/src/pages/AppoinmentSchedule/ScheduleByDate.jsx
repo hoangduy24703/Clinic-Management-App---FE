@@ -56,8 +56,8 @@ const ScheduleByDate = () => {
     const dateA = moment(ngayA).format("YYYY-MM-DD");
     const dateB = moment(ngayB).format("YYYY-MM-DD");
     const data = await postLichHenDayToDay(dateA, dateB);
-    console.log(data?.data?.data?.listBDT);
-    setData(data?.data?.data?.listBDT);
+    console.log(data?.data?.data);
+    setData(data?.data?.data);
   }
 
   useEffect(() => {
@@ -66,10 +66,10 @@ const ScheduleByDate = () => {
 
   const content = data?.map((dataItem, index) => {
     return <TableRow key={index}>
-      <span>{dataItem.BNKHAMLE}</span>
-      <span>{dataItem.IDBUOIDIEUTRI}</span>
-      <span>{dataItem.KEHOACHDT}</span>
-      <span>{dataItem.KHAMCHINH}</span>
+      <span>{dataItem.BENHNHAN}</span>
+      <span>{dataItem.BACSI}</span>
+      <span>{dataItem.TROKHAM}</span>
+      <span>{moment(dataItem.NGAYHEN).format("DD/MM/YYYY")}</span>
       <span>{moment(dataItem.NGAYDT).format("DD/MM/YYYY")}</span>
       <DropdownWrapper>
         <AiOutlineMore style={categoryStyle} onClick={() => handleDropdownOpen(dataItem)} />
