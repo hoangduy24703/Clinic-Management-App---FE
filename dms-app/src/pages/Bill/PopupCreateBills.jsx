@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import Form from 'react-bootstrap/Form';
 import { IoMdClose } from "react-icons/io";
@@ -26,7 +26,9 @@ const PopupFormCreateBill = ({handleClosePopup}) => {
       alert("CHƯA ĐIỀN ĐẦY ĐỦ THÔNG TIN");
       return;
     }
+    console.log(loaithanhtoan, ghichuhoadon, ngaygiaodich, idbenhnhan, idbuoidieutri);
     const a = await addHoaDon(loaithanhtoan, ghichuhoadon, ngaygiaodich, idbenhnhan, idbuoidieutri);
+    console.log(a);
     if (a?.data?.isSuccess) {
       alert("TẠO HÓA ĐƠN THÀNH CÔNG");
     }
@@ -34,7 +36,9 @@ const PopupFormCreateBill = ({handleClosePopup}) => {
       alert("TẠO HÓA ĐƠN THẤT BẠI");
     }
   }
-
+  useEffect(() => {
+    console.log(loaithanhtoan, ghichuhoadon, ngaygiaodich, idbenhnhan, idbuoidieutri);
+  }, [])
   return (<>
     <PopupWrapper>
       <Form>

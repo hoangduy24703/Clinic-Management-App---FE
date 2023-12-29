@@ -35,7 +35,7 @@ const Bills = () => {
         navigate("/bills/bills-by-date");
         break;
       case 2:
-        if (role === `"QT"`)
+        if (role === `"QT"` || role === `"NV"`)
           setIsOpenPopupCreateBill(true);
         break;
       default:

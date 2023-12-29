@@ -15,7 +15,8 @@ const header = [
   "KHÁM CHÍNH",
   "TRỢ KHÁM",
   "NGÀY",
-  "TÌNH TRẠNG",
+  "NGÀY HẸN",
+  "TÌNH TRẠNG"
 ];
 
 
@@ -57,6 +58,7 @@ const ScheduleByDate = () => {
       <span>{dataItem.TROKHAM}</span>
       <span>{moment(dataItem.NGAYHEN).format("DD/MM/YYYY")}</span>
       <span>{moment(dataItem.NGAYDT).format("DD/MM/YYYY")}</span>
+      <span>{dataItem.TINHTRANG}</span>
     </CustomTableRow>
   })
 

@@ -63,7 +63,7 @@ const PopupFormLDT = ({ handleClosePopup, setLoaiDieuTri, loaiDieuTri }) => {
         <div style={{ height: "300px", overflowY: "scroll" }}>
           {RangDieuTri?.map((item, index) => {
             return <>
-              <h4 style={{ textAlign: "center" }}>Mặt răng {index + 1}</h4>
+              <h4 style={{ textAlign: "center" }}> Răng {index + 1}</h4>
               <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
                 <Form.Label style={{ width: "300px", fontWeight: "700" }}>TÊN RĂNG</Form.Label>
                 <Form.Control type="text" placeholder=" Nhập tên điều trị " value={item.TENRANG} style={{ width: "90%", marginRight: "10px" }} />

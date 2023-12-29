@@ -27,7 +27,7 @@ const PopupFormCreateSchedule = ({handleClosePopup}) => {
     const a = await postThemLichHen(moment(ngayhen).format("YYYY-MM-DD"), thoigianhen, tinhtrang, phong, ghichu, bacsi, benhnhan, trokham);
     console.log(a);
     if (a?.data?.isSuccess) {
-      alert("TẠO KẾ HOẠCH ĐIỀU TRỊ THÀNH CÔNG");
+      alert("TẠO LỊCH HẸN THÀNH CÔNG");
     }
     else {
       alert("TẠO THẤT BẠI");
