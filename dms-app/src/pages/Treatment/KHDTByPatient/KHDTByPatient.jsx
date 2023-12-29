@@ -3,12 +3,13 @@ import SliderCategory from "../../../components/Slider/SliderCategory";
 import Scrollbar from "../../../components/Scrollbar/Scrollbar";
 import styled from "styled-components";
 import { AiOutlineMore } from "react-icons/ai";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Search from "../../../components/Search/Search";
 import { getListKHbyID } from '../../../api/dieutri/dieutri';
 import KHDTDetail from "../KHDTDetail/KHDTDetail";
 import moment from "moment";
+import { useSelector } from "react-redux";
 
 const header = [
   "ID ĐIỀU TRỊ",
@@ -25,11 +26,16 @@ const KHDTByPatient = () => {
   const [selectedItem, setSelectedItem] = useState();
   const [searchTerm, setSearchTerm] = useState('');
   const [isOpenPopupKHDT, setIsOpenPopupKHDT] = useState(false);
+  const role = useSelector(state => state.auth.role);
 
   const categoryStyle = {
     cursor: "pointer",
     marginLeft: "80%",
   }
+
+  useEffect(() => {
+    console.log(role === `"NS"`);
+  }, [role]);
 
   const buttonContent = {
     name: "",
@@ -54,6 +60,10 @@ const KHDTByPatient = () => {
     e.preventDefault();
     
     console.log("Search", searchTerm);
+    if (searchTerm === '') {
+      alert("CHƯA NHẬP MÃ BỆNH NHÂN");
+      return;
+    }
     const result = await getListKHbyID(searchTerm);
     setData(result?.data?.data?.listBDT);
   }
@@ -69,10 +79,9 @@ const KHDTByPatient = () => {
       <span>{dataItem.GHICHUKHDT}</span>
       <DropdownWrapper>
         <AiOutlineMore style={categoryStyle} onClick={() => handleDropdownOpen(dataItem)}/>
-        {isOpen && selectedItem === dataItem.IDDIEUTRI && 
+        {(role === `"NS"` || role === `"QT"`)  && isOpen && selectedItem === dataItem.IDDIEUTRI && 
         <Dropdown>
           <DropdownItem onClick={handleOnView}>Xem chi tiết KHĐT</DropdownItem>
-          <DropdownItem onClick={handleDelete}>Xóa kế hoạch điều trị</DropdownItem>
         </Dropdown>}
       </DropdownWrapper>
     </CustomTableRow>
@@ -102,11 +111,6 @@ export default KHDTByPatient;
 const KHDTByPatientWrapper = styled.div`
   width: 100%;
   position: relative;
-  .prescription-title {
-    margin-left: 10%;
-    font-weight: 700;
-    font-size: 20px;
-  }
 `
 
 // const ButtonGroup = styled.div`

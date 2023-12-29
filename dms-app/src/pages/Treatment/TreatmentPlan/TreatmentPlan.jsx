@@ -5,6 +5,7 @@ import PopupFormKHDT from "../PopupFormTreatment/PopupFormKHDT";
 import { useNavigate } from "react-router-dom";
 import { Fragment, useState } from "react";
 import PopupFormBDT from "../PopupFormTreatment/PopupFormBDT";
+import { useSelector } from "react-redux";
 // import PopupFormBDTDate from "../ByDate/PopupFormBDTDate";
 
 const content = [
@@ -34,6 +35,7 @@ const TreatmentPlan = () => {
   const navigate = useNavigate();
   const [isOpenPopupFormKHDT, setIsOpenPopupFormKHDT] = useState(false);
   const [isOpenPopupFormBDT, setIsOpenPopupFormBDT] = useState(false);
+  const role = useSelector(state => state.auth.role);
 
   const handleNavigate = (key) => {
     switch (key) {
@@ -47,7 +49,8 @@ const TreatmentPlan = () => {
         navigate("/treatment-plan/KHDT-by-patient");
         break;
       case 3:
-        setIsOpenPopupFormKHDT(true);
+        if (role === `"NS"`)
+          setIsOpenPopupFormKHDT(true);
         break;
       case 4:
         setIsOpenPopupFormBDT(true);

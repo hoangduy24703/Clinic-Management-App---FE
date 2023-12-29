@@ -31,7 +31,7 @@ export default function Dashboard() {
     <SliderCategory />
     <h1>WELCOME TO DMS</h1>
 
-    <div className="data-card">
+    {/* <div className="data-card">
       <h3>Total Patients</h3>
       <Bar
           data={chartData}
@@ -47,7 +47,7 @@ export default function Dashboard() {
             },
           }}
         />
-    </div>
+    </div> */}
   </DashboardWrapper>)
 }
 

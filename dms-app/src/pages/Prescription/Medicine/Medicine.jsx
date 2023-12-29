@@ -12,6 +12,7 @@ import Search from "../../../components/Search/Search";
 import moment from "moment";
 import { getLoaiThuoc } from "../../../api/donthuoc/donthuoc";
 import PopupFormMed from "./PopUpFormMed";
+import { useSelector } from "react-redux";
 
 
 const header = [
@@ -30,6 +31,8 @@ const Medicine = () => {
   const [selectedItem, setSelectedItem] = useState();
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
+  const role = useSelector(state => state.auth.role);
+
 
   const categoryStyle = {
     cursor: "pointer",
@@ -40,18 +43,7 @@ const Medicine = () => {
     name: "",
     title: "THÊM MỚI THUỐC"
   }
-  const handleDropdownOpen = (value) => {
-    setSelectedItem(value.IDTHUOC);
-    setIsOpen(!isOpen);
-  }
 
-  const handleOnNavigate = () => {
-    // navigate("/patient-records/:idPatient");
-  }
-
-  const handleDelete = () => {
-    
-  }
   const handleCreateThuoc = ()=>{
     setIsOpenPopupFormThuoc(true);
   }
@@ -64,6 +56,10 @@ const Medicine = () => {
     e.preventDefault();
     
     console.log("Search", searchTerm);
+    if (searchTerm === "") {
+      alert("NHẬP KHÔNG ĐỦ THÔNG TIN");
+      return;
+    }
     const result = await getLoaiThuoc(searchTerm);
     console.log(result);
     console.log(result?.data?.data?.listDonThuoc);
@@ -78,14 +74,6 @@ const Medicine = () => {
       <span>{dataItem.THANHPHAN}</span>
       <span>{dataItem.GIATHUOC}</span>
       <span>{dataItem.DONVITINH}</span>
-      <DropdownWrapper>
-        <AiOutlineMore style={categoryStyle} onClick={() => handleDropdownOpen(dataItem)}/>
-        {isOpen && selectedItem === dataItem.IDTHUOC && 
-        <Dropdown>
-          <DropdownItem onClick={handleOnNavigate}>Sửa loại thuốc</DropdownItem>
-          
-        </Dropdown>}
-      </DropdownWrapper>
     </CustomTableRow>
   })
 
@@ -105,7 +93,7 @@ const Medicine = () => {
         </CustomTableHead>
         <Scrollbar data={content} />
         {/* <ButtonGroup> */}
-          <Button onClick={handleCreateThuoc}>{buttonContent.name} {buttonContent.title}</Button>
+          {role === `"QT"` && <Button onClick={handleCreateThuoc}>{buttonContent.name} {buttonContent.title}</Button>}
         {/* </ButtonGroup> */}
       </Table>
     </MedicineWrapper>
@@ -117,12 +105,6 @@ export default Medicine;
 const MedicineWrapper = styled.div`
   width: 100%;
   position: relative;
-
-  // .prescription-title {
-  //   margin-left: 10%;
-  //   font-weight: 700;
-  //   font-size: 20px;
-  // }
 `
 
 // const ButtonGroup = styled.div`
@@ -142,14 +124,13 @@ const Button = styled.button`
   min-width: 100px;
   position: absolute;
   right: 0;
-  bottom: -8vh;
   background-color: var(--bg-blue-color);
   font-weight: 700;
 `
 
 const CustomTableHead = styled(TableHead)`
-  grid-template-columns: repeat(${header.length + 1}, 1fr);
+  grid-template-columns: repeat(${header.length}, 1fr);
 ` 
 const CustomTableRow = styled(TableRow)`
-grid-template-columns: repeat(${header.length + 1}, 1fr);
+grid-template-columns: repeat(${header.length }, 1fr);
 ` 

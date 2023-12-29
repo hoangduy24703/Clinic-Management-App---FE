@@ -10,6 +10,7 @@ import DatePicker from 'react-datepicker';
 import Form from 'react-bootstrap/Form';
 import { postLichLamViec } from "../../api/lichlamviec/lichlamviec";
 import PopupFormCreateWorkSchedule from "./PopupCreateWorkSchedule";
+import { useSelector } from "react-redux";
 const header = [
   "ID NHÂN VIÊN",
   "TÊN NHÂN VIÊN",
@@ -28,7 +29,7 @@ const WorkScheduleByDate = () => {
   const [ngayA, setNgayA] = useState(null);
   const [ngayB, setNgayB] = useState(null);
   const [isOpenPopUpFormLichLamViec, setIsOpenPopUpFormLichLamViec] = useState(false);
-  const navigate = useNavigate();
+  const role = useSelector(state => state.auth.role);
 
   const FormGroupStyle = {
     display: "flex",
@@ -44,19 +45,6 @@ const WorkScheduleByDate = () => {
     cursor: "pointer",
     marginLeft: "80%",
   }
-
-  const handleDropdownOpen = (value) => {
-    setSelectedItem(value.IDNHANVIEN);
-    setIsOpen(!isOpen);
-  }
-
-  const handleOnNavigate = () => {
-    // navigate("/patient-records/:idPatient");
-  }
-
-  const handleDelete = () => {
-
-  }
   const handleCreateLichLamViec = ()=>{
     setIsOpenPopUpFormLichLamViec(true);
   }
@@ -68,6 +56,10 @@ const WorkScheduleByDate = () => {
     e.preventDefault();
     const dateA = moment(ngayA).format("YYYY-MM-DD");
     const dateB = moment(ngayB).format("YYYY-MM-DD");
+    if ((dateA.length !== 10 && dateB.length !== 10) || (dateA.length !== dateB.length) || searchTerm === "") {
+      alert("NHẬP DỮ LIỆU KHÔNG ĐỦ");
+      return;
+    }
     const data = await postLichLamViec(searchTerm, dateA, dateB);
     console.log(data);
     setData(data?.data?.data);  
@@ -87,14 +79,6 @@ const WorkScheduleByDate = () => {
       <span>{dataItem.NAM}</span>
       <span>{dataItem.IDCALAM}</span>
       <span>{dataItem.KHUNGGIO}</span>
-      <DropdownWrapper>
-        <AiOutlineMore style={categoryStyle} onClick={() => handleDropdownOpen(dataItem)} />
-        {isOpen && selectedItem === dataItem.IDNHANVIEN &&
-          <Dropdown>
-            <DropdownItem onClick={handleOnNavigate}>Sửa lịch làm việc</DropdownItem>
-            <DropdownItem onClick={handleDelete}>Xóa lịch làm việc</DropdownItem>
-          </Dropdown>}
-      </DropdownWrapper>
     </CustomTableRow>
   })
 
@@ -142,7 +126,7 @@ const WorkScheduleByDate = () => {
         </CustomTableHead>
         <Scrollbar data={content} />
         {/* <ButtonGroup> */}
-          <Button style={{position: "absolute", width: "300px", right: 0, bottom: "-7vh"}}onClick={handleCreateLichLamViec}>{buttonContent.name} {buttonContent.title}</Button>
+          {role === `"QT"` && <Button style={{position: "absolute", width: "300px", right: 0}}onClick={handleCreateLichLamViec}>{buttonContent.name} {buttonContent.title}</Button>}
         {/* </ButtonGroup> */}
       </Table>
     </WorkScheduleByDateWrapper>
@@ -178,10 +162,10 @@ const Button = styled.button`
 `
 
 const CustomTableHead = styled(TableHead)`
-  grid-template-columns: repeat(${header.length + 1}, 1fr);
+  grid-template-columns: repeat(${header.length}, 1fr);
 ` 
 const CustomTableRow = styled(TableRow)`
-  grid-template-columns: repeat(${header.length + 1}, 1fr);
+  grid-template-columns: repeat(${header.length }, 1fr);
 `
 
 const Input = styled.input`

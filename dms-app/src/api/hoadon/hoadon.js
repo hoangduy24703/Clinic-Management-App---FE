@@ -14,7 +14,7 @@ export async function getHoaDonNgay(date) {
 }
 
 export async function addHoaDon(loaithanhtoan, ghichuhoadon, ngaygiaodich, idbenhnhan, idbuoidieutri) {
-  return await api.get(`/hoadon/addHoaDon`, {
+  return await api.post(`/hoadon/addHoaDon`, {
     loaithanhtoan: loaithanhtoan, 
     ghichuhoadon: ghichuhoadon, 
     ngaygiaodich: ngaygiaodich, 

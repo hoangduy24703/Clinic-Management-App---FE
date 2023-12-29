@@ -6,6 +6,7 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import { addDonThuoc } from "../../../api/donthuoc/donthuoc";
 import DatePicker from "react-datepicker";
 import PopupCreatePrescriptionDetail from "./PopupCreatePrescriptionDetail";
+import moment from "moment";
 
 const PopupCreatePrescription = ({handleClosePopup}) => {  
   const [ngaycap, setNgaycap] = useState("");
@@ -14,6 +15,10 @@ const PopupCreatePrescription = ({handleClosePopup}) => {
 
   function handleNextStep(e) {
     e.preventDefault();
+    if (!ngaycap || !idbuoidieutri) {
+      alert("THIẾU THÔNG TIN NGÀY CẤP HOẶC ID BUỔI ĐIỀU TRỊ");
+      return;
+    }
     setIsOpenPopupCreateChiTiet(true);
   }
 
@@ -24,7 +29,7 @@ const PopupCreatePrescription = ({handleClosePopup}) => {
 
   return (<>
     <PopupWrapper>
-      {isOpenPopupCreateChiTiet && <PopupCreatePrescriptionDetail setIsOpenPopupCreateChiTiet={setIsOpenPopupCreateChiTiet} ngaycap={ngaycap} idbuoidieutri={idbuoidieutri} handleCloseDonThuoc={handleClosePopup}/>}
+      {isOpenPopupCreateChiTiet && <PopupCreatePrescriptionDetail setIsOpenPopupCreateChiTiet={setIsOpenPopupCreateChiTiet} ngaycap={moment(ngaycap).format("YYYY-MM-DD")} idbuoidieutri={idbuoidieutri} handleCloseDonThuoc={handleClosePopup}/>}
       <Form>
         <IoMdClose style={{marginLeft: "105%", marginTop: "-20%", cursor: "pointer"}} size="30px" onClick={handleClosePopup}/>
         <div className="popup-title">THÊM MỚI ĐƠN THUỐC</div>
@@ -54,9 +59,12 @@ export default PopupCreatePrescription;
 
 const PopupWrapper = styled.div`
   position: fixed;
-  top: 10%;
+  top: 15%;
   left: 22%;
   right: 22%;
+  bottom: 40%;
+  width: auto;
+  height: auto;
   z-index: 2;
   padding: 5vw;
   padding-bottom: 2vw;
@@ -76,9 +84,11 @@ const ButtonGroup = styled.div`
   display: flex;
   padding-top: 2vh;
   .btn-cancel {
+    font-weight: 700;
     background-color: var(--grey-line-color);
   }
   .btn-create {
+    font-weight: 700;
     background-color: var( --btn-color-1);
   }
 `

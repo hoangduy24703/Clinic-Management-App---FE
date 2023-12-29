@@ -5,16 +5,15 @@ import { IoMdClose } from "react-icons/io";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import PopupFormCTDT from "./PopupCreateCTDT";
-import { addBDT } from "../../../api/dieutri/dieutri";
 
 const PopupFormBDT = ({handleClosePopup}) => {
-  const [mabenhnhan, setMabenhnhan] = useState('');
-  const [mota, setMota] = useState('');
-  const [ghichu, setGhichu] = useState('');
+  const [mabenhnhan, setMabenhnhan] = useState(null);
+  const [mota, setMota] = useState(null);
+  const [ghichu, setGhichu] = useState(null);
   const [ngay, setNgay] = useState(null);
-  const [khamchinh, setKhamchinh] = useState('');
-  const [trokham, setTrokham] = useState('');
-  const [kehoach, setKehoach] = useState('');
+  const [khamchinh, setKhamchinh] = useState(null)
+  const [trokham, setTrokham] = useState(null)
+  const [kehoach, setKehoach] = useState(null);
   const [nextStep, setNextStep] = useState(false); 
   const [ctdt, setCtdt ]= useState({});
   const [bdt, setBDT] = useState({});
@@ -26,16 +25,18 @@ const PopupFormBDT = ({handleClosePopup}) => {
 
   function handleNextStep(e) {
     e.preventDefault();
-    if (!mabenhnhan || !ngay || !khamchinh || !kehoach)
+    if (!mabenhnhan || !ngay || !khamchinh){
+      alert("CHƯA NHẬP DỮ LIỆU");
       return;
+    }
     setCtdt({
-      mabenhnhan: mabenhnhan,
-      mota: mota,
-      ghichu: ghichu,
-      ngay: ngay,
-      khamchinh: khamchinh,
-      trokham: trokham,
-      kehoach: kehoach,
+      MABENHNHAN: mabenhnhan,
+      MOTA: mota,
+      GHICHU: ghichu,
+      NGAY: ngay,
+      KHAMCHINH: khamchinh,
+      TROKHAM: trokham,
+      KEHOACH: kehoach,
     })
     setNextStep(true);
   }
@@ -123,7 +124,7 @@ const PopupWrapper = styled.div`
 `
 const ButtonGroup = styled.div`
   display: flex;
-  padding-top: 2vh;
+  
   .btn-cancel {
     background-color: var(--grey-line-color);
     font-weight: 700;

@@ -5,6 +5,7 @@ import { IoMdClose } from "react-icons/io";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { postThemLichHen } from "../../api/lichhen/lichhen";
 import DatePicker from "react-datepicker";
+import moment from "moment";
 
 const PopupFormCreateSchedule = ({handleClosePopup}) => {  
   const [ngayhen, setNgayhen] = useState("");
@@ -18,9 +19,20 @@ const PopupFormCreateSchedule = ({handleClosePopup}) => {
 
   async function handleAddKHDT(e) {
     e.preventDefault();
+    if (!thoigianhen || !phong || !bacsi || !benhnhan) {
+      alert("CHƯA NHẬP ĐỦ THÔNG TIN");
+      return;
+    }
     // KIỂM TRA ĐIỀU KIỆN
-    await postThemLichHen(ngayhen, thoigianhen, tinhtrang, phong, ghichu, bacsi, benhnhan, trokham);
-    alert("TẠO KẾ HOẠCH ĐIỀU TRỊ THÀNH CÔNG");
+    const a = await postThemLichHen(moment(ngayhen).format("YYYY-MM-DD"), thoigianhen, tinhtrang, phong, ghichu, bacsi, benhnhan, trokham);
+    console.log(a);
+    if (a?.data?.isSuccess) {
+      alert("TẠO KẾ HOẠCH ĐIỀU TRỊ THÀNH CÔNG");
+    }
+    else {
+      alert("TẠO THẤT BẠI");
+    }
+    handleClosePopup();
   }
 
   const FormGroupStyle = {
@@ -44,19 +56,19 @@ const PopupFormCreateSchedule = ({handleClosePopup}) => {
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>THỜI GIAN HẸN</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập mô tả " onChange={(event) => { setThoigianhen(event.target.value) }} value={thoigianhen} style={{width: "100%"}}/>
+          <Form.Control type="text" placeholder=" Nhập thời gian hẹn " onChange={(event) => { setThoigianhen(event.target.value) }} value={thoigianhen} style={{width: "100%"}}/>
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>PHÒNG</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập trạng thái " onChange={(event) => { setPhong(event.target.value) }} value={phong} style={{width: "100%"}}/>
+          <Form.Control type="text" placeholder=" Nhập phòng " onChange={(event) => { setPhong(event.target.value) }} value={phong} style={{width: "100%"}}/>
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>TÌNH TRẠNG</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập ghi chú " onChange={(event) => { setTinhtrang(event.target.value) }} value={tinhtrang} style={{width: "100%"}}/>
+          <Form.Control type="text" placeholder=" Nhập tình trạng " onChange={(event) => { setTinhtrang(event.target.value) }} value={tinhtrang} style={{width: "100%"}}/>
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>GHI CHÚ</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập tổng giá " onChange={(event) => { setGhichu(event.target.value) }} value={ghichu} style={{width: "100%"}}/>
+          <Form.Control type="text" placeholder=" Nhập ghi chú " onChange={(event) => { setGhichu(event.target.value) }} value={ghichu} style={{width: "100%"}}/>
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>BỆNH NHÂN</Form.Label>
@@ -68,11 +80,11 @@ const PopupFormCreateSchedule = ({handleClosePopup}) => {
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>TRỢ KHÁM</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập tên id bác sĩ phụ trách " onChange={(event) => { setTrokham(event.target.value) }} value={trokham} style={{width: "100%"}}/>
+          <Form.Control type="text" placeholder=" Nhập tên id bác sĩ trợ khám " onChange={(event) => { setTrokham(event.target.value) }} value={trokham} style={{width: "100%"}}/>
         </Form.Group>
         <ButtonGroup>
           <Button className="btn-cancel" onClick={handleClosePopup}>HỦY</Button>
-          <Button className="btn-create"><IoMdAddCircleOutline size="20px" onClick={handleAddKHDT}/> TẠO </Button>
+          <Button className="btn-create" onClick={handleAddKHDT}>TẠO</Button>
         </ButtonGroup>
       </Form>
     </PopupWrapper>

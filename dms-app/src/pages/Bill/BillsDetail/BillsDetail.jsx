@@ -114,9 +114,10 @@ const HDDetailWrapper = styled.div`
   background-color: var(--bg-grey-1-color);
   left: 10%;
   right: 10%;
-  top: 0;
+  top: 5%;
+  bottom: 5%;
   width: auto;
-  height: 800px;
+  height: auto;
   padding: 2vw;
   border-radius: 15px;
   overflow-y: scroll;

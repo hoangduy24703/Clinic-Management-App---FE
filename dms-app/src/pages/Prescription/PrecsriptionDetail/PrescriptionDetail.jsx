@@ -9,6 +9,7 @@ import Search from "../../../components/Search/Search";
 import moment from "moment";
 import { getDonThuoc } from "../../../api/donthuoc/donthuoc";
 import PopupCreatePrescription from "./PopupCreatePresciption";
+import PreDetail from "./PreDetaiil";
 
 const header = [
   "ID ĐƠN THUỐC",
@@ -21,9 +22,9 @@ const PrescriptionDetail = () => {
   const [data, setData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenPopupCreatePrescription, setIsOpenPopupCreatePrescription] = useState(false);
+  const [isOpenPopupDetail, setIsOpenPopupDetail] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
   const [searchTerm, setSearchTerm] = useState('');
-  const navigate = useNavigate();
 
   const categoryStyle = {
     cursor: "pointer",
@@ -36,17 +37,18 @@ const PrescriptionDetail = () => {
   }
 
   const handleOnNavigate = () => {
-    // navigate("/patient-records/:idPatient");
+    setIsOpenPopupDetail(true);
   }
 
-  const handleDelete = () => {
-    
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
     console.log("Search", searchTerm);
+    if (searchTerm === "") {
+      alert("CHƯA NHẬP ID BỆNH NHÂN");
+      return;
+    }
     const result = await getDonThuoc(searchTerm);
     console.log(result?.data?.data);
     setData(result?.data?.data?.listDonThuoc);
@@ -66,8 +68,6 @@ const PrescriptionDetail = () => {
         {isOpen && selectedItem === dataItem.IDDONTHUOC && 
         <Dropdown>
           <DropdownItem onClick={handleOnNavigate}>Xem đơn thuốc</DropdownItem>
-          <DropdownItem onClick={handleOnNavigate}>Sửa đơn thuốc</DropdownItem>
-          <DropdownItem onClick={handleDelete}>Xóa đơn thuốc</DropdownItem>
         </Dropdown>}
       </DropdownWrapper>
     </CustomTableRow>
@@ -77,9 +77,10 @@ const PrescriptionDetail = () => {
   return (<div style={{marginBottom: "5vh"}}>
     <SliderCategory />
     <div style={{display: "flex"}}>
-      <Search onSubmit={handleSubmit} content={" Nhập mã đơn thuốc "} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
+      <Search onSubmit={handleSubmit} content={" Nhập id bệnh nhân "} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
     </div>  
     <PrescriptionDetailWrapper>
+      {isOpenPopupDetail && <PreDetail title={"CHI TIẾT ĐƠN THUỐC"} ID={selectedItem} setIsOpenPopup={setIsOpenPopupDetail}/>}
       {isOpenPopupCreatePrescription && <PopupCreatePrescription handleClosePopup={handleClosePopup}/>}
       <Table style={{ width: "80%", height: "50%", maxWidth: "1200px" }}>
         <CustomTableHead style={{ height: "50px", borderBottom: "2px solid" }}>
@@ -123,7 +124,6 @@ const Button = styled.button`
   min-width: 100px;
   position: absolute;
   right: 0;
-  bottom: -60px;
   background-color: var(--bg-blue-color);
   font-weight: 700;
 `

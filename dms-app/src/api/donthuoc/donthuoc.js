@@ -8,9 +8,8 @@ export async function getDonThuoc(IDBENHNHAN) {
   return await api.get(`/donthuoc/getDonThuoc/${IDBENHNHAN}`);
 }
 
-export async function addLoaiThuoc(idthuoc, tenthuoc, thanhphan, donvitinh, giathuoc) {
+export async function addLoaiThuoc(tenthuoc, thanhphan, donvitinh, giathuoc) {
   const request = {
-    idthuoc: idthuoc,
     tenthuoc: tenthuoc,
     thanhphan: thanhphan,
     donvitinh: donvitinh,
@@ -35,11 +34,11 @@ export async function getChiTietDonThuoc(iddonthuoc) {
   return await api.get(`/donthuoc/chitietdonthuoc/${iddonthuoc}`);
 }
 
-export async function addDonThuoc(donthuoc, chitietdonthuoc) {
+export async function addDonThuoc(ctdonthuoc) {
   const request = {
-    donthuoc: donthuoc,
-    chitietdonthuoc: chitietdonthuoc
+    ...ctdonthuoc
   }
+  console.log(request);
   return await api.post(`/donthuoc/addDonThuoc`, request);
 }
 

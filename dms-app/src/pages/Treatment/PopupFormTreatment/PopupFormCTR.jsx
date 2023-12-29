@@ -5,8 +5,8 @@ import { IoMdClose } from "react-icons/io";
 import { IoMdAddCircleOutline } from "react-icons/io";
 
 const PopupFormCTR = ({ handleClosePopup, setRangDieuTri, RangDieuTri }) => {
-  const [tenRang, setTenRang] = useState("");
-  const [matDieuTri, setMatDieuTri] = useState("");
+  const [tenRang, setTenRang] = useState(null);
+  const [matDieuTri, setMatDieuTri] = useState(null);
 
   const FormGroupStyle = {
     display: "flex",
@@ -15,13 +15,17 @@ const PopupFormCTR = ({ handleClosePopup, setRangDieuTri, RangDieuTri }) => {
 
   function handleAddCTR(e) {
     e.preventDefault();
+    if (!tenRang || !matDieuTri) {
+      alert("THIẾU TÊN VÀ MẶT RĂNG ĐIỀU TRỊ");
+      return;
+    }
     setRangDieuTri([...RangDieuTri, {
       TENRANG: tenRang,
       MATDIEUTRI: matDieuTri
     }]);
     handleClosePopup();
   }
-  
+
 
   return (<>
     <PopupWrapper>
@@ -51,10 +55,10 @@ export default PopupFormCTR;
 
 const PopupWrapper = styled.div`
   position: fixed;
-  top: 20%;
-  left: 30%;
-  right: 30%;
-  bottom: 30%;
+  top: 10%;
+  left: 20%;
+  right: 20%;
+  bottom: 20%;
   z-index: 4;
   padding: 5vw;
   padding-bottom: 2vw;

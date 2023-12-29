@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Form from 'react-bootstrap/Form';
 import { IoMdClose } from "react-icons/io";
 import { IoMdAddCircleOutline } from "react-icons/io";
+import moment from "moment";
 
 import DatePicker from "react-datepicker";
 import { postThemLichLamViec } from "../../api/lichlamviec/lichlamviec";
@@ -21,12 +22,19 @@ const PopupFormCreateWorkSchedule = ({handleClosePopup}) => {
     e.preventDefault();
     // KIỂM TRA ĐIỀU KIỆN
     // console.log("co chay")
-    let date = new Date(ngay)
-    let temp = date.setDate(date.getDate() + 2);
-    setNgay(temp)
-    // console.log(temp)
-    await postThemLichLamViec(idnhanvien, ngay, idcalam)
-    // console.log("co chay 2")
+    const date = moment(ngay).format("YYYY-MM-DD");
+    if (date.length !== 10 || !idnhanvien) {
+      alert("CHƯA NHẬP ĐỦ THÔNG TIN");
+      return;
+    }
+    const a = await postThemLichLamViec(idnhanvien, date, idcalam)
+    console.log(a);
+    if (a?.data?.isSuccess) {
+      alert("TẠO LỊCH LÀM VIỆC THÀNH CÔNG");
+    }
+    else {
+      alert("TẠO LỊCH LÀM VIỆC THẤT BẠI");
+    }
   }
 
   return (<>
@@ -50,12 +58,18 @@ const PopupFormCreateWorkSchedule = ({handleClosePopup}) => {
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>ID CA LÀM</Form.Label>
-        <Form.Control type="text" placeholder=" Nhập ID Ca Làm " onChange={(event) => { setIDCaLam(event.target.value) }} value={idcalam} style={{width: "100%"}}/>
+          <Form.Select aria-label="Default select example" onChange={e => setIDCaLam(e.target.value)} >
+                <option>Chọn ca làm </option>
+                <option value="C1" > Ca 1 </option>
+                <option value="C2" > Ca 2 </option>
+                <option value="C3" > Ca 3 </option>
+                <option value="C4" > Ca 4 </option>
+            </Form.Select>
         </Form.Group>
     
         <ButtonGroup>
           <Button className="btn-cancel" onClick={handleClosePopup}>HỦY</Button>
-          <Button className="btn-create" onClick={handleAddLichLamViec}><IoMdAddCircleOutline size="20px" /> TẠO </Button>
+          <Button className="btn-create" onClick={handleAddLichLamViec}>TẠO</Button>
         </ButtonGroup>
       </Form>
     </PopupWrapper>
@@ -88,9 +102,11 @@ const ButtonGroup = styled.div`
   display: flex;
   padding-top: 2vh;
   .btn-cancel {
+    font-weight: 700;
     background-color: var(--grey-line-color);
   }
   .btn-create {
+    font-weight: 700;
     background-color: var( --btn-color-1);
   }
 `

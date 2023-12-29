@@ -5,12 +5,13 @@ import { useNavigate, useHistory } from 'react-router-dom';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
-import { useDispatch } from "react-redux";
-import { setIsLogin } from "../../redux/slice/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsLogin, setClickLogout } from "../../redux/slice/authSlice";
 
 const SliderCategory = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const role = useSelector(state => state.auth.role);
 
   var settings = {
     dots: true,
@@ -20,22 +21,9 @@ const SliderCategory = () => {
     slidesToScroll: 10,
   };
 
-  const getScreenSize = () => {
-    const {innerWidth, innerHeight} = window;
-    return {innerWidth, innerHeight};
-  }
-
-  const [screenSize, setScreenSize] = useState(getScreenSize());
   useEffect(() => {
-    const handdleResize = () => {
-      setScreenSize(getScreenSize());
-    }
-
-    window.addEventListener('resize', handdleResize);
-    return () => {
-      window.removeEventListener('resize', handdleResize);
-    }
-  }, [screenSize])
+    console.log(role);
+  }, [])
 
   function handleSelectPage(key) {
     switch(key) {
@@ -58,18 +46,22 @@ const SliderCategory = () => {
         navigate("/prescription");
         break;
       case 6:
-        navigate("/bills");
+        if (role === `"QT"` || role === `"NV"`)
+          navigate("/bills");
         break;
       case 7:
-        navigate("/statistic");
+        if (role === `"QT"`)
+          navigate("/statistic");
         break;
       case 8:
-        navigate("/staff");
+        if (role === `"QT"`)
+          navigate("/staff");
         break;
       case 9:
         dispatch(setIsLogin(false));
         localStorage.setItem("isLogin", JSON.stringify(false));
         localStorage.setItem("role", JSON.stringify(null));
+        dispatch(setClickLogout(true));
         break;
       default:
     }

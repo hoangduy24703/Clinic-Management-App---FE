@@ -41,6 +41,7 @@ const Prescription = () => {
     name: "",
     title: "THÊM MỚI THUỐC"
   }
+  
   return (<>
     <SliderCategory />
     <PrescriptionBody>

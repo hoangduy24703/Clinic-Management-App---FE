@@ -33,28 +33,14 @@ const ScheduleByDate = () => {
     margin: "10px auto"
   }
 
-  const categoryStyle = {
-    cursor: "pointer",
-    marginLeft: "80%",
-  }
-
-  const handleDropdownOpen = (value) => {
-    setSelectedItem(value.IDBUOIDIEUTRI);
-    setIsOpen(!isOpen);
-  }
-
-  const handleOnNavigate = () => {
-    navigate("/patient-records/:idPatient");
-  }
-
-  const handleDelete = () => {
-
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const dateA = moment(ngayA).format("YYYY-MM-DD");
     const dateB = moment(ngayB).format("YYYY-MM-DD");
+    if (dateA.length !== dateB.length || (dateA.length !== 10 && dateB.length !== 10)) {
+      alert("CHƯA NHẬP ĐỦ NGÀY");
+      return;
+    }
     const data = await postLichHenDayToDay(dateA, dateB);
     console.log(data?.data?.data);
     setData(data?.data?.data);
@@ -65,21 +51,13 @@ const ScheduleByDate = () => {
   }, [ngayA, ngayB])
 
   const content = data?.map((dataItem, index) => {
-    return <TableRow key={index}>
+    return <CustomTableRow key={index}>
       <span>{dataItem.BENHNHAN}</span>
       <span>{dataItem.BACSI}</span>
       <span>{dataItem.TROKHAM}</span>
       <span>{moment(dataItem.NGAYHEN).format("DD/MM/YYYY")}</span>
       <span>{moment(dataItem.NGAYDT).format("DD/MM/YYYY")}</span>
-      <DropdownWrapper>
-        <AiOutlineMore style={categoryStyle} onClick={() => handleDropdownOpen(dataItem)} />
-        {isOpen && selectedItem === dataItem.IDBUOIDIEUTRI &&
-          <Dropdown>
-            <DropdownItem onClick={handleOnNavigate}>Sửa lịch hẹn</DropdownItem>
-            <DropdownItem onClick={handleDelete}>Xóa lịch hẹn</DropdownItem>
-          </Dropdown>}
-      </DropdownWrapper>
-    </TableRow>
+    </CustomTableRow>
   })
 
 
@@ -112,11 +90,11 @@ const ScheduleByDate = () => {
       </FormWrapper>
       
       <Table style={{ width: "80%", height: "50%", maxWidth: "1200px" }}>
-        <TableHead style={{ height: "50px", borderBottom: "2px solid" }}>
+        <CustomTableHead style={{ height: "50px", borderBottom: "2px solid" }}>
           {header?.map((headerItem) => {
             return <span >{headerItem}</span>
           })}
-        </TableHead>
+        </CustomTableHead>
         <Scrollbar data={content} />
       </Table>
     </ScheduleByDateWrapper>
@@ -148,4 +126,10 @@ const Button = styled.button`
   min-width: 100px;
   background-color: var(--bg-blue-color);
   font-weight: 700;
+`
+const CustomTableHead = styled(TableHead)`
+  grid-template-columns: repeat(${header.length }, 1fr);
+`
+const CustomTableRow = styled(TableRow)`
+  grid-template-columns: repeat(${header.length }, 1fr);
 `

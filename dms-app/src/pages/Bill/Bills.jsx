@@ -4,6 +4,7 @@ import { useState } from "react";
 import SliderCategory from "../../components/Slider/SliderCategory";
 import Button from "../../components/Button/Button";
 import PopupFormCreateBill from "./PopupCreateBills";
+import { useSelector } from "react-redux";
 
 const content = [
   {
@@ -23,6 +24,7 @@ const content = [
 const Bills = () => {
   const navigate = useNavigate();
   const [isOpenPopupCreateBill, setIsOpenPopupCreateBill] = useState(false);
+  const role = useSelector(state => state.auth.role);
 
   const handleNavigate = (key) => {
     switch (key) {
@@ -33,7 +35,8 @@ const Bills = () => {
         navigate("/bills/bills-by-date");
         break;
       case 2:
-        setIsOpenPopupCreateBill(true);
+        if (role === `"QT"`)
+          setIsOpenPopupCreateBill(true);
         break;
       default:
     }

@@ -10,8 +10,10 @@ export default function BDTDetail({title, ID, setIsOpenPopup}) {
   const [detail, setDetail] = useState();
 
   async function loadData() {
+    console.log(ID);
     const data = await getBDT(ID);
-    console.log(data?.data?.data?.chitiet, data?.data?.isSuccess);
+    console.log(data);
+    // console.log(data?.data?.data?.chitiet, data?.data?.data?.tongquan[0]);
     setOverview(data?.data?.data?.tongquan[0]);
     setDetail(data?.data?.data?.chitiet);
     setIsSuccess(data?.data?.isSuccess);
@@ -112,9 +114,10 @@ const BDTDetailWrapper = styled.div`
   background-color: var(--bg-grey-1-color);
   left: 10%;
   right: 10%;
-  top: 0;
+  top: 10%;
+  bottom: 10%
   width: auto;
-  height: 800px;
+  height: auto;
   padding: 2vw;
   border-radius: 15px;
   

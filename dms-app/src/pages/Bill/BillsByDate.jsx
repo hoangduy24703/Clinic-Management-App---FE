@@ -21,19 +21,10 @@ const header = [
 ];
 
 const BillsByDate = () => {
-  // const data = [...dummyData];'
-  // const [data, setData] = useState([]);
-  // const [isOpen, setIsOpen] = useState(false);
-  // // const [isOpenPopupForm, setIsOpenPopupForm] = useState(false);
-  // const [selectedItem, setSelectedItem] = useState();
-  // const [searchTerm, setSearchTerm] = useState('');
-  // const navigate = useNavigate();
-
   const [data, setData] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenPopupBill, setIsOpenPopupBill] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
-  const [searchTerm, setSearchTerm] = useState('');
   const [date, setDate] = useState(null);
 
   const categoryStyle = {
@@ -49,17 +40,15 @@ const BillsByDate = () => {
   const handleOnViewBill = () => {
     setIsOpenPopupBill(true);
   }
-  const handleOnNavigate = () => {
-    // navigate("/patient-records/:idPatient");
-  }
-
-  const handleDelete = () => {
-
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = await getHoaDonNgay(moment(date).format("YYYY-MM-DD"));
+    const DATE = moment(date).format("YYYY-MM-DD");
+    if (DATE.length !== 10) {
+      alert("CHƯA CHỌN NGÀY");
+      return;
+    }
+    const result = await getHoaDonNgay(DATE);
     console.log(result?.data?.data);
     setData(result?.data?.data?.listDonThuoc);
   }
@@ -80,8 +69,6 @@ const BillsByDate = () => {
         {isOpen && selectedItem === dataItem.IDHOADON &&
           <Dropdown>
             <DropdownItem onClick={handleOnViewBill}>Xem hóa đơn</DropdownItem>
-            {/* <DropdownItem onClick={handleOnNavigate}>Sửa hóa đơn</DropdownItem>
-          <DropdownItem onClick={handleDelete}>Xóa buổi điều trị</DropdownItem> */}
           </Dropdown>}
       </DropdownWrapper>
     </TableRow>

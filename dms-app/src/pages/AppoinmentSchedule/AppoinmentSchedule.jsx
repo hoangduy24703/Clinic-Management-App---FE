@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button/Button";
 import PopupFormCreateSchedule from "./PopupCreateSchedule";
+import { useSelector } from "react-redux";
 
 const content = [
   {
@@ -31,6 +32,7 @@ const content = [
 const AppointmentSchedule = () => {
   const navigate = useNavigate();
   const [isOpenPopupCreateSchedule, setIsOpenCreateSchedule] = useState(false); 
+  const role = useSelector(state => state.auth.role);
 
   const btnStyle = {
     boxShadow: "4px 4px 2px black",
@@ -58,7 +60,8 @@ const AppointmentSchedule = () => {
         navigate("/appointment-schedule/by-date");
         break;
       case 4: 
-        setIsOpenCreateSchedule(true);
+        if (role === `"NV"` || role === `"QT"`)
+          setIsOpenCreateSchedule(true);
         break;
       default:
     }

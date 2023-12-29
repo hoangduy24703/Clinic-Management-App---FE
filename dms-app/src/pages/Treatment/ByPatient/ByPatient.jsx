@@ -38,14 +38,14 @@ const ByPatient = () => {
     setIsOpenPopupBDT(true);
   }
 
-  const handleDelete = () => {
-    
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     
     console.log("Search", searchTerm);
+    if (searchTerm === '') {
+      alert("CHƯA NHẬP MÃ BỆNH NHÂN");
+      return;
+    }
     const result = await getListBDTbyID(searchTerm);
     console.log(result);
     console.log(result?.data?.data?.listBDT)
@@ -64,8 +64,6 @@ const ByPatient = () => {
         {isOpen && selectedItem === dataItem.IDBUOIDIEUTRI && 
         <Dropdown>
           <DropdownItem onClick={handleOnViewBDT}>Xem buổi điều trị</DropdownItem>
-          <DropdownItem onClick={handleOnViewBDT}>Sửa buổi điều trị</DropdownItem>
-          <DropdownItem onClick={handleDelete}>Xóa buổi điều trị</DropdownItem>
         </Dropdown>}
       </DropdownWrapper>
     </TableRow>

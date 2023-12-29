@@ -5,7 +5,6 @@ import Search from "../../components/Search/Search";
 import styled from "styled-components";
 import { AiOutlineMore } from "react-icons/ai";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { getHoaDon } from "../../api/hoadon/hoadon";
 import BillsDetail from "./BillsDetail/BillsDetail";
@@ -15,7 +14,8 @@ const header = [
   "TỔNG TIỀN",
   "NGÀY GIAO DỊCH",
   "TÊN BỆNH NHÂN",
-  "ID BUỔI ĐIỀU TRỊ"
+  "ID BUỔI ĐIỀU TRỊ",
+  "GHI CHÚ"
 ];
 
 const BillsByPatient = () => {
@@ -45,18 +45,15 @@ const BillsByPatient = () => {
   const handleOnViewBill = () => {
     setIsOpenPopupBill(true);
   }
-  const handleOnNavigate = () => {
-    // navigate("/patient-records/:idPatient");
-  }
-
-  const handleDelete = () => {
-    
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
     console.log("Search", searchTerm);
+    if (searchTerm === "") {
+      alert("CHƯA NHẬP ID BỆNH NHÂN");
+      return;
+    }
     const result = await getHoaDon(searchTerm);
     console.log(result);
     setData(result?.data?.data?.listhoadon);
@@ -64,12 +61,13 @@ const BillsByPatient = () => {
   
 
   const content = data?.map((dataItem, index) => {
-    return <TableRow key={index}>
+    return <CustomTableRow key={index}>
       <span>{dataItem.IDHOADON}</span>
       <span>{dataItem.TONGTIEN}</span>
       <span>{moment(dataItem.NGAYGIAODICH).format("DD/MM/YYYY")}</span>
       <span>{dataItem.TENBN}</span>
       <span>{dataItem.IDBUOIDIEUTRI}</span>
+      <span>{dataItem.GHICHUHOADON}</span>
       <DropdownWrapper>
         <AiOutlineMore style={categoryStyle} onClick={() => handleDropdownOpen(dataItem)}/>
         {isOpen && selectedItem === dataItem.IDHOADON && 
@@ -79,7 +77,7 @@ const BillsByPatient = () => {
           <DropdownItem onClick={handleDelete}>Xóa buổi điều trị</DropdownItem> */}
         </Dropdown>}
       </DropdownWrapper>
-    </TableRow>
+    </CustomTableRow>
   })
 
 
@@ -92,11 +90,11 @@ const BillsByPatient = () => {
       {/* <div className="patient-record-title">DANH SÁCH HỒ SƠ BỆNH NHÂN</div> */}
       {isOpenPopupBill && <BillsDetail title={"HÓA ĐƠN " + selectedItem} ID={selectedItem} setIsOpenPopup={setIsOpenPopupBill}/>}
       <Table style={{ width: "80%", height: "50%", maxWidth: "1200px" }}>
-        <TableHead style={{ height: "50px", borderBottom: "2px solid" }}>
+        <CustomTableHead style={{ height: "50px", borderBottom: "2px solid" }}>
           {header?.map((headerItem) => {
             return <span >{headerItem}</span>
           })}
-        </TableHead>
+        </CustomTableHead>
         <Scrollbar data={content} />
         <ButtonGroup>
           {/* <Button onClick={handleCreatePatient}>{buttonContent.name} {buttonContent.title}</Button> */}
@@ -133,3 +131,11 @@ const ButtonGroup = styled.div`
 //   padding: 10px;
 //   min-width: 100px;
 // `
+
+const CustomTableHead = styled(TableHead)`
+  grid-template-columns: repeat(${header.length + 1}, 1fr);
+`
+
+const CustomTableRow = styled(TableRow)`
+  grid-template-columns: repeat(${header.length + 1}, 1fr);
+`

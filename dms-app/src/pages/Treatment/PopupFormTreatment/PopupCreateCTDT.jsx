@@ -11,6 +11,7 @@ import { addBDT } from "../../../api/dieutri/dieutri";
 const PopupFormCTDT = ({ handleClosePopup, ctdt, bdt, setBDT, handleCloseBDT }) => {
   const [isOpenPopupLDT, setIsOpenPopupLDT] = useState(false);
   const [loaiDieuTri, setLoaiDieuTri] = useState([]);
+  const [obj, setObj] = useState({});
   const FormGroupStyle = {
     display: "flex",
     width: "100%",
@@ -18,15 +19,16 @@ const PopupFormCTDT = ({ handleClosePopup, ctdt, bdt, setBDT, handleCloseBDT }) 
 
   async function handleAddBDT(e) {
     e.preventDefault();
-    setBDT({
-      tongquan: ctdt,
-      chitietdieutri: loaiDieuTri,
-    })
+    console.log(bdt, ctdt, loaiDieuTri);
     handleClosePopup();
+    const a = await addBDT({tongquan: ctdt, chitietdieutri: loaiDieuTri});
     handleCloseBDT();
     // KIỂM TRA ĐIỀU KIỆN
-    await addBDT(bdt);
-    alert("TẠO BUỔI ĐIỀU TRỊ THÀNH CÔNG");
+    console.log(a);
+    if (a?.data?.isSuccess)
+      alert("TẠO BUỔI ĐIỀU TRỊ THÀNH CÔNG");
+    else 
+      alert("TẠO THẤT BẠI");
   }
 
   function handleAddLDT(e) {
@@ -38,9 +40,7 @@ const PopupFormCTDT = ({ handleClosePopup, ctdt, bdt, setBDT, handleCloseBDT }) 
     setIsOpenPopupLDT(false);
   }
 
-  useEffect(() => {
-    console.log(bdt);
-  }, [bdt])
+
 
   return (<>
     <PopupWrapper>
@@ -93,7 +93,6 @@ const PopupWrapper = styled.div`
 `
 const ButtonGroup = styled.div`
   display: flex;
-  padding-top: 2vh;
   
   .btn-cancel {
     background-color: var(--grey-line-color);

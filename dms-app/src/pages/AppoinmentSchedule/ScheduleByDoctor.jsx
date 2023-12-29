@@ -12,10 +12,13 @@ import DatePicker from "react-datepicker";
 
 const header = [
   "BỆNH NHÂN",
-  "KHÁM CHÍNH",
-  "TRỢ KHÁM",
-  "NGÀY",
+  "ID NHÂN VIÊN",
+  "TÊN NV",
+  "PHÒNG",
+  "NGÀY HẸN",
+  "THỜI GIAN HẸN",
   "TÌNH TRẠNG",
+  "GHI CHÚ",
 ];
 
 export default function ScheduleByDoctor() {
@@ -48,29 +51,28 @@ export default function ScheduleByDoctor() {
     e.preventDefault();
     
     console.log("Search", searchTerm);
-    const result = await postLichHenIDNS(searchTerm);
+    const DATE = moment(date).format("YYYY-MM-DD");
+    if (DATE.length !== 10 || searchTerm === '') {
+      alert("NHẬP THÔNG TIN KHÔNG ĐẦY ĐỦ");
+      return;
+    }
+    const result = await postLichHenIDNS(searchTerm, DATE);
     console.log(result);
-    console.log(result?.data?.data?.listBDT)
-    setData(result?.data?.data?.listBDT);
+    console.log(result?.data?.data)
+    setData(result?.data?.data);
   }
 
   const content = data?.map((dataItem, index) => {
-    return <TableRow key={index}>
-      <span>{dataItem.IDBENHNHAN}</span>
-      <span>{dataItem.BACSI}</span>
-      <span>{dataItem.TROKHAM}</span>
+    return <CustomTableRow key={index}>
+      <span>{dataItem.BENHNHAN}</span>
+      <span>{dataItem.IDNHANVIEN}</span>
+      <span>{dataItem.TENNV}</span>
+      <span>{dataItem.PHONG}</span>
       <span>{moment(dataItem.NGAYHEN).format("DD/MM/YYYY")}</span>
+      <span>{moment(dataItem.THOIGIANHEN).format("DD/MM/YYYY HH:mm:ss")}</span>
       <span>{dataItem.TINHTRANG}</span>
-      <DropdownWrapper>
-        <AiOutlineMore style={categoryStyle} onClick={() => handleDropdownOpen(dataItem)}/>
-        {isOpen && selectedItem === dataItem.IDBUOIDIEUTRI && 
-        <Dropdown>
-          <DropdownItem onClick={handleOnNavigate}>Xem buổi điều trị</DropdownItem>
-          <DropdownItem onClick={handleOnNavigate}>Sửa buổi điều trị</DropdownItem>
-          <DropdownItem onClick={handleDelete}>Xóa buổi điều trị</DropdownItem>
-        </Dropdown>}
-      </DropdownWrapper>
-    </TableRow>
+      <span>{dataItem.GHICHULICHHEN}</span>
+    </CustomTableRow>
   })
 
   return(<>
@@ -95,11 +97,11 @@ export default function ScheduleByDoctor() {
     <ScheduleByDoctorWrapper>
       {/* <div className="patient-record-title">DANH SÁCH HỒ SƠ BỆNH NHÂN</div> */}
       <Table style={{ width: "80%", height: "50%", maxWidth: "1200px" }}>
-        <TableHead style={{ height: "50px", borderBottom: "2px solid" }}>
+        <CustomTableHead style={{ height: "50px", borderBottom: "2px solid" }}>
           {header?.map((headerItem) => {
             return <span >{headerItem}</span>
           })}
-        </TableHead>
+        </CustomTableHead>
         <Scrollbar data={content} />
         {/* <ButtonGroup>
           <Button onClick={handleCreatePatient}>{buttonContent.name} {buttonContent.title}</Button>
@@ -146,4 +148,11 @@ const Button = styled.button`
 `
 const CustomDatePicker = styled(DatePicker)`
   padding: 10px;
+`
+
+const CustomTableHead = styled(TableHead)`
+  grid-template-columns: repeat(${header.length}, 1fr);
+`
+const CustomTableRow = styled(TableRow)`
+  grid-template-columns: repeat(${header.length}, 1fr);
 `

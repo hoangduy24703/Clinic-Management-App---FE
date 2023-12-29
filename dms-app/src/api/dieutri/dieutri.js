@@ -30,20 +30,21 @@ export async function addBDT(bdt) {
   const request = {
     ...bdt
   }
+  console.log(request);
   const response = await api.post(`/dieutri/addBDT`, request);
   return response;
 }
 
-export async function addKeHoach(IDDIEUTRI, MOTAKHDT, TRANGTHAI, GHICHUKHDT, TONGGIA, BENHNHAN, BSPHUTRACH) {
+export async function addKeHoach(MOTAKHDT, TRANGTHAI, GHICHUKHDT, BENHNHAN, BSPHUTRACH) {
   const request = {
-    IDDIEUTRI: IDDIEUTRI,
     MOTAKHDT: MOTAKHDT,
     TRANGTHAI: TRANGTHAI,
     GHICHUKHDT: GHICHUKHDT,
-    TONGGIA: TONGGIA,
     BENHNHAN: BENHNHAN,
     BSPHUTRACH: BSPHUTRACH
   }
+  console.log(request);
+
   const response = await api.post(`/dieutri/addKeHoach`, request);
   return response;
 }

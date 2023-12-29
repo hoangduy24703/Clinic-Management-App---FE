@@ -8,7 +8,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import PopupFormCTR from "./PopupFormCTR";
 
 const PopupFormLDT = ({ handleClosePopup, setLoaiDieuTri, loaiDieuTri }) => {
-  const [madieutri, setMadieutri] = useState('');
+  const [madieutri, setMadieutri] = useState(null);
   const [RangDieuTri, setRangDieuTri] = useState([]);
   const [isOpenPopupCTR, setIsOpenPopupCTR] = useState(false);
 
@@ -28,6 +28,10 @@ const PopupFormLDT = ({ handleClosePopup, setLoaiDieuTri, loaiDieuTri }) => {
 
   function handleCreateLDT(e) {
     e.preventDefault();
+    if (!madieutri || !RangDieuTri) {
+      alert("THIẾU THÔNG TIN RĂNG VÀ LOẠI ĐIỀU TRỊ");
+      return;
+    }
     setLoaiDieuTri([...loaiDieuTri, {
       MADIEUTRI: madieutri,
       rangdt: RangDieuTri
@@ -46,7 +50,7 @@ const PopupFormLDT = ({ handleClosePopup, setLoaiDieuTri, loaiDieuTri }) => {
           {/* <Form.Control type="text" placeholder=" Nhập mã điều trị " onChange={(event) => { setMadieutri(event.target.value) }} value={madieutri} style={{ width: "100%" }} /> */}
           <Form.Select aria-label="Default select example" onChange={e => setMadieutri(e.target.value)} >
             <option>Chọn loại điều trị</option>
-            <option value="CC" >Chữa tủy</option>
+            <option value="CT" >Chữa tủy</option>
             <option value="CVR" >Cạo vôi răng</option>
             <option value="NR" >Nhổ răng</option>
             <option value="TK" >Thăm khám</option>
@@ -108,7 +112,7 @@ const PopupWrapper = styled.div`
 `
 const ButtonGroup = styled.div`
   display: flex;
-  padding-top: 2vh;
+
   .btn-cancel {
     font-weight: 700;
     background-color: var(--grey-line-color);

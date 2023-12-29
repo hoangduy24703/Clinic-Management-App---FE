@@ -7,14 +7,10 @@ import { useDispatch } from 'react-redux';
 import { setIsLogin } from '../../redux/slice/authSlice';
 import { useEffect } from 'react';
 
-const Login = () => {
+const Login = ({setClickLogin}) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [role, setRole] = useState("");
-  const [idPhongkham, setIdPhongKham] = useState("");
 
-  const dispatch = useDispatch();
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -22,17 +18,17 @@ const Login = () => {
 
     setUsername("");
     setPassword("");
-    console.log(auth);
+    console.log(auth?.data?.data[0]?.LOAINV);
     if (auth?.data?.isSuccess) {
-      dispatch(setIsLogin(true));
-      localStorage.setItem("isLogin", JSON.stringify(auth?.data?.isSuccess));
+      localStorage.setItem("isLogin", JSON.stringify(true));
       localStorage.setItem("role", JSON.stringify(auth?.data?.data[0]?.LOAINV));
     }
     else {
-      dispatch(setIsLogin(false));
-      localStorage.setItem("isLogin", auth?.data?.isSuccess);
+      alert("WRONG PHONE NUMBER OR PASSWORD! LOGIN FAILED");
+      localStorage.setItem("isLogin", JSON.stringify(false));
       localStorage.setItem("role", null);
     }
+    setClickLogin(true);
   }
 
 

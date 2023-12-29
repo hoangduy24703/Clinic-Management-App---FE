@@ -9,7 +9,7 @@ import { addHoaDon } from "../../api/hoadon/hoadon";
 
 const PopupFormCreateBill = ({handleClosePopup}) => {
   const [loaithanhtoan, setLoaithanhtoan] = useState('');
-  const [ghichuhoadon, setGhichuhoadon] = useState('');
+  const [ghichuhoadon, setGhichuhoadon] = useState(null);
   const [ngaygiaodich, setNgaygiaodich] = useState('');
   const [idbenhnhan, setIdbenhnhan] = useState('');
   const [idbuoidieutri, setIdbuoidieutri] = useState('');
@@ -22,8 +22,17 @@ const PopupFormCreateBill = ({handleClosePopup}) => {
   async function handleAddHoaDon(e) {
     // KIỂM TRA ĐIỀU KIỆN
     e.preventDefault();
-    await addHoaDon(loaithanhtoan, ghichuhoadon, ngaygiaodich, idbenhnhan, idbuoidieutri)
-    alert("TẠO HÓA ĐƠN THÀNH CÔNG");
+    if (!loaithanhtoan || !ngaygiaodich || !idbenhnhan || !idbuoidieutri) {
+      alert("CHƯA ĐIỀN ĐẦY ĐỦ THÔNG TIN");
+      return;
+    }
+    const a = await addHoaDon(loaithanhtoan, ghichuhoadon, ngaygiaodich, idbenhnhan, idbuoidieutri);
+    if (a?.data?.isSuccess) {
+      alert("TẠO HÓA ĐƠN THÀNH CÔNG");
+    }
+    else {
+      alert("TẠO HÓA ĐƠN THẤT BẠI");
+    }
   }
 
   return (<>
@@ -33,11 +42,11 @@ const PopupFormCreateBill = ({handleClosePopup}) => {
         <div className="popup-title">THÊM MỚI BUỔI ĐIỀU TRỊ</div>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>ID BUỔI ĐIỀU TRỊ</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập id buổi điều trị " onChange={(event) => { setGhichuhoadon(event.target.value) }} value={ghichuhoadon} style={{width: "100%"}}/>
+          <Form.Control type="text" placeholder=" Nhập id buổi điều trị " onChange={(event) => { setIdbuoidieutri(event.target.value) }} value={idbuoidieutri} style={{width: "100%"}}/>
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>ID BỆNH NHÂN</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập id bệnh nhân " onChange={(event) => { setGhichuhoadon(event.target.value) }} value={ghichuhoadon} style={{width: "100%"}}/>
+          <Form.Control type="text" placeholder=" Nhập id bệnh nhân " onChange={(event) => { setIdbenhnhan(event.target.value) }} value={idbenhnhan} style={{width: "100%"}}/>
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>GHI CHÚ</Form.Label>
@@ -63,7 +72,7 @@ const PopupFormCreateBill = ({handleClosePopup}) => {
         </Form.Group>
         <ButtonGroup>
           <Button className="btn-cancel" onClick={handleClosePopup}>HỦY</Button>
-          <Button className="btn-create" onClick={handleAddHoaDon}><IoMdAddCircleOutline size="20px"/> TẠO </Button>
+          <Button className="btn-create" onClick={handleAddHoaDon}>TẠO</Button>
         </ButtonGroup>
       </Form>
     </PopupWrapper>

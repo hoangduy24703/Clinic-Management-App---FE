@@ -2,7 +2,7 @@ import { TableRow, Dropdown, DropdownItem, DropdownWrapper, Table, TableHead } f
 import { useState } from "react";
 import SliderCategory from "../../components/Slider/SliderCategory";
 import { useNavigate } from "react-router-dom";
-import { postLichHenIDNS } from "../../api/lichhen/lichhen";
+import { postLichHenIDPK } from "../../api/lichhen/lichhen";
 import moment from "moment";
 import { AiOutlineMore } from "react-icons/ai";
 import styled from "styled-components";
@@ -12,9 +12,13 @@ import DatePicker from 'react-datepicker';
 
 const header = [
   "BỆNH NHÂN",
-  "KHÁM CHÍNH",
+  "BÁC SĨ",
+  "GHI CHÚ",
+  "PHÒNG",
+  "TÊN PK",
   "TRỢ KHÁM",
-  "NGÀY",
+  "NGÀY HẸN",
+  "THỜI GIAN HẸN",
   "TÌNH TRẠNG",
 ];
 
@@ -26,51 +30,33 @@ export default function ScheduleByClinic() {
   const [date, setDate] = useState(null);
   const navigate = useNavigate();
 
-  const categoryStyle = {
-    cursor: "pointer",
-    marginLeft: "80%",
-  }
-
-  const handleDropdownOpen = (value) => {
-    setSelectedItem(value.BACSI);
-    setIsOpen(!isOpen);
-  }
-
-  const handleOnNavigate = () => {
-    navigate("/patient-records/:idPatient");
-  }
-
-  const handleDelete = () => {
-    
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     console.log("Search", searchTerm);
-    const result = await postLichHenIDNS(searchTerm, date.format("YYYY-MM-DD"));
+    const DATE = moment(date).format("YYYY-MM-DD");
+    if (DATE.length !== 10 || searchTerm === '') {
+      alert("NHẬP THÔNG TIN KHÔNG ĐẦY ĐỦ");
+      return;
+    }
+    const result = await postLichHenIDPK(searchTerm, DATE);
     console.log(result);
-    console.log(result?.data?.data?.listBDT)
-    setData(result?.data?.data?.listBDT);
+    console.log(result?.data?.data)
+    setData(result?.data?.data);
   }
 
   const content = data?.map((dataItem, index) => {
-    return <TableRow key={index}>
-      <span>{dataItem.IDBENHNHAN}</span>
+    return <CustomTableRow key={index}>
+      <span>{dataItem.BENHNHAN}</span>
       <span>{dataItem.BACSI}</span>
+      <span>{dataItem.GHICHULICHHEN}</span>
+      <span>{dataItem.PHONG}</span>
+      <span>{dataItem.TENPK}</span>
       <span>{dataItem.TROKHAM}</span>
       <span>{moment(dataItem.NGAYHEN).format("DD/MM/YYYY")}</span>
+      <span>{moment(dataItem.THOIGIANHEN).format("DD/MM/YYYY HH:mm:ss")}</span>
       <span>{dataItem.TINHTRANG}</span>
-      <DropdownWrapper>
-        <AiOutlineMore style={categoryStyle} onClick={() => handleDropdownOpen(dataItem)}/>
-        {isOpen && selectedItem === dataItem.IDBUOIDIEUTRI && 
-        <Dropdown>
-          <DropdownItem onClick={handleOnNavigate}>Xem buổi điều trị</DropdownItem>
-          <DropdownItem onClick={handleOnNavigate}>Sửa buổi điều trị</DropdownItem>
-          <DropdownItem onClick={handleDelete}>Xóa buổi điều trị</DropdownItem>
-        </Dropdown>}
-      </DropdownWrapper>
-    </TableRow>
+    </CustomTableRow>
   })
 
   return(<>
@@ -95,11 +81,11 @@ export default function ScheduleByClinic() {
     <ScheduleByClinicWrapper>
       {/* <div className="patient-record-title">DANH SÁCH HỒ SƠ BỆNH NHÂN</div> */}
       <Table style={{ width: "80%", height: "50%", maxWidth: "1200px" }}>
-        <TableHead style={{ height: "50px", borderBottom: "2px solid" }}>
+        <CustomTableHead style={{ height: "50px", borderBottom: "2px solid" }}>
           {header?.map((headerItem) => {
             return <span >{headerItem}</span>
           })}
-        </TableHead>
+        </CustomTableHead>
         <Scrollbar data={content} />
         {/* <ButtonGroup>
           <Button onClick={handleCreatePatient}>{buttonContent.name} {buttonContent.title}</Button>
@@ -146,4 +132,12 @@ const Button = styled.button`
 `
 const CustomDatePicker = styled(DatePicker)`
   padding: 10px;
+`
+
+const CustomTableHead = styled(TableHead)`
+  grid-template-columns: repeat(${header.length}, 1fr);
+`
+
+const CustomTableRow = styled(TableRow)`
+  grid-template-columns: repeat(${header.length}, 1fr);
 `

@@ -85,7 +85,6 @@ const PatientRecords = () => {
         {isOpen && selectedItem === dataItem.IDBENHNHAN && 
         <Dropdown>
           <DropdownItem onClick={handleViewPatient}>Xem thông tin hồ sơ</DropdownItem>
-          <DropdownItem onClick={handleUpdatePatient}>Sửa thông tin hồ sơ</DropdownItem>
         </Dropdown>}
       </DropdownWrapper>
     </TableRow>
@@ -162,6 +161,7 @@ export const ButtonGroup = styled.div`
 `
 
 const Button = styled.button`
+  font-weight: 700;
   background-color: var(--bg-blue-color);
   border: none;
   padding: 10px;

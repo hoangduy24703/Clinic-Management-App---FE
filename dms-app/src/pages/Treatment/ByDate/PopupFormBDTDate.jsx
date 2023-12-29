@@ -48,18 +48,14 @@ const ByDate = () => {
     setIsOpenPopupBDT(true);
   }
 
-  const handleDelete = () => {
-
-  }
-
-  const handleOnUpdate = () => {
-
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const dateA = moment(ngayA).format("YYYY-MM-DD");
     const dateB = moment(ngayB).format("YYYY-MM-DD");
+    if (dateA.length !== dateB.length || (dateA.length !== 10 && dateB.length !== 10)) {
+      alert("CHƯA CHỌN ĐẦY ĐỦ NGÀY");
+      return;
+    }
     const data = await getListBDTbyDate(dateA, dateB);
     console.log(data?.data?.data?.listBDT);
     setDataBDT(data?.data?.data?.listBDT);
@@ -77,8 +73,6 @@ const ByDate = () => {
         {isOpen && selectedItem === dataItem.IDBUOIDIEUTRI &&
           <Dropdown>
             <DropdownItem onClick={handleOnView}>Xem buổi điều trị</DropdownItem>
-            <DropdownItem onClick={handleOnUpdate}>Sửa buổi điều trị</DropdownItem>
-            <DropdownItem onClick={handleDelete}>Xóa buổi điều trị</DropdownItem>
           </Dropdown>}
       </DropdownWrapper>
     </TableRow>
@@ -112,7 +106,7 @@ const ByDate = () => {
           <Button>SEARCH</Button>
         </Form.Group>
       </FormWrapper>
-      {isOpenPopupBDT && <BDTDetail title={"BUỔI ĐIỀU TRỊ " + selectedItem} IDBUOIDIEUTRI={selectedItem} setIsOpenPopup={setIsOpenPopupBDT}/>}
+      {isOpenPopupBDT && <BDTDetail title={"BUỔI ĐIỀU TRỊ " + selectedItem} ID={selectedItem} setIsOpenPopup={setIsOpenPopupBDT}/>}
       <Table style={{ width: "80%", height: "50%", maxWidth: "1200px" }}>
         <TableHead style={{ height: "50px", borderBottom: "2px solid" }}>
           {header?.map((headerItem) => {
