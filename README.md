@@ -1,3 +1,3 @@
-﻿#DDENTAL-MANAGEMENT-SYSTEM
---- install and start project --- 
+﻿#DENTAL-MANAGEMENT-SYSTEM
+#--- install and start project --- 
 npm install --force
