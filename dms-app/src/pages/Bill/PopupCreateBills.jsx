@@ -35,6 +35,7 @@ const PopupFormCreateBill = ({handleClosePopup}) => {
     else {
       alert("TẠO HÓA ĐƠN THẤT BẠI");
     }
+    handleClosePopup();
   }
   useEffect(() => {
     console.log(loaithanhtoan, ghichuhoadon, ngaygiaodich, idbenhnhan, idbuoidieutri);
