@@ -35,6 +35,7 @@ const PopupFormCreateWorkSchedule = ({handleClosePopup}) => {
     else {
       alert("TẠO LỊCH LÀM VIỆC THẤT BẠI");
     }
+    handleClosePopup();
   }
 
   return (<>
