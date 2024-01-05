@@ -10,6 +10,8 @@ import DatePicker from 'react-datepicker';
 import Form from 'react-bootstrap/Form';
 import { getListBDTbyDate } from "../../../api/dieutri/dieutri";
 import BDTDetail from "../BDTDetail/BDTDetail";
+import PopupDeleteBDT from "../PopupFormBDT/PopupFormDeleteBDT";
+import { useSelector } from "react-redux";
 
 const header = [
   "ID BỆNH NHÂN",
@@ -26,6 +28,8 @@ const ByDate = () => {
   const [selectedItem, setSelectedItem] = useState();
   const [ngayA, setNgayA] = useState(null);
   const [ngayB, setNgayB] = useState(null);
+  const [isOpenDelete, setIsOpenDelete] = useState(false);
+  const role = useSelector(state => state.auth.role);
   
   const FormGroupStyle = {
     display: "flex",
@@ -46,9 +50,6 @@ const ByDate = () => {
     setIsOpenPopupBDT(true);
   }
 
-  const handleUpdateBDT = () => {
-
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -75,7 +76,7 @@ const ByDate = () => {
         {isOpen && selectedItem === dataItem.IDBUOIDIEUTRI &&
           <Dropdown>
             <DropdownItem onClick={handleOnView}>Xem buổi điều trị</DropdownItem>
-            <DropdownItem onClick={handleUpdateBDT}>Chỉnh sửa buổi điều trị</DropdownItem>
+            {(role === `"NS"` || role === `"QT"`) && <DropdownItem onClick={() => setIsOpenDelete(true)}>Xóa buổi điều trị</DropdownItem>}
           </Dropdown>}
       </DropdownWrapper>
     </TableRow>
@@ -84,6 +85,7 @@ const ByDate = () => {
 
   return (<div style={{ marginBottom: "5vh" }}>
     <SliderCategory />
+    {isOpenDelete && <PopupDeleteBDT handleClosePopup={() => setIsOpenDelete(false)} idbuoidieutri={selectedItem}/>}
     <ByDateWrapper>
       {/* <div className="patient-record-title">DANH SÁCH HỒ SƠ BỆNH NHÂN</div> */}
       <FormWrapper onSubmit={handleSubmit}>

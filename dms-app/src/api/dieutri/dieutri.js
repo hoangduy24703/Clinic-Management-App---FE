@@ -48,3 +48,16 @@ export async function addKeHoach(MOTAKHDT, TRANGTHAI, GHICHUKHDT, BENHNHAN, BSPH
   const response = await api.post(`/dieutri/addKeHoach`, request);
   return response;
 }
+
+export async function addChiTietDT(IDBUOIDIEUTRI, MADIEUTRI) {
+  return await api.post(`/dieutri/addChiTietDT`, {
+    MADIEUTRI: MADIEUTRI,
+    IDBUOIDIEUTRI: IDBUOIDIEUTRI
+  })
+}
+
+export async function deleteBDT(IDBUOIDIEUTRI) {
+  return await api.post(`/dieutri/deleteBDT`, {
+    IDBUOIDIEUTRI: IDBUOIDIEUTRI
+  })
+}

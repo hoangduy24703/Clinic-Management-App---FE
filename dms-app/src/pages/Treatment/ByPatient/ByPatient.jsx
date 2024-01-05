@@ -8,6 +8,8 @@ import Search from "../../../components/Search/Search";
 import { getListBDTbyID } from '../../../api/dieutri/dieutri';
 import BDTDetail from "../BDTDetail/BDTDetail";
 import moment from "moment";
+import PopupDeleteBDT from "../PopupFormBDT/PopupFormDeleteBDT";
+import { useSelector } from "react-redux";
 
 const header = [
   "ID BỆNH NHÂN",
@@ -23,6 +25,8 @@ const ByPatient = () => {
   const [isOpenPopupBDT, setIsOpenPopupBDT] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
   const [searchTerm, setSearchTerm] = useState('');
+  const [isOpenDelete, setIsOpenDelete] = useState(false);
+  const role = useSelector(state => state.auth.role);
 
   const categoryStyle = {
     cursor: "pointer",
@@ -68,7 +72,7 @@ const ByPatient = () => {
         {isOpen && selectedItem === dataItem.IDBUOIDIEUTRI && 
         <Dropdown>
           <DropdownItem onClick={handleOnViewBDT}>Xem buổi điều trị</DropdownItem>
-          <DropdownItem onClick={handleUpdateBDT}>Chỉnh sửa buổi điều trị</DropdownItem>
+          {(role === `"NS"` || role === `"QT"`) && <DropdownItem onClick={() => setIsOpenDelete(true)}>Xóa buổi điều trị</DropdownItem>}
         </Dropdown>}
       </DropdownWrapper>
     </TableRow>
@@ -76,6 +80,7 @@ const ByPatient = () => {
 
   return (<div style={{marginBottom: "5vh"}}>
     <SliderCategory />
+    {isOpenDelete && <PopupDeleteBDT handleClosePopup={() => setIsOpenDelete(false)} idbuoidieutri={selectedItem}/>}
     <div style={{display: "flex"}}>
       <Search onSubmit={handleSubmit} content={" Nhập mã bệnh nhân "} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
     </div>

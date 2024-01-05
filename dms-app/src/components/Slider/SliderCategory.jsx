@@ -33,7 +33,8 @@ const SliderCategory = () => {
           navigate("/dashboard");
           break;
         case 1:
-          navigate("/patient-records");
+          if (role === `"NS"` || role === `"QT"`)
+            navigate("/patient-records");
           break;
         case 2:
           navigate("/treatment-plan");

@@ -4,13 +4,13 @@ import Form from 'react-bootstrap/Form';
 // import Button from "../../../components/Button/Button";
 import { IoMdClose } from "react-icons/io";
 import { IoMdAddCircleOutline } from "react-icons/io";
+import { postThemBenhNhan } from "../../../api/patient/patient";
 
 const PopupForm = ({handleClosePopup}) => {
   const [name, setName] = useState("");
   const [phongkham, setPhongkham] = useState("");
   const [bornYear, setBornYear] = useState("");
   const [gender, setGender] = useState("");
-  const [age, setAge] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
@@ -20,6 +20,20 @@ const PopupForm = ({handleClosePopup}) => {
   const [password, setPassword] = useState("");
   const [bacsimd, setBacsimd] = useState("");
 
+  async function handleCreateBN(e) {
+    e.preventDefault();
+    const a = await postThemBenhNhan(name, phongkham, bornYear, gender, phoneNumber, email, address, password, bacsimd, overview, status, contraindicatedDrugs);
+    if (a?.data?.isSuccess) {
+      alert("TẠO HỒ SƠ BỆNH NHÂN THÀNH CÔNG");
+      handleClosePopup();
+      return;
+    }
+    else {
+      alert("TẠO HỒ SƠ BỆNH NHÂN THẤT BẠI");
+      handleClosePopup();
+      return;
+    }
+  }
 
   const FormGroupStyle = {
     display: "flex",
@@ -56,10 +70,6 @@ const PopupForm = ({handleClosePopup}) => {
           <Form.Control type="text" placeholder=" Nhập năm sinh " onChange={(event) => { setBornYear(event.target.value) }} value={bornYear} style={{width: "100%"}}/>
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
-          <Form.Label style={{width: "300px", fontWeight: "700"}}>TUỔI</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập tuổi " onChange={(event) => { setAge(event.target.value) }} value={age} style={{width: "100%"}}/>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>TÌNH TRẠNG DỊ ỨNG</Form.Label>
           <Form.Control type="text" placeholder=" Nhập tình trạng dị ứng" onChange={(event) => { setStatus(event.target.value) }} value={status} style={{width: "100%"}}/>
         </Form.Group>
@@ -76,7 +86,7 @@ const PopupForm = ({handleClosePopup}) => {
           <Form.Control type="text" placeholder=" Nhập email " onChange={(event) => { setEmail(event.target.value) }} value={email} style={{width: "100%"}}/>
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
-          <Form.Label style={{width: "300px", fontWeight: "700"}}>PASSWORD</Form.Label>
+          <Form.Label style={{width: "300px", fontWeight: "700"}}>MẬT KHẨU</Form.Label>
           <Form.Control type="password" placeholder=" Nhập mật khẩu " onChange={(event) => { setPassword(event.target.value) }} value={password} style={{width: "100%"}}/>
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
@@ -85,7 +95,7 @@ const PopupForm = ({handleClosePopup}) => {
         </Form.Group>
         <ButtonGroup>
           <Button className="btn-cancel" onClick={handleClosePopup}>HỦY</Button>
-          <Button className="btn-create"> TẠO </Button>
+          <Button className="btn-create" onClick={handleCreateBN}> TẠO </Button>
         </ButtonGroup>
       </Form>
     </PopupWrapper>

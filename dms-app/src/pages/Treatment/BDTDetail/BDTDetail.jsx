@@ -3,11 +3,16 @@ import { useEffect, useState } from "react";
 import { getBDT } from "../../../api/dieutri/dieutri";
 import { IoMdClose } from "react-icons/io";
 import moment from "moment";
+import CreateCTDT from "./CreateCTDT";
+import { useSelector } from "react-redux";
 
 export default function BDTDetail({title, ID, setIsOpenPopup}) {
   const [isSuccess, setIsSuccess] = useState(false);
   const [overview, setOverview] = useState();
   const [detail, setDetail] = useState();
+  const [isOpenAddCTDT, setIsOpenAddCTDT] = useState(false);
+  const role = useSelector(state => state.auth.role);
+  
 
   async function loadData() {
     console.log(ID);
@@ -29,6 +34,7 @@ export default function BDTDetail({title, ID, setIsOpenPopup}) {
   
   return <>
     <BDTDetailWrapper>
+      {isOpenAddCTDT && <CreateCTDT handleClosePopup={() => setIsOpenAddCTDT(false)} IDBUOIDIEUTRI={overview?.IDBUOIDIEUTRI}/>}
       <IoMdClose style={{cursor: "pointer", right: 10, top: 10, position: "absolute"}} size="30px" onClick={handleClosePopup}/>
       <h2>{title}</h2>
       <h3>TỔNG QUAN</h3>
@@ -105,12 +111,13 @@ export default function BDTDetail({title, ID, setIsOpenPopup}) {
           </>
         })}
       </BDTDetailDetail>
+      {(role === `"NS"` || role === `"QT"` ) && <Button onClick={() => setIsOpenAddCTDT(true)}>THÊM CHI TIẾT ĐIÊU TRỊ</Button>}
     </BDTDetailWrapper>
   </>;
 }
 
 const BDTDetailWrapper = styled.div`
-  position: fixed;
+  position: absolute;
   z-index: 2;
   background-color: var(--bg-grey-1-color);
   left: 10%;
@@ -174,4 +181,13 @@ const BDTOverviewItem = styled.div`
     border-radius: 15px;
     margin-left: 40px;
   }
+`
+const Button = styled.button`
+  margin-top: 2vh;
+  border: none;
+  border-radius: 10px;
+  background-color: var(--btn-color-1);
+  padding: 5px;
+  width: 300px;
+  font-weight: 700;
 `

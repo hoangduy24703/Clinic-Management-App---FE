@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import { getChiTietDonThuoc } from "../../../api/donthuoc/donthuoc";
 import { IoMdClose } from "react-icons/io";
 import moment from "moment";
+import { deleteCTDonThuoc } from "../../../api/donthuoc/donthuoc";
+import { useSelector } from "react-redux";
+import PopupDeleteDetail from "./PopupDeleteDetail";
 
 export default function PreDetail({title, ID, setIsOpenPopup}) {
   const [isSuccess, setIsSuccess] = useState(false);
@@ -10,6 +13,9 @@ export default function PreDetail({title, ID, setIsOpenPopup}) {
   const [detail, setDetail] = useState();
   const [thuoc, setThuoc] = useState();
   const [idbuoidieutri, setIdbuoidieutri] = useState('');
+  const role = useSelector(state => state.auth.role);
+  const [isOpenDelete, setIsOpenDelete] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   async function loadData() {
     const data = await getChiTietDonThuoc(ID);
@@ -28,7 +34,9 @@ export default function PreDetail({title, ID, setIsOpenPopup}) {
   useEffect(() => {
     loadData();
   }, [isSuccess])
+  
   return <>
+    {isOpenDelete && <PopupDeleteDetail handleClosePopup={() => setIsOpenDelete(false)} data={overview} selectedItem={selectedItem} IDBUOIDIEUTRI={ID}/>}
     <HDDetailWrapper>
       <IoMdClose style={{cursor: "pointer", right: 10, top: 10, position: "absolute"}} size="30px" onClick={handleClosePopup}/>
       <h2>{title}</h2>
@@ -52,6 +60,11 @@ export default function PreDetail({title, ID, setIsOpenPopup}) {
           <span>TỔNG GIÁ</span>
           <span>{item?.TONGGIA}</span>
         </HDOverviewItem>
+        {(role === `"NS"` || role === `"QT"`) && 
+        <Button onClick={() => {
+            setIsOpenDelete(true);
+            setSelectedItem(item);
+          }}>XÓA CHI TIẾT ĐƠN THUỐC</Button>}
     </HDDetailOverview>
       })}
     </HDDetailWrapper>
@@ -103,4 +116,15 @@ const HDOverviewItem = styled.div`
     border-radius: 15px;
     margin-left: 40px;
   }
+`
+
+const Button = styled.button`
+  margin-top: 2vh;
+  border: none;
+  background-color: var(--btn-color-2);
+  padding: 5px;
+  font-weight: 700;
+  text-align: center;
+  width: 300px;
+  border-radius: 10px;
 `

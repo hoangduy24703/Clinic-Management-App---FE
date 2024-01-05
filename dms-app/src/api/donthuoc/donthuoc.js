@@ -60,3 +60,10 @@ export async function getLoaiThuoc(tenthuoc) {
 export async function deleteDonThuoc(id) {
   return await api.post(`/donthuoc/deleteDonThuoc/${id}`, {});
 }
+
+export async function deleteCTDonThuoc(iddonthuoc, idthuoc) {
+  return await api.post(`/donthuoc/deleteChiTietDonThuoc`, {
+    iddonthuoc: iddonthuoc,
+    idthuoc: idthuoc,
+  })
+}
