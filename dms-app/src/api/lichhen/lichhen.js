@@ -49,3 +49,13 @@ export async function postXoaLichHen(NGAYHEN, THOIGIANHEN, BACSI, BENHNHAN) {
     BENHNHAN: BENHNHAN
   })
 }
+
+export async  function postCapNhatLichHen(NGAYHEN, THOIGIANHEN, BACSI, BENHNNHAN, TINHTRANG) {
+  return await api.post(`/lichhen/updateLH`, {
+    NGAYHEN: NGAYHEN,
+    THOIGIANHEN: THOIGIANHEN,
+    BACSI: BACSI,
+    BENHNNHAN: BENHNNHAN, 
+    TINHTRANG_NEW: TINHTRANG
+  });
+}

@@ -4,11 +4,12 @@ import SliderCategory from "../../components/Slider/SliderCategory";
 import { useNavigate } from "react-router-dom";
 import { postLichHenIDNS } from "../../api/lichhen/lichhen";
 import moment from "moment";
-import { AiOutlineMore } from "react-icons/ai";
 import styled from "styled-components";
-import Search from "../../components/Search/Search";
 import Scrollbar from "../../components/Scrollbar/Scrollbar";
 import DatePicker from "react-datepicker";
+import { useSelector } from "react-redux";
+import PopupUpdateSchedule from "./PopupUpdateSchedule";
+import PopupDeleteSchedule from "./PopupDeleteSchedule";
 
 const header = [
   "BỆNH NHÂN",
@@ -27,20 +28,13 @@ export default function ScheduleByDoctor() {
   const [selectedItem, setSelectedItem] = useState();
   const [searchTerm, setSearchTerm] = useState('');
   const [date, setDate] = useState(null);
-  const navigate = useNavigate();
-
-  const categoryStyle = {
-    cursor: "pointer",
-    marginLeft: "80%",
-  }
+  const [isOpenUpdateLH, setIsOpenUpdateLH] = useState(false);
+  const [isOpenDeleteLH, setIsOpenDeleteLH] = useState(false);
+  const role = useSelector(state => state.auth.role);
 
   const handleDropdownOpen = (value) => {
-    setSelectedItem(value.BACSI);
+    setSelectedItem(value);
     setIsOpen(!isOpen);
-  }
-
-  const handleOnNavigate = () => {
-    navigate("/patient-records/:idPatient");
   }
 
   const handleDelete = () => {
@@ -63,20 +57,29 @@ export default function ScheduleByDoctor() {
   }
 
   const content = data?.map((dataItem, index) => {
-    return <CustomTableRow key={index}>
+    return <CustomTableRow key={index} onClick={() => handleDropdownOpen(dataItem)}>
       <span>{dataItem.BENHNHAN}</span>
       <span>{dataItem.IDNHANVIEN}</span>
       <span>{dataItem.TENNV}</span>
       <span>{dataItem.PHONG}</span>
       <span>{moment(dataItem.NGAYHEN).format("DD/MM/YYYY")}</span>
-      <span>{moment(dataItem.THOIGIANHEN).format("DD/MM/YYYY HH:mm:ss")}</span>
+      <span>{moment(dataItem.THOIGIANHEN).format("HH:mm:ss")}</span>
       <span>{dataItem.TINHTRANG}</span>
       <span>{dataItem.GHICHULICHHEN}</span>
+      <DropdownWrapper>
+        {isOpen && (role === `"QT"`  || role === `"NV"`) && (selectedItem.BENHNHAN === dataItem.BENHNHAN && selectedItem.NGAYHEN === dataItem.NGAYHEN && selectedItem.THOIGIANHEN === dataItem.THOIGIANHEN) &&
+          <CustomDropdown>
+            <DropdownItem onClick={() => setIsOpenUpdateLH(true)}>Sửa lịch hẹn</DropdownItem>
+            <DropdownItem onClick={() => setIsOpenDeleteLH(true)}>Xóa lịch hẹn</DropdownItem>
+          </CustomDropdown>}
+      </DropdownWrapper>
     </CustomTableRow>
   })
 
   return(<>
     <SliderCategory />
+    {isOpenUpdateLH && <PopupUpdateSchedule handleClosePopup={() => setIsOpenUpdateLH(false)} data={data} selectedItem={selectedItem}/>}
+    {isOpenDeleteLH && <PopupDeleteSchedule handleClosePopup={() => setIsOpenDeleteLH(false)} data={data} selectedItem={selectedItem}/>}
     <div style={{display: "flex"}}>
       <FormSearch onSubmit={handleSubmit}>
         <Input
@@ -155,4 +158,10 @@ const CustomTableHead = styled(TableHead)`
 `
 const CustomTableRow = styled(TableRow)`
   grid-template-columns: repeat(${header.length}, 1fr);
+`
+
+const CustomDropdown= styled(Dropdown)`
+  position: absolute;
+  left: 100%;
+  top: 50%;
 `

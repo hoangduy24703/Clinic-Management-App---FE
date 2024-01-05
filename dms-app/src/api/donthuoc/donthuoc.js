@@ -56,3 +56,7 @@ export async function getLoaiThuoc(tenthuoc) {
     tenthuoc: tenthuoc
   });
 }
+
+export async function deleteDonThuoc(id) {
+  return await api.post(`/donthuoc/deleteDonThuoc/${id}`, {});
+}

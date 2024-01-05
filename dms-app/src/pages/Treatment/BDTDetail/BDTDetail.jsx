@@ -25,7 +25,8 @@ export default function BDTDetail({title, ID, setIsOpenPopup}) {
 
   useEffect(() => {
     loadData();
-  }, [isSuccess])
+  }, [isSuccess]);
+  
   return <>
     <BDTDetailWrapper>
       <IoMdClose style={{cursor: "pointer", right: 10, top: 10, position: "absolute"}} size="30px" onClick={handleClosePopup}/>

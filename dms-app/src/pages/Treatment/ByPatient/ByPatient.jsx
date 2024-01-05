@@ -37,6 +37,10 @@ const ByPatient = () => {
   const handleOnViewBDT = () => {
     setIsOpenPopupBDT(true);
   }
+  
+  const handleUpdateBDT = () => {
+
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -64,6 +68,7 @@ const ByPatient = () => {
         {isOpen && selectedItem === dataItem.IDBUOIDIEUTRI && 
         <Dropdown>
           <DropdownItem onClick={handleOnViewBDT}>Xem buổi điều trị</DropdownItem>
+          <DropdownItem onClick={handleUpdateBDT}>Chỉnh sửa buổi điều trị</DropdownItem>
         </Dropdown>}
       </DropdownWrapper>
     </TableRow>

@@ -49,8 +49,7 @@ const TreatmentPlan = () => {
         navigate("/treatment-plan/KHDT-by-patient");
         break;
       case 3:
-        if (role === `"NS"`)
-          setIsOpenPopupFormKHDT(true);
+        setIsOpenPopupFormKHDT(true);
         break;
       case 4:
         setIsOpenPopupFormBDT(true);

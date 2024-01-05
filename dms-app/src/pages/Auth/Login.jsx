@@ -3,14 +3,15 @@ import styled from 'styled-components';
 // import Button from '../../components/Button/Button';
 import { postLogin } from '../../api/auth/auth';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setIsLogin } from '../../redux/slice/authSlice';
-import { useEffect } from 'react';
+import { setRegister } from '../../redux/slice/authSlice';
 
 const Login = ({setClickLogin}) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -22,11 +23,13 @@ const Login = ({setClickLogin}) => {
     if (auth?.data?.isSuccess) {
       localStorage.setItem("isLogin", JSON.stringify(true));
       localStorage.setItem("role", JSON.stringify(auth?.data?.data[0]?.LOAINV));
+      localStorage.setItem("id", JSON.stringify(auth?.data?.data[0]?.IDNHANVIEN));
     }
     else {
       alert("WRONG PHONE NUMBER OR PASSWORD! LOGIN FAILED");
       localStorage.setItem("isLogin", JSON.stringify(false));
       localStorage.setItem("role", null);
+      localStorage.setItem("id", null);
     }
     setClickLogin(true);
   }
@@ -39,17 +42,18 @@ const Login = ({setClickLogin}) => {
       <FormWrapper>
         <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label>PHONE NUMBER</Form.Label>
-            <Form.Control type="text" placeholder=" Enter phone number " onChange={(event) => setUsername(event.target.value)} value={username}/>
+            <Form.Label>SỐ ĐIỆN THOẠI</Form.Label>
+            <Form.Control type="text" placeholder=" Nhập số điện thoại " onChange={(event) => setUsername(event.target.value)} value={username}/>
           </Form.Group>
           <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1" >
-            <Form.Label>PASSWORD</Form.Label>
-            <Form.Control type="password" placeholder=" Enter password" onChange={(event) => setPassword(event.target.value)} value={password}/>
+            <Form.Label>MẬT KHẨU</Form.Label>
+            <Form.Control type="password" placeholder=" Nhập mật khẩu " onChange={(event) => setPassword(event.target.value)} value={password}/>
           </Form.Group>
           <Form.Group style={{display: "flex"}}>
-            <Button>SIGN IN</Button>
+            <Button>ĐĂNG NHẬP</Button>
           </Form.Group>
         </Form>
+        <div style={{textAlign: "center", paddingTop: "3vh", fontSize: "13px", cursor: "pointer"}} onClick={() => {dispatch(setRegister(true)); navigate("/register");}}>ĐĂNG KÝ THÔNG TIN KHÁCH HÀNG?</div>
       </FormWrapper>
     </LoginContainer>
   )

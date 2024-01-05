@@ -1,36 +1,40 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Form from 'react-bootstrap/Form';
 import { IoMdClose } from "react-icons/io";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { addLoaiThuoc } from "../../../api/donthuoc/donthuoc";
+import { updateLoaiThuoc } from "../../../api/donthuoc/donthuoc";
+import { useNavigate } from "react-router-dom";
 
-const PopupFormMed = ({handleClosePopup}) => {
-  const [tenthuoc, setTenThuoc] = useState('');
-  const [thanhphan, setThanhPhan] = useState('') ;
-  const [donvitinh, setDonViTinh] = useState('');
-  const [giathuoc, setGiaThuoc] = useState('')
+const PopupFormUpdateMed = ({handleClosePopup, thuoc, selectedItem, submit}) => {
+  const navigate = useNavigate();
+  const item = thuoc.find((i) => i.IDTHUOC === selectedItem);
+  const [tenthuoc, setTenThuoc] = useState(item?.TENTHUOC);
+  const [thanhphan, setThanhPhan] = useState(item?.THANHPHAN) ;
+  const [donvitinh, setDonViTinh] = useState(item?.DONVITINH);
+  const [giathuoc, setGiaThuoc] = useState(item?.GIATHUOC)
 
   const FormGroupStyle = {
     display: "flex",
     width: "100%"
   }
 
-  async function handleAddThuoc(e) {
+  async function handleUpdateMed(e) {
     e.preventDefault();
     // KIỂM TRA ĐIỀU KIỆN
     if (!tenthuoc || !thanhphan || !donvitinh || !giathuoc) {
       alert("CHƯA NHẬP ĐẦY ĐỦ THÔNG TIN");
       return;
     }
-    const a = await addLoaiThuoc(tenthuoc, thanhphan, donvitinh, giathuoc);
+    const a = await updateLoaiThuoc(item?.IDTHUOC , tenthuoc, thanhphan, donvitinh, giathuoc);
     if (a?.data?.isSuccess) {
-      alert("THÊM THUỐC THÀNH CÔNG");
+      alert("SỬA THUỐC THÀNH CÔNG");
+      navigate('/prescription');
     }
     else {
-      alert("THÊM THUỐC THẤT BẠI");
+      alert("SỬA THUỐC THẤT BẠI");
     }
     handleClosePopup();
   }
@@ -38,8 +42,8 @@ const PopupFormMed = ({handleClosePopup}) => {
   return (<>
     <PopupWrapper>
       <Form>
-        <IoMdClose style={{marginLeft: "105%", marginTop: "-20%", cursor: "pointer"}} size="30px" onClick={handleClosePopup}/>
-        <div className="popup-title">THÊM MỚI THUỐC</div>
+        <IoMdClose style={{marginLeft: "105%", marginTop: "-20%", cursor: "pointer"}} size="30px" onClick={() => {handleClosePopup(false); console.log("click")}}/>
+        <div className="popup-title">SỬA THUỐC</div>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>TÊN THUỐC</Form.Label>
           <Form.Control type="text" placeholder=" Nhập tên thuốc " onChange={(event) => { setTenThuoc(event.target.value) }} value={tenthuoc} style={{width: "100%"}}/>
@@ -47,7 +51,7 @@ const PopupFormMed = ({handleClosePopup}) => {
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
             <Form.Label style={{width: "300px", fontWeight: "700"}}>ĐƠN VỊ TÍNH</Form.Label>
             <Form.Select aria-label="Default select example" onChange={e => setDonViTinh(e.target.value)} >
-                <option>Đơn vị tính</option>
+                <option disabled>Đơn vị tính</option>
                 <option value="ml" >ml</option>
                 <option value="viên" >viên</option>
                 <option value="g" >g</option>
@@ -65,15 +69,15 @@ const PopupFormMed = ({handleClosePopup}) => {
           <Form.Control type="text" placeholder="Giá thuốc" onChange={(event) => { setGiaThuoc(event.target.value) }} value={giathuoc} style={{width: "100%"}}/>
         </Form.Group>
         <ButtonGroup>
-          <Button className="btn-cancel" onClick={handleClosePopup}>HỦY</Button>
-          <Button className="btn-create" onClick={handleAddThuoc}>TẠO</Button>
+          <Button className="btn-cancel" onClick={(e) => {e.preventDefault(); handleClosePopup()}}>HỦY</Button>
+          <Button className="btn-create" onClick={handleUpdateMed}>CẬP NHẬT</Button>
         </ButtonGroup>
       </Form>
     </PopupWrapper>
   </>)
 }
 
-export default PopupFormMed;
+export default PopupFormUpdateMed;
 
 const PopupWrapper = styled.div`
   position: fixed;

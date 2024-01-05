@@ -9,7 +9,7 @@ import icon8 from "../../assets/logout.png";
 import staff from "../../assets/staff.png";
 import dashboard from "../../assets/dashboard.png";
 
-const SliderItems = [
+const SliderItems1 = [
   {
     idSlider: 0,
     iconSlider: dashboard,
@@ -59,6 +59,30 @@ const SliderItems = [
     idSlider: 9,
     iconSlider: icon8,
     nameSlider: "Đăng xuất"
-  },];
+  },
+];
 
-export { SliderItems }
+const SliderItems2 = [
+  {
+    idSlider: 0,
+    iconSlider: dashboard,
+    nameSlider: "Trang chủ"
+  },
+  {
+    idSlider: 1,
+    iconSlider: icon1,
+    nameSlider: "Hồ sơ"
+  },
+  {
+    idSlider: 2,
+    iconSlider: icon3,
+    nameSlider: "Đặt lịch"
+  },
+  {
+    idSlider: 3,
+    iconSlider: icon8,
+    nameSlider: "Đăng xuất"
+  },
+];
+
+export { SliderItems1, SliderItems2 }

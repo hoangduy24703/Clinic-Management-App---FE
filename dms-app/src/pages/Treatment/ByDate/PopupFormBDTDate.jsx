@@ -26,9 +26,7 @@ const ByDate = () => {
   const [selectedItem, setSelectedItem] = useState();
   const [ngayA, setNgayA] = useState(null);
   const [ngayB, setNgayB] = useState(null);
-
-  const navigate = useNavigate();
-
+  
   const FormGroupStyle = {
     display: "flex",
     margin: "10px auto"
@@ -46,6 +44,10 @@ const ByDate = () => {
 
   const handleOnView = () => {
     setIsOpenPopupBDT(true);
+  }
+
+  const handleUpdateBDT = () => {
+
   }
 
   const handleSubmit = async (e) => {
@@ -73,6 +75,7 @@ const ByDate = () => {
         {isOpen && selectedItem === dataItem.IDBUOIDIEUTRI &&
           <Dropdown>
             <DropdownItem onClick={handleOnView}>Xem buổi điều trị</DropdownItem>
+            <DropdownItem onClick={handleUpdateBDT}>Chỉnh sửa buổi điều trị</DropdownItem>
           </Dropdown>}
       </DropdownWrapper>
     </TableRow>

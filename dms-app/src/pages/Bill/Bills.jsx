@@ -27,18 +27,19 @@ const Bills = () => {
   const role = useSelector(state => state.auth.role);
 
   const handleNavigate = (key) => {
-    switch (key) {
-      case 0:
-        navigate("/bills/bills-by-patient");
-        break;
-      case 1:
-        navigate("/bills/bills-by-date");
-        break;
-      case 2:
-        if (role === `"QT"` || role === `"NV"`)
-          setIsOpenPopupCreateBill(true);
-        break;
-      default:
+    if (role === `"QT"` || role === `"NV"`) {
+      switch (key) {
+        case 0:
+          navigate("/bills/bills-by-patient");
+          break;
+        case 1:
+          navigate("/bills/bills-by-date");
+          break;
+        case 2:
+            setIsOpenPopupCreateBill(true);
+          break;
+        default:
+      }
     }
   }
 

@@ -117,7 +117,6 @@ export default PatientRecords;
 
 const PatientRecordsWrapper = styled.div` 
   width: 100%;
-  position: relative;
   .patient-record-title {
     margin-left: 1%;
     font-weight: 700;

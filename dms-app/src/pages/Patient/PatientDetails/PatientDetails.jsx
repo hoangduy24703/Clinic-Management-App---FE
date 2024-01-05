@@ -6,17 +6,23 @@ import { getChiTietBenhNhan } from "../../../api/patient/patient";
 import { useParams } from "react-router-dom";
 import moment from "moment";
 import { ButtonGroup } from "../PatientRecords/PatientRecords";
+import PopupFormUpdate from "../PopupForm/PopupFormUpdate";
+import { useSelector } from "react-redux";
 
 const PatientDetails = () => {
-  const {patientId} = useParams();
+  const { patientId } = useParams();
   const [patientData, setPatientData] = useState({});
+  const [isOpenOrderSchedule, setIsOpenOrderSchedule] = useState(false);
+  const role = useSelector(state => state.auth.role);
+
   const avatarStyle = {
-    padding: "50px", 
+    padding: "50px",
     backgroundColor: "var(--bg-grey-2-color)",
     borderRadius: "30%"
   }
 
   async function loadData() {
+    console.log(patientId);
     const patientData = await getChiTietBenhNhan(patientId);
     console.log(patientData);
     setPatientData(patientData);
@@ -28,10 +34,14 @@ const PatientDetails = () => {
   }, [patientData?.data?.isSuccess]);
 
   return (<Wrapper>
+    {isOpenOrderSchedule &&
+      <PopupFormUpdate patientData={patientData} handleClosePopup={() => {
+        setIsOpenOrderSchedule(false);
+      }} />}
     <SliderCategory />
     <PatientDetailsWrapper>
       <PatientLeft>
-        <FaRegUser size="300px" style={avatarStyle}/>
+        <FaRegUser size="300px" style={avatarStyle} />
         <PatientLeftBody>
           <PatientLeftBodyItems>
             <span>ID BỆNH NHÂN</span>
@@ -41,7 +51,7 @@ const PatientDetails = () => {
           <PatientLeftBodyItems>
             <span>TÊN BN</span>
             <span>:</span>
-            <span></span>
+            <span>{patientData?.data?.data[0]?.TENBN}</span>
           </PatientLeftBodyItems>
           <PatientLeftBodyItems>
             <span>ID PHÒNG KHÁM</span>
@@ -92,17 +102,21 @@ const PatientDetails = () => {
         </PatientRightItems>
         <PatientRightItems>
           <span>TÌNH TRẠNG DỊ ỨNG</span>
-          <input className="box-item" value={patientData?.data?.data[0]?.TINHTRANGDIUNG}/>
+          <input className="box-item" value={patientData?.data?.data[0]?.TINHTRANGDIUNG} />
         </PatientRightItems>
         <PatientRightItems>
           <span>THUỐC CHỐNG CHỈ ĐỊNH</span>
           <input className="box-item" value={patientData?.data?.data[0]?.THUOCCHONGCHIDINH} />
         </PatientRightItems>
       </PatientRight>
-      <ButtonGroup style={{bottom: "-10px"}}>
-        <Button style={{right: "0", backgroundColor: "var(--btn-color-3)"}}>CHỈNH SỬA</Button>
-      </ButtonGroup>
-    </PatientDetailsWrapper>    
+      {role !== `"BN"` && <ButtonGroup style={{ bottom: "-10px" }}>
+         <Button
+          style={{ right: "0", backgroundColor: "var(--btn-color-3)", fontWeight: "700" }}
+          onClick={() => { setIsOpenOrderSchedule(true) }}>
+          CHỈNH SỬA
+        </Button>
+      </ButtonGroup>}
+    </PatientDetailsWrapper>
   </Wrapper>);
 }
 
@@ -139,7 +153,7 @@ const PatientLeftBody = styled.div`
 
 const PatientLeftBodyItems = styled.div`
   display: grid;
-  grid-template-columns: 150px 10px 200px ;
+  grid-template-columns: 150px 10px 50% ;
   font-weight: 700;
   font-size: 15px;
 

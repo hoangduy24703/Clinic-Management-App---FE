@@ -37,11 +37,6 @@ const KHDTByPatient = () => {
     console.log(role === `"NS"`);
   }, [role]);
 
-  const buttonContent = {
-    name: "",
-    title: "THÊM MỚI KẾ HOẠCH"
-  }
-
   const handleDropdownOpen = (value) => {
     setSelectedItem(value.IDDIEUTRI);
     setIsOpen(!isOpen);

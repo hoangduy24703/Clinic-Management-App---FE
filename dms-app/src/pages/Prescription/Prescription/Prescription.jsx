@@ -37,10 +37,6 @@ const Prescription = () => {
     padding: "10px",
     margin: "3vh"
   }
-  const buttonContent = {
-    name: "",
-    title: "THÊM MỚI THUỐC"
-  }
   
   return (<>
     <SliderCategory />

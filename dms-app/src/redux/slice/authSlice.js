@@ -6,6 +6,8 @@ export const authReducer = createSlice({
     isLogin: false,
     clickLogout: false,
     role: "",
+    id: "",
+    register: false
   },
   reducers: {
     setIsLogin: (state, {payload}) => {
@@ -16,12 +18,18 @@ export const authReducer = createSlice({
     },
     setRoleSlice: (state, {payload}) => {
       state.role = payload;
+    },
+    setId: (state, {payload}) => {
+      state.id = payload;
+    },
+    setRegister: (state, {payload}) => {
+      state.register = payload;
     }
   }
 });
 
 // this is for dispatch
-export const { setIsLogin, setClickLogout, setRoleSlice } = authReducer.actions;
+export const { setIsLogin, setClickLogout, setRoleSlice, setId, setRegister } = authReducer.actions;
 
 // this is for configureStore
 export default authReducer.reducer;

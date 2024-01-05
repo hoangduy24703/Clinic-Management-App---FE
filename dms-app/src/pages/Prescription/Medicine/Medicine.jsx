@@ -2,18 +2,14 @@ import { Table, TableRow, TableHead, Dropdown, DropdownItem, DropdownWrapper } f
 import SliderCategory from "../../../components/Slider/SliderCategory";
 import Scrollbar from "../../../components/Scrollbar/Scrollbar";
 import styled from "styled-components";
-import { AiOutlineMore } from "react-icons/ai";
-import { IoMdAddCircleOutline } from "react-icons/io";
-import { LuEye } from "react-icons/lu";
-import { MdDeleteOutline } from "react-icons/md";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Search from "../../../components/Search/Search";
 import moment from "moment";
 import { getLoaiThuoc } from "../../../api/donthuoc/donthuoc";
 import PopupFormMed from "./PopUpFormMed";
 import { useSelector } from "react-redux";
-
+import PopupFormUpdateMed from "./PopupFormUpdateMed";
 
 const header = [
   "ID THUỐC",
@@ -30,13 +26,17 @@ const Medicine = () => {
   const [isOpenPopupFormThuoc, setIsOpenPopupFormThuoc] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
   const [searchTerm, setSearchTerm] = useState('');
+  const [isOpenUpdateMed, setIsOpenUpdateMed] = useState(false);
   const navigate = useNavigate();
   const role = useSelector(state => state.auth.role);
 
-
-  const categoryStyle = {
-    cursor: "pointer",
-    marginLeft: "80%",
+  const handleDropdownOpen = (value) => {
+    setSelectedItem(value.IDTHUOC);
+    setIsOpen(!isOpen);
+  }
+  
+  function handleUpdateMed() {
+    setIsOpenUpdateMed(true);
   }
 
   const buttonContent = {
@@ -50,8 +50,10 @@ const Medicine = () => {
 
   function handleClosePopup ()
   {
-    setIsOpenPopupFormThuoc (false);
+    setIsOpenPopupFormThuoc(false);
+    setIsOpenUpdateMed(false);
   }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -68,23 +70,33 @@ const Medicine = () => {
   
 
   const content = data?.map((dataItem, index) => {
-    return <CustomTableRow key={index}>
+    return <CustomTableRow key={index} onClick={() => {handleDropdownOpen(dataItem)}}>
       <span>{dataItem.IDTHUOC}</span>
       <span>{dataItem.TENTHUOC}</span>
       <span>{dataItem.THANHPHAN}</span>
       <span>{dataItem.GIATHUOC}</span>
       <span>{dataItem.DONVITINH}</span>
+      <DropdownWrapper>
+        {isOpen && role === `"QT"` && selectedItem === dataItem.IDTHUOC &&
+          <CustomDropdown>
+            <DropdownItem onClick={handleUpdateMed}>Sửa thuốc</DropdownItem>
+          </CustomDropdown>}
+      </DropdownWrapper>
     </CustomTableRow>
   })
 
+  useEffect(() => {
+    console.log(selectedItem)
+  }, [selectedItem]);
 
   return (<div style={{marginBottom: "5vh"}}>
     <SliderCategory />
+    {isOpenUpdateMed && <PopupFormUpdateMed handleClosePopup={handleClosePopup} thuoc={data} selectedItem={selectedItem} submit={getLoaiThuoc}/>}
     <div style={{display: "flex"}}>
       <Search onSubmit={handleSubmit} content={" Nhập tên thuốc "} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
     </div>
     <MedicineWrapper>
-      {isOpenPopupFormThuoc && <PopupFormMed handleClosePopup={handleClosePopup} />}
+      {isOpenPopupFormThuoc && <PopupFormMed handleClosePopup={handleClosePopup}/>}
       <Table style={{ width: "80%", height: "50%", maxWidth: "1200px" }}>
         <CustomTableHead style={{ height: "50px", borderBottom: "2px solid" }}>
           {header?.map((headerItem) => {
@@ -134,3 +146,9 @@ const CustomTableHead = styled(TableHead)`
 const CustomTableRow = styled(TableRow)`
 grid-template-columns: repeat(${header.length }, 1fr);
 ` 
+
+const CustomDropdown= styled(Dropdown)`
+  position: absolute;
+  left: 100%;
+  top: 50%;
+`

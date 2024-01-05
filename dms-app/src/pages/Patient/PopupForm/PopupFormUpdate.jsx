@@ -1,26 +1,52 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import Form from 'react-bootstrap/Form';
 // import Button from "../../../components/Button/Button";
 import { IoMdClose } from "react-icons/io";
-import { IoMdAddCircleOutline } from "react-icons/io";
+import moment from "moment";
+import { postCapNhatHoSoBenhNhan } from "../../../api/patient/patient";
+import { useNavigate } from "react-router-dom";
+import DatePicker from "react-datepicker";
 
-const PopupForm = ({handleClosePopup}) => {
-  const [name, setName] = useState("");
-  const [phongkham, setPhongkham] = useState("");
-  const [bornYear, setBornYear] = useState("");
-  const [gender, setGender] = useState("");
-  const [age, setAge] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [email, setEmail] = useState("");
-  const [address, setAddress] = useState("");
-  const [status, setStatus] = useState("");
-  const [overview, setOverview] = useState("");
-  const [contraindicatedDrugs, setContraindicatedDrugs] = useState("");
-  const [password, setPassword] = useState("");
-  const [bacsimd, setBacsimd] = useState("");
+const PopupFormUpdate = ({patientData, handleClosePopup}) => {
+  const id = patientData?.data?.data[0]?.IDBENHNHAN;
+  const TENBN = patientData?.data?.data[0]?.TENBN;
+  const GIOITINH = patientData?.data?.data[0]?.GIOITINHBN;
+  const [phongkham, setPhongkham] = useState(patientData?.data?.data[0]?.IDPHONGKHAM);
+  const [bornYear, setBornYear] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState(patientData?.data?.data[0]?.SODIENTHOAIBN);
+  const [email, setEmail] = useState(patientData?.data?.data[0]?.EMAIL);
+  const [address, setAddress] = useState(patientData?.data?.data[0]?.DIACHI);
+  const [status, setStatus] = useState(patientData?.data?.data[0]?.TINHTRANGDIUNG);
+  const [overview, setOverview] = useState(patientData?.data?.data[0]?.TTTONGQUAN);
+  const [contraindicatedDrugs, setContraindicatedDrugs] = useState(patientData?.data?.data[0]?.THUOCCHONGCHIDINH);
+  const [password, setPassword] = useState(patientData?.data?.data[0]?.MATKHAU);
+  const [bacsimd, setBacsimd] = useState(patientData?.data?.data[0]?.BACSIMD);
+  const navigate = useNavigate();
 
+  async function updateInforPatient(e) {
+    e.preventDefault();
+    if (!TENBN || !id || !phongkham || !bornYear || !phoneNumber) {
+      alert("THÔNG TIN BỆNH NHÂN CÒN THIẾU");
+      return;
+    }
+    const a = await postCapNhatHoSoBenhNhan(id, TENBN, phongkham, moment(bornYear).format("YYYY-MM-DD"), GIOITINH, phoneNumber, email, address, password, bacsimd, overview, status, contraindicatedDrugs);
+    console.log(a);
+    if (a?.data?.isSuccess) {
+      alert("CẬP NHẬT HỒ SƠ BỆNH NHÂN THÀNH CÔNG");
+      navigate("/dashboard");
+      handleClosePopup();
+      return;
+    }
+    else {
+      alert("CẬP NHẬT THẤT BẠI");
+    }
+    handleClosePopup();
+  }
 
+  useEffect(() => {
+    console.log(bornYear);
+  }, [bornYear])
   const FormGroupStyle = {
     display: "flex",
     width: "100%"
@@ -33,7 +59,7 @@ const PopupForm = ({handleClosePopup}) => {
         <div className="popup-title">THÊM MỚI HỒ SƠ BỆNH NHÂN</div>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>HỌ VÀ TÊN</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập tên bệnh nhân " onChange={(event) => { setName(event.target.value) }} value={name} style={{width: "100%"}}/>
+          <Form.Control type="text" placeholder=" Nhập tên bệnh nhân " value={patientData?.data?.data[0]?.TENBN} style={{width: "100%"}} disabled/>
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>PHÒNG KHÁM</Form.Label>
@@ -41,7 +67,7 @@ const PopupForm = ({handleClosePopup}) => {
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle} >
           <Form.Label style={{width: "300px", fontWeight: "700"}}>GIỚI TÍNH</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập giới tính " onChange={(event) => { setGender(event.target.value) }} value={gender} style={{width: "100%"}}/>
+          <Form.Control type="text" placeholder=" Nhập giới tính " value={patientData?.data?.data[0]?.GIOITINHBN} style={{width: "100%"}} disabled/>
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>ĐỊA CHỈ</Form.Label>
@@ -53,11 +79,12 @@ const PopupForm = ({handleClosePopup}) => {
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>NĂM SINH</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập năm sinh " onChange={(event) => { setBornYear(event.target.value) }} value={bornYear} style={{width: "100%"}}/>
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
-          <Form.Label style={{width: "300px", fontWeight: "700"}}>TUỔI</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập tuổi " onChange={(event) => { setAge(event.target.value) }} value={age} style={{width: "100%"}}/>
+          <CustomDatePicker
+            selected={bornYear}
+            onChange={(date) => setBornYear(date)}
+            dateFormat="dd/MM/yyyy"
+            placeholderText=" Chọn ngày"
+          />
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>TÌNH TRẠNG DỊ ỨNG</Form.Label>
@@ -85,14 +112,14 @@ const PopupForm = ({handleClosePopup}) => {
         </Form.Group>
         <ButtonGroup>
           <Button className="btn-cancel" onClick={handleClosePopup}>HỦY</Button>
-          <Button className="btn-create"> TẠO </Button>
-        </ButtonGroup>
+          <Button className="btn-create" onClick={updateInforPatient}>CẬP NHẬT</Button>
+        </ButtonGroup> 
       </Form>
     </PopupWrapper>
   </>)
 }
 
-export default PopupForm;
+export default PopupFormUpdate;
 
 const PopupWrapper = styled.div`
   position: absolute;
@@ -134,4 +161,9 @@ const Button = styled.button`
   border: none;
   margin: 0 auto;
   padding: 10px 30px;
+`
+
+const CustomDatePicker = styled(DatePicker)`
+  padding: 5px;
+  width: 100%;
 `

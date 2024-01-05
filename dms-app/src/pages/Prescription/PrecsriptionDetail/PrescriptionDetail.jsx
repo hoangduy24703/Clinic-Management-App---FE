@@ -10,6 +10,8 @@ import moment from "moment";
 import { getDonThuoc } from "../../../api/donthuoc/donthuoc";
 import PopupCreatePrescription from "./PopupCreatePresciption";
 import PreDetail from "./PreDetaiil";
+import { useSelector } from "react-redux";
+import PopupDeletePrescription from "./PopupDeletePrescription";
 
 const header = [
   "ID ĐƠN THUỐC",
@@ -25,6 +27,8 @@ const PrescriptionDetail = () => {
   const [isOpenPopupDetail, setIsOpenPopupDetail] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
   const [searchTerm, setSearchTerm] = useState('');
+  const [isOpenDeleteDT, setIsOpenDeleteDT] = useState(false);
+  const role = useSelector(state => state.auth.role);
 
   const categoryStyle = {
     cursor: "pointer",
@@ -68,6 +72,7 @@ const PrescriptionDetail = () => {
         {isOpen && selectedItem === dataItem.IDDONTHUOC && 
         <Dropdown>
           <DropdownItem onClick={handleOnNavigate}>Xem đơn thuốc</DropdownItem>
+          <DropdownItem onClick={() => setIsOpenDeleteDT(true)}>Xóa đơn thuốc</DropdownItem>
         </Dropdown>}
       </DropdownWrapper>
     </CustomTableRow>
@@ -76,6 +81,7 @@ const PrescriptionDetail = () => {
 
   return (<div style={{marginBottom: "5vh"}}>
     <SliderCategory />
+    {isOpenDeleteDT && <PopupDeletePrescription handleClosePopup={() => setIsOpenDeleteDT(false)} data={data} selectedItem={selectedItem}/>}
     <div style={{display: "flex"}}>
       <Search onSubmit={handleSubmit} content={" Nhập id bệnh nhân "} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
     </div>  
@@ -89,7 +95,7 @@ const PrescriptionDetail = () => {
           })}
         </CustomTableHead>
         <Scrollbar data={content} />
-        <Button onClick={() => setIsOpenPopupCreatePrescription(true)}> THÊM MỚI ĐƠN THUỐC </Button>
+        {role === `"QT"` && <Button onClick={() => setIsOpenPopupCreatePrescription(true)}> THÊM MỚI ĐƠN THUỐC </Button>}
       </Table>
     </PrescriptionDetailWrapper>
   </div>);

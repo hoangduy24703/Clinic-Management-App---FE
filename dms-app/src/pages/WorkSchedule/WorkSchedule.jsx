@@ -10,7 +10,10 @@ import DatePicker from 'react-datepicker';
 import Form from 'react-bootstrap/Form';
 import { postLichLamViec } from "../../api/lichlamviec/lichlamviec";
 import PopupFormCreateWorkSchedule from "./PopupCreateWorkSchedule";
+import PopupUpdateWorkSchedule from "./PopupUpdateWorkSchedule";
+import PopupDeleteWorkSchedule from "./PopupDeleteWorkSchedule";
 import { useSelector } from "react-redux";
+
 const header = [
   "ID NHÂN VIÊN",
   "TÊN NHÂN VIÊN",
@@ -29,6 +32,8 @@ const WorkScheduleByDate = () => {
   const [ngayA, setNgayA] = useState(null);
   const [ngayB, setNgayB] = useState(null);
   const [isOpenPopUpFormLichLamViec, setIsOpenPopUpFormLichLamViec] = useState(false);
+  const [isOpenUpdateLLV, setIsOpenUpdateLLV] = useState(false);
+  const [isOpenDeleteLLV, setIsOpenDeleteLLV] = useState(false);
   const role = useSelector(state => state.auth.role);
 
   const FormGroupStyle = {
@@ -41,17 +46,20 @@ const WorkScheduleByDate = () => {
     title: "THÊM MỚI LỊCH LÀM VIỆC"
   }
 
-  const categoryStyle = {
-    cursor: "pointer",
-    marginLeft: "80%",
-  }
   const handleCreateLichLamViec = ()=>{
     setIsOpenPopUpFormLichLamViec(true);
   }
+
   function handleClosePopup ()
   {
     setIsOpenPopUpFormLichLamViec(false);
   }
+  
+  const handleDropdownOpen = (value) => {
+    setSelectedItem(value);
+    setIsOpen(!isOpen);
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const dateA = moment(ngayA).format("YYYY-MM-DD");
@@ -71,7 +79,7 @@ const WorkScheduleByDate = () => {
   }, [ngayA, ngayB])
 
   const content = data?.map((dataItem, index) => {
-    return <CustomTableRow key={index}>
+    return <CustomTableRow key={index} onClick={() => handleDropdownOpen(dataItem)}>
       <span>{dataItem.IDNHANVIEN}</span>
       <span>{dataItem.TENNV}</span>
       <span>{dataItem.NGAY}</span>
@@ -79,14 +87,22 @@ const WorkScheduleByDate = () => {
       <span>{dataItem.NAM}</span>
       <span>{dataItem.IDCALAM}</span>
       <span>{dataItem.KHUNGGIO}</span>
+      <DropdownWrapper>
+        {isOpen && (role === `"QT"`  || role === `"NV"`) && (selectedItem.IDNHANVIEN === dataItem.IDNHANVIEN && selectedItem.NAM === dataItem.NAM && selectedItem.THANG === dataItem.THANG && selectedItem.NGAY === dataItem.NGAY && selectedItem.IDCALAM === dataItem.IDCALAM) &&
+          <CustomDropdown>
+            <DropdownItem onClick={() => setIsOpenUpdateLLV(true)}>Sửa lịch hẹn</DropdownItem>
+            <DropdownItem onClick={() => setIsOpenDeleteLLV(true)}>Xóa lịch hẹn</DropdownItem>
+          </CustomDropdown>}
+      </DropdownWrapper>
     </CustomTableRow>
   })
 
 
   return (<div style={{ marginBottom: "5vh" }}>
     <SliderCategory />
+    {isOpenUpdateLLV && <PopupUpdateWorkSchedule handleClosePopup={() => setIsOpenUpdateLLV(false)} data={data} selectedItem={selectedItem}/>}
+    {isOpenDeleteLLV && <PopupDeleteWorkSchedule handleClosePopup={() => setIsOpenDeleteLLV(false)} data={data} selectedItem={selectedItem}/>}
     <WorkScheduleByDateWrapper>
-      {/* <div className="patient-record-title">DANH SÁCH HỒ SƠ BỆNH NHÂN</div> */}
       <FormWrapper onSubmit={handleSubmit}>
       {isOpenPopUpFormLichLamViec && <PopupFormCreateWorkSchedule handleClosePopup={handleClosePopup} />}
         <Form.Group style={FormGroupStyle}>
@@ -172,4 +188,10 @@ const Input = styled.input`
   padding: 8px;
   width: 400px;
   margin: 0 auto;
+`
+
+const CustomDropdown= styled(Dropdown)`
+  position: absolute;
+  left: 100%;
+  top: 50%;
 `

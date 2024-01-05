@@ -2,20 +2,22 @@ import { Table, TableHead, TableRow, Dropdown, DropdownItem, DropdownWrapper } f
 import SliderCategory from "../../components/Slider/SliderCategory";
 import Scrollbar from "../../components/Scrollbar/Scrollbar";
 import styled from "styled-components";
-import { AiOutlineMore } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import DatePicker from 'react-datepicker';
 import Form from 'react-bootstrap/Form';
 import { postLichHenDayToDay } from "../../api/lichhen/lichhen";
+import PopupUpdateSchedule from "./PopupUpdateSchedule";
+import PopupDeleteSchedule from "./PopupDeleteSchedule";
+import { useSelector } from "react-redux";
 
 const header = [
   "BỆNH NHÂN",
   "KHÁM CHÍNH",
   "TRỢ KHÁM",
-  "NGÀY",
   "NGÀY HẸN",
+  "THỜI GIAN HẸN",
   "TÌNH TRẠNG"
 ];
 
@@ -26,8 +28,10 @@ const ScheduleByDate = () => {
   const [selectedItem, setSelectedItem] = useState();
   const [ngayA, setNgayA] = useState(null);
   const [ngayB, setNgayB] = useState(null);
+  const [isOpenUpdateLH, setIsOpenUpdateLH] = useState(false);
+  const [isOpenDeleteLH, setIsOpenDeleteLH] = useState(false);
+  const role = useSelector(state => state.auth.role);
 
-  const navigate = useNavigate();
 
   const FormGroupStyle = {
     display: "flex",
@@ -51,20 +55,34 @@ const ScheduleByDate = () => {
     console.log(moment(ngayA).format("YYYY-MM-DD"), moment(ngayB).format("YYYY-MM-DD"));
   }, [ngayA, ngayB])
 
+  const handleDropdownOpen = (value) => {
+    setSelectedItem(value);
+    setIsOpen(!isOpen);
+  }
+
   const content = data?.map((dataItem, index) => {
-    return <CustomTableRow key={index}>
+    return <CustomTableRow key={index} onClick={() => handleDropdownOpen(dataItem)}>
       <span>{dataItem.BENHNHAN}</span>
       <span>{dataItem.BACSI}</span>
       <span>{dataItem.TROKHAM}</span>
       <span>{moment(dataItem.NGAYHEN).format("DD/MM/YYYY")}</span>
-      <span>{moment(dataItem.NGAYDT).format("DD/MM/YYYY")}</span>
+      <span>{moment(dataItem.THOIGIANHEN).format("hh:MM:ss")}</span>
       <span>{dataItem.TINHTRANG}</span>
+      <DropdownWrapper>
+        {isOpen && (role === `"QT"`  || role === `"NV"`) && (selectedItem.BENHNHAN === dataItem.BENHNHAN && selectedItem.NGAYHEN === dataItem.NGAYHEN && selectedItem.THOIGIANHEN === dataItem.THOIGIANHEN) &&
+          <CustomDropdown>
+            <DropdownItem onClick={() => setIsOpenUpdateLH(true)}>Sửa lịch hẹn</DropdownItem>
+            <DropdownItem onClick={() => setIsOpenDeleteLH(true)}>Xóa lịch hẹn</DropdownItem>
+          </CustomDropdown>}
+      </DropdownWrapper>
     </CustomTableRow>
   })
 
 
   return (<div style={{ marginBottom: "5vh" }}>
     <SliderCategory />
+    {isOpenUpdateLH && <PopupUpdateSchedule handleClosePopup={() => setIsOpenUpdateLH(false)} data={data} selectedItem={selectedItem}/>}
+    {isOpenDeleteLH && <PopupDeleteSchedule handleClosePopup={() => setIsOpenDeleteLH(false)} data={data} selectedItem={selectedItem}/>}
     <ScheduleByDateWrapper>
       {/* <div className="patient-record-title">DANH SÁCH HỒ SƠ BỆNH NHÂN</div> */}
       <FormWrapper onSubmit={handleSubmit}>
@@ -134,4 +152,9 @@ const CustomTableHead = styled(TableHead)`
 `
 const CustomTableRow = styled(TableRow)`
   grid-template-columns: repeat(${header.length }, 1fr);
+`
+const CustomDropdown= styled(Dropdown)`
+  position: absolute;
+  left: 100%;
+  top: 50%;
 `
