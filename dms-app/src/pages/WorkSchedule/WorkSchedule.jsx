@@ -132,6 +132,9 @@ const WorkScheduleByDate = () => {
         <Form.Group style={FormGroupStyle}>
           <Button>SEARCH</Button>
         </Form.Group>
+        <div style={{display: "flex"}}>
+          {data?.length !== 0 && <div style={{margin: "0 auto"}}>Có {data?.length} kết quả tìm kiếm</div>}
+        </div>
       </FormWrapper>
       
       <Table style={{ width: "80%", height: "50%", maxWidth: "1200px" }}>
