@@ -45,7 +45,10 @@ function App() {
     let id = localStorage.getItem("id");
     console.log(id);
     if (id !== undefined && id !== null) {
-      id = id.split(`"`);
+      id = id?.split(`"`);
+    }
+    else {
+      id = [null, null, null]
     }
     setClickLogin(false);
     dispatch(setClickLogout(false));
