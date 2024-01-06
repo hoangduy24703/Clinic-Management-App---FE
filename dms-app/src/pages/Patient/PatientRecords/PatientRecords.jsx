@@ -97,7 +97,9 @@ const PatientRecords = () => {
     </div>
     {isOpenPopupForm && <PopupForm handleClosePopup={handleCreatePatient}/>}
     <PatientRecordsWrapper>
-      {/* <div className="patient-record-title">DANH SÁCH HỒ SƠ BỆNH NHÂN</div> */}
+      <div style={{display: "flex"}}>
+        {dataPatient?.length !== 0 && <div style={{margin: "0 auto"}}>Có {dataPatient?.length} kết quả tìm kiếm</div>}
+      </div>
       <Table style={{ width: "80%", height: "50%", maxWidth: "1200px" }}>
         <TableHead style={{ height: "50px", borderBottom: "2px solid" }}>
           {header?.map((headerItem) => {
@@ -106,7 +108,7 @@ const PatientRecords = () => {
         </TableHead>
         <Scrollbar data={content} />
         <ButtonGroup>
-          <Button onClick={handleCreatePatient}>{buttonContent.name} {buttonContent.title}</Button>
+          <Button onClick={handleCreatePatient}> {buttonContent.name} {buttonContent.title}</Button>
         </ButtonGroup>
       </Table>
     </PatientRecordsWrapper>

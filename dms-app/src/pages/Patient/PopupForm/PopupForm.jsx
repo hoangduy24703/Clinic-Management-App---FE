@@ -5,6 +5,8 @@ import Form from 'react-bootstrap/Form';
 import { IoMdClose } from "react-icons/io";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { postThemBenhNhan } from "../../../api/patient/patient";
+import moment from "moment";
+import DatePicker from 'react-datepicker';
 
 const PopupForm = ({handleClosePopup}) => {
   const [name, setName] = useState("");
@@ -14,15 +16,15 @@ const PopupForm = ({handleClosePopup}) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
-  const [status, setStatus] = useState("");
-  const [overview, setOverview] = useState("");
-  const [contraindicatedDrugs, setContraindicatedDrugs] = useState("");
+  const [status, setStatus] = useState(null);
+  const [overview, setOverview] = useState(null);
+  const [contraindicatedDrugs, setContraindicatedDrugs] = useState(null);
   const [password, setPassword] = useState("");
-  const [bacsimd, setBacsimd] = useState("");
+  const [bacsimd, setBacsimd] = useState(null);
 
   async function handleCreateBN(e) {
     e.preventDefault();
-    const a = await postThemBenhNhan(name, phongkham, bornYear, gender, phoneNumber, email, address, password, bacsimd, overview, status, contraindicatedDrugs);
+    const a = await postThemBenhNhan(name, phongkham, moment(bornYear).format("YYYY-MM-DD"), gender, phoneNumber, email, address, password, bacsimd, overview, status, contraindicatedDrugs);
     if (a?.data?.isSuccess) {
       alert("TẠO HỒ SƠ BỆNH NHÂN THÀNH CÔNG");
       handleClosePopup();
@@ -67,7 +69,12 @@ const PopupForm = ({handleClosePopup}) => {
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>NĂM SINH</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập năm sinh " onChange={(event) => { setBornYear(event.target.value) }} value={bornYear} style={{width: "100%"}}/>
+          <CustomDatePicker
+              selected={bornYear}
+              onChange={(date) => setBornYear(date)}
+              dateFormat="dd/MM/yyyy"
+              placeholderText=" Chọn ngày"
+            />
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>TÌNH TRẠNG DỊ ỨNG</Form.Label>
@@ -144,4 +151,7 @@ const Button = styled.button`
   border: none;
   margin: 0 auto;
   padding: 10px 30px;
+`
+const CustomDatePicker = styled(DatePicker)`
+  padding: 5px;
 `
