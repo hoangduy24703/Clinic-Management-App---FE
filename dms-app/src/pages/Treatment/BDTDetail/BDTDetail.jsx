@@ -87,6 +87,10 @@ export default function BDTDetail({title, ID, setIsOpenPopup}) {
           <span>NGÀY</span>
           <span>{moment(overview?.NGAYDT).format("DD/MM/YYYY")}</span>
         </BDTOverviewItem>
+        <BDTOverviewItem>
+          <span>TỔNG TIỀN</span>
+          <span>{overview?.TONGTIEN}</span>
+        </BDTOverviewItem>
       </BDTDetailOverview>
       <h3>CHI TIẾT</h3>
       <BDTDetailDetail>
