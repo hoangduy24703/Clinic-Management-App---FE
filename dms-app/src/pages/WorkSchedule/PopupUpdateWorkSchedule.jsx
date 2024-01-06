@@ -28,7 +28,7 @@ const PopupUpdateWorkSchedule = ({ handleClosePopup, data, selectedItem }) => {
     console.log(a);
     if (a?.data?.isSuccess) {
       alert("CẬP NHẬT LỊCH LÀM VIỆC THÀNH CÔNG");
-      navigate(`/appointment-schedule/by-patient`);
+      // navigate(`/work-schedule/by-date`);
     }
     else {
       alert("CẬP NHẬT THẤT BẠI");

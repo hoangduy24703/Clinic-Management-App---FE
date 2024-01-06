@@ -34,7 +34,7 @@ export default function BDTDetail({title, ID, setIsOpenPopup}) {
   
   return <>
     <BDTDetailWrapper>
-      {isOpenAddCTDT && <CreateCTDT handleClosePopup={() => setIsOpenAddCTDT(false)} IDBUOIDIEUTRI={overview?.IDBUOIDIEUTRI}/>}
+      {isOpenAddCTDT && <CreateCTDT handleClosePopup={() => {setIsOpenAddCTDT(false); }} IDBUOIDIEUTRI={overview?.IDBUOIDIEUTRI}/>}
       <IoMdClose style={{cursor: "pointer", right: 10, top: 10, position: "absolute"}} size="30px" onClick={handleClosePopup}/>
       <h2>{title}</h2>
       <h3>TỔNG QUAN</h3>

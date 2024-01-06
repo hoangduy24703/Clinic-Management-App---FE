@@ -14,9 +14,10 @@ const PopupDeleteBDT = ({ handleClosePopup, idbuoidieutri }) => {
   async function handleDeleteCTDT(e) {
     e.preventDefault();
     const a = await deleteBDT(idbuoidieutri);
+    console.log(a?.data);
     if (a?.data?.isSuccess) {
       alert("XÓA BUỔI ĐIỀU TRỊ THÀNH CÔNG");
-      navigate(`treatment-plan`);
+      navigate(`/treatment-plan`);
       return;
     }
     else {

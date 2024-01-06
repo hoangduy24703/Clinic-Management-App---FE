@@ -19,7 +19,7 @@ const CreateCTDT = ({ handleClosePopup, IDBUOIDIEUTRI }) => {
     const a = await addChiTietDT(IDBUOIDIEUTRI, madieutri);
     if (a?.data?.isSuccess) {
       alert("TẠO CHI TIẾT ĐIỀU TRỊ THÀNH CÔNG");
-      navigate('treatment-plan');
+      navigate('/treatment-plan');
       return;
     }
     else {
@@ -41,7 +41,7 @@ const CreateCTDT = ({ handleClosePopup, IDBUOIDIEUTRI }) => {
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{ width: "300px", fontWeight: "700" }}>LOẠI ĐIỀU TRỊ</Form.Label>
           <Form.Select aria-label="Default select example" onChange={e => setMadieutri(e.target.value)} >
-            <option disabled>Chọn loại điều trị</option>
+            <option>Chọn loại điều trị</option>
             <option value="CT" >Chữa tủy</option>
             <option value="CVR" >Cạo vôi răng</option>
             <option value="NR" >Nhổ răng</option>
