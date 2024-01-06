@@ -26,6 +26,7 @@ export async function postXoaLichLamViec(ID_NHANVIEN, NGAY, ID_CALAM) {
 }
 
 export async function postCapNhatLichLamViec(IDNHANVIEN, NGAY, IDCALAM, NGAY_NEW, ID_CALAM_NEW) {
+  console.log(IDNHANVIEN, NGAY, IDCALAM, NGAY_NEW, ID_CALAM_NEW);
   return await api.post(`/lichlamviec/updateLLV`, {
     ID_NHANVIEN: IDNHANVIEN,
     NGAY: NGAY,

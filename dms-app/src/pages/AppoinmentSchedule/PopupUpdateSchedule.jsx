@@ -13,12 +13,12 @@ const PopupUpdateSchedule = ({handleClosePopup, data, selectedItem}) => {
   const dataLH = selectedItem.BENHNHAN === undefined ? 
                                   data?.find((item) => item?.IDBENHNHAN === selectedItem?.IDBENHNHAN && item?.NGAYDT === selectedItem?.NGAYDT && item?.THOIGIANHEN === selectedItem?.THOIGIANHEN) : 
                                   data?.find((item) => item?.BENHNHAN === selectedItem?.BENHNHAN && item?.NGAYHEN === selectedItem?.NGAYHEN && item?.THOIGIANHEN === selectedItem?.THOIGIANHEN);
-  const [ngayhen, setNgayhen] = useState(moment(dataLH?.NGAYHEN).format("DD/MM/YYYY"));
-  const [thoigianhen, setThoigianhen] = useState(moment(dataLH?.THOIGIANHEN).format("hh:MM:ss"));
+  const [ngayhen, setNgayhen] = useState(moment(dataLH?.NGAYHEN));
+  const [thoigianhen, setThoigianhen] = useState(moment(dataLH?.THOIGIANHEN).add(16, 'hours'));
   const [tinhtrang, setTinhtrang] = useState(dataLH?.TINHTRANG);
   const [bacsi, setBacsi] = useState(dataLH?.BACSI === undefined ? dataLH?.IDNHANVIEN : dataLH?.BACSI);
   const [benhnhan, setBenhnhan] = useState(dataLH?.BENHNHAN === undefined ? dataLH?.IDBENHNHAN : dataLH?.BENHNHAN);
-
+  
   async function handleUpdateLH(e) {
     e.preventDefault();
     if (!thoigianhen || !bacsi || !benhnhan || !tinhtrang) {
@@ -26,7 +26,7 @@ const PopupUpdateSchedule = ({handleClosePopup, data, selectedItem}) => {
       return;
     }
     // KIỂM TRA ĐIỀU KIỆN
-    const a = await postCapNhatLichHen(moment(ngayhen).format("YYYY-MM-DD"), thoigianhen, bacsi, benhnhan, tinhtrang);
+    const a = await postCapNhatLichHen(moment(ngayhen).format("YYYY-MM-DD"), moment(thoigianhen).format("HH:mm:ss"), bacsi, benhnhan, tinhtrang);
     console.log(a);
     if (a?.data?.isSuccess) {
       alert("CẬP NHẬT LỊCH HẸN THÀNH CÔNG");
@@ -50,11 +50,11 @@ const PopupUpdateSchedule = ({handleClosePopup, data, selectedItem}) => {
         <div className="popup-title">THÊM MỚI LỊCH HẸN</div>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>NGÀY HẸN</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập ngày hẹn " onChange={(event) => { setNgayhen(event.target.value) }} value={ngayhen} style={{width: "100%"}} disabled/>
+          <Form.Control type="text" placeholder=" Nhập ngày hẹn " onChange={(event) => { setNgayhen(event.target.value) }} value={moment(ngayhen).format("DD/MM/YYYY")} style={{width: "100%"}} disabled/>
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>THỜI GIAN HẸN</Form.Label>
-          <Form.Control type="text" placeholder=" Nhập thời gian hẹn " onChange={(event) => { setThoigianhen(event.target.value) }} value={thoigianhen} style={{width: "100%"}} disabled/>
+          <Form.Control type="text" placeholder=" Nhập thời gian hẹn " onChange={(event) => { setThoigianhen(event.target.value) }} value={moment(thoigianhen).format("HH:mm:ss")} style={{width: "100%"}} disabled/>
         </Form.Group>
         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1" style={FormGroupStyle}>
           <Form.Label style={{width: "300px", fontWeight: "700"}}>TÌNH TRẠNG</Form.Label>

@@ -12,7 +12,7 @@ const PopupUpdateWorkSchedule = ({ handleClosePopup, data, selectedItem }) => {
   console.log(data, selectedItem);
   const dataLLV = data?.find((item) => item?.IDNHANVIEN === selectedItem?.IDNHANVIEN && item?.IDCALAM === selectedItem?.IDCALAM && item?.NGAY === selectedItem?.NGAY && item?.THANG === selectedItem?.THANG && item?.NAM === selectedItem?.NAM)
   const [idnhanvien, setIDNhanVien] = useState(dataLLV?.IDNHANVIEN);
-  const [ngay, setNgay] = useState(moment(dataLLV?.NAM + "-" + dataLLV?.THANG + "-" + dataLLV?.NGAY).format("YYYY-MM-DD"));
+  const [ngay, setNgay] = useState(moment(dataLLV?.NAM + "-" + dataLLV?.THANG + "-" + dataLLV?.NGAY));
   const [idcalam, setIDCaLam] = useState(dataLLV?.IDCALAM);
   const [ngay_new, setNgayNew] = useState(null);
   const [idcalam_new, setIDCaLamNew] = useState(null);
@@ -24,7 +24,7 @@ const PopupUpdateWorkSchedule = ({ handleClosePopup, data, selectedItem }) => {
       return;
     }
     // KIỂM TRA ĐIỀU KIỆN
-    const a = await postCapNhatLichLamViec(idnhanvien, ngay, idcalam, ngay_new, idcalam_new);
+    const a = await postCapNhatLichLamViec(idnhanvien, moment(ngay).format("YYYY-MM-DD"), idcalam, moment(ngay_new).format("YYYY-MM-DD"), idcalam_new);
     console.log(a);
     if (a?.data?.isSuccess) {
       alert("CẬP NHẬT LỊCH LÀM VIỆC THÀNH CÔNG");

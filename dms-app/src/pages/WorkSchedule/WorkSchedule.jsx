@@ -90,8 +90,8 @@ const WorkScheduleByDate = () => {
       <DropdownWrapper>
         {isOpen && (role === `"QT"`  || role === `"NV"`) && (selectedItem.IDNHANVIEN === dataItem.IDNHANVIEN && selectedItem.NAM === dataItem.NAM && selectedItem.THANG === dataItem.THANG && selectedItem.NGAY === dataItem.NGAY && selectedItem.IDCALAM === dataItem.IDCALAM) &&
           <CustomDropdown>
-            <DropdownItem onClick={() => setIsOpenUpdateLLV(true)}>Sửa lịch hẹn</DropdownItem>
-            <DropdownItem onClick={() => setIsOpenDeleteLLV(true)}>Xóa lịch hẹn</DropdownItem>
+            <DropdownItem onClick={() => setIsOpenUpdateLLV(true)}>Sửa lịch làm việc</DropdownItem>
+            <DropdownItem onClick={() => setIsOpenDeleteLLV(true)}>Xóa lịch làm việc</DropdownItem>
           </CustomDropdown>}
       </DropdownWrapper>
     </CustomTableRow>

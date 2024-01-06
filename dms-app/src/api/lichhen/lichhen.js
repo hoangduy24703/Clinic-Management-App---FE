@@ -42,20 +42,22 @@ export async function postThemLichHen(NGAYHEN, THOIGIANHEN, TINHTRANG, PHONG, GH
 }
 
 export async function postXoaLichHen(NGAYHEN, THOIGIANHEN, BACSI, BENHNHAN) {
-  return await api.post(`/lichhen/deleteLH`, {
-    NGAYHEN: NGAYHEN,
-    THOIGIANHEN: THOIGIANHEN,
-    BACSI: BACSI,
-    BENHNHAN: BENHNHAN
-  })
+  console.log(NGAYHEN, THOIGIANHEN, BACSI, BENHNHAN);
+    return await api.post(`/lichhen/deleteLH`, {
+      NGAYHEN: NGAYHEN,
+      THOIGIANHEN: THOIGIANHEN,
+      BACSI: BACSI,
+      BENHNHAN: BENHNHAN
+    })
 }
 
-export async  function postCapNhatLichHen(NGAYHEN, THOIGIANHEN, BACSI, BENHNNHAN, TINHTRANG) {
+export async  function postCapNhatLichHen(NGAYHEN, THOIGIANHEN, BACSI, BENHNHAN, TINHTRANG) {
+  console.log(NGAYHEN, THOIGIANHEN, BACSI, BENHNHAN, TINHTRANG);
   return await api.post(`/lichhen/updateLH`, {
     NGAYHEN: NGAYHEN,
     THOIGIANHEN: THOIGIANHEN,
     BACSI: BACSI,
-    BENHNNHAN: BENHNNHAN, 
+    BENHNHAN: BENHNHAN, 
     TINHTRANG_NEW: TINHTRANG
   });
 }

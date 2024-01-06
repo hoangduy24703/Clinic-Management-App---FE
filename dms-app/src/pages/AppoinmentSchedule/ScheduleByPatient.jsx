@@ -53,10 +53,10 @@ export default function ScheduleByPatient() {
       <span>{dataItem.TENBN}</span>
       <span>{dataItem.BACSI}</span>
       <span>{dataItem.TROKHAM}</span>
-      <span>{moment(dataItem.NGAYDT).format("DD/MM/YYYY")}</span>
+      <span>{moment(dataItem.NGAYHEN).format("DD/MM/YYYY")}</span>
       <span>{dataItem.TINHTRANG}</span>
       <DropdownWrapper>
-        {isOpen && (role === `"QT"`  || role === `"NV"`) && (selectedItem.IDBENHNHAN === dataItem.IDBENHNHAN && selectedItem.NGAYDT === dataItem.NGAYDT && selectedItem.THOIGIANHEN === dataItem.THOIGIANHEN) &&
+        {isOpen && (role === `"QT"`  || role === `"NV"`) && (selectedItem.IDBENHNHAN === dataItem.IDBENHNHAN && selectedItem.NGAYHEN === dataItem.NGAYHEN && selectedItem.THOIGIANHEN === dataItem.THOIGIANHEN) &&
           <CustomDropdown>
             <DropdownItem onClick={() => setIsOpenUpdateLH(true)}>Sửa lịch hẹn</DropdownItem>
             <DropdownItem onClick={() => setIsOpenDeleteLH(true)}>Xóa lịch hẹn</DropdownItem>
