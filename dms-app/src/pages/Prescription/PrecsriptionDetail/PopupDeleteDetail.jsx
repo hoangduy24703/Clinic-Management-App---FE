@@ -7,7 +7,7 @@ import moment from "moment";
 import { useNavigate } from "react-router-dom";
 import { deleteCTDonThuoc } from "../../../api/donthuoc/donthuoc";
 
-const PopupDeleteDetail = ({ handleClosePopup, data, selectedItem, IDBUOIDIEUTRI }) => {
+const PopupDeleteDetail = ({ handleClosePopup, data, selectedItem, IDDONTHUOC }) => {
   const navigate = useNavigate();
   const dataCTDT = data?.find((item) => item?.IDTHUOC === selectedItem?.IDTHUOC);
   console.log(data, selectedItem);
@@ -15,7 +15,7 @@ const PopupDeleteDetail = ({ handleClosePopup, data, selectedItem, IDBUOIDIEUTRI
   async function handleDeleteCTDT(e) {
     e.preventDefault();
     // KIỂM TRA ĐIỀU KIỆN
-    const a = await deleteCTDonThuoc(IDBUOIDIEUTRI, dataCTDT?.IDTHUOC);
+    const a = await deleteCTDonThuoc(IDDONTHUOC, dataCTDT?.IDTHUOC);
     console.log(a);
     if (a?.data?.isSuccess) {
       alert("XÓA CT ĐƠN THUỐC THÀNH CÔNG");

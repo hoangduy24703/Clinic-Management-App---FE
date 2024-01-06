@@ -6,6 +6,7 @@ import moment from "moment";
 import { deleteCTDonThuoc } from "../../../api/donthuoc/donthuoc";
 import { useSelector } from "react-redux";
 import PopupDeleteDetail from "./PopupDeleteDetail";
+import CreateCTDonThuoc from "./CreatePreDetail";
 
 export default function PreDetail({title, ID, setIsOpenPopup}) {
   const [isSuccess, setIsSuccess] = useState(false);
@@ -16,11 +17,13 @@ export default function PreDetail({title, ID, setIsOpenPopup}) {
   const role = useSelector(state => state.auth.role);
   const [isOpenDelete, setIsOpenDelete] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [isOpenCreate, setIsOpenCreate] = useState(false);
 
   async function loadData() {
     const data = await getChiTietDonThuoc(ID);
-    console.log(data?.data?.data?.chitietdonthuoc, data?.data?.isSuccess);
+    console.log(data?.data?.data?.chitietdonthuoc, data?.data?.data?.soluong[0]);
     setOverview(data?.data?.data?.chitietdonthuoc);
+    setDetail(data?.data?.data?.soluong[0]?.SOLUONGTHUOC)
     // setDetail(data?.data?.data?.buoidieutri);
     // setIdbuoidieutri(data?.data?.data?.buoidieutri[0].IDBUOIDIEUTRI);
     // setThuoc (data?.data?.data?.thuoc)
@@ -36,11 +39,12 @@ export default function PreDetail({title, ID, setIsOpenPopup}) {
   }, [isSuccess])
   
   return <>
-    {isOpenDelete && <PopupDeleteDetail handleClosePopup={() => setIsOpenDelete(false)} data={overview} selectedItem={selectedItem} IDBUOIDIEUTRI={ID}/>}
+    {isOpenCreate && <CreateCTDonThuoc handleClosePopup={() => setIsOpenCreate(false)} iddonthuoc={ID}/>}
+    {isOpenDelete && <PopupDeleteDetail handleClosePopup={() => setIsOpenDelete(false)} data={overview} selectedItem={selectedItem} IDDONTHUOC={ID}/>}
     <HDDetailWrapper>
       <IoMdClose style={{cursor: "pointer", right: 10, top: 10, position: "absolute"}} size="30px" onClick={handleClosePopup}/>
       <h2>{title}</h2>
-      <h3>CHI TIẾT ĐƠN THUỐC</h3>
+      <h3>CHI TIẾT ĐƠN THUỐC ({detail})</h3>
       {overview?.map((item, index) => {
         return <HDDetailOverview >
         <h3>CHI TIẾT ĐƠN {index +  1}</h3>
@@ -64,9 +68,12 @@ export default function PreDetail({title, ID, setIsOpenPopup}) {
         <Button onClick={() => {
             setIsOpenDelete(true);
             setSelectedItem(item);
-          }}>XÓA CHI TIẾT ĐƠN THUỐC</Button>}
+          }}>XÓA CTDT</Button>}
     </HDDetailOverview>
       })}
+    <div style={{display: "flex"}}>
+      <Button style={{backgroundColor: "var(--btn-color-1)", margin: "1vh auto"}} onClick={() => setIsOpenCreate(true)}>THÊM CTDT</Button>
+    </div>
     </HDDetailWrapper>
     </>;
 }
@@ -125,6 +132,6 @@ const Button = styled.button`
   padding: 5px;
   font-weight: 700;
   text-align: center;
-  width: 300px;
+  width: 150px;
   border-radius: 10px;
 `
